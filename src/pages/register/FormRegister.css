@@ -1,0 +1,33 @@
+
+.btn{
+    margin-left: 33.5%; 
+  }
+  .Google{
+    margin-right: 2.5%;
+    width:45%;
+  }
+  .GitHub{
+    width:45%;
+  }
+  .btnText{
+    margin-left: 5%;
+  }
+  .x{
+    height: 2px;
+    width: 30%;
+    border-width:0;
+    background-color:gray;
+    margin-left: 33.5%;
+  }
+  .left{
+    margin-right: 2%;
+  }
+  .right{
+    margin-left: 2%;
+  }
+  
+  #ligne{
+    margin-top: 1%;
+    margin-bottom: 1%;
+    display: flex;
+  }
