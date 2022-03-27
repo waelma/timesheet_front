@@ -5,9 +5,11 @@ import { FcGoogle } from 'react-icons/fc';
 import { AiFillGithub } from 'react-icons/ai';
 import './FormRegister.css';
 import axios from "axios";
+import {GoogleLogin} from 'react-google-login';
+import { useNavigate } from "react-router-dom";
 
 const FormRegister = ({form,setx,setCurrent}) => {
-
+  let navigate = useNavigate();
     const onFinish = (values) => {
         setx(values)
         axios.get(`http://localhost:8000/api/employe/confirmAcc`, {
@@ -33,12 +35,34 @@ const FormRegister = ({form,setx,setCurrent}) => {
         else 
           return false 
       };
+
+      const responseGoogle=(response)=>{
+        console.log(response.profileObj)
+        let data={
+          email:response.profileObj.email,
+          lastName:response.profileObj.familyName,
+          firstName:response.profileObj.givenName,
+          photo:response.profileObj.imageUrl
+        }
+        axios.post(`http://localhost:8000/api/login/google`,data)
+        .then(response => {console.log(response.data)
+          localStorage.setItem('token',response.data.token);
+          if(response.status===200 || response.status===201){
+              // navigate("/profile");
+              setCurrent(2)
+          }
+        });
+      }
     
       return (
         <>
         <div className="btn">
-          <Button icon={<FcGoogle/>}  className="Google"><span className="btnText">Continue with Google</span></Button>
-          <Button icon={<AiFillGithub/>} className="GitHub" ><span className="btnText">Continue with GitHub</span></Button>
+          <GoogleLogin className="Google" clientId="454166173619-s076fdpbdcj06psli2h9o067vg5eh434.apps.googleusercontent.com"
+          render={renderProps => (
+            <Button icon={<FcGoogle/>}  className="Google" onClick={renderProps.onClick} disabled={renderProps.disabled}><span className="btnText">Continue with Google</span></Button>
+          )}
+           buttonText="Continue with Google" onSuccess={responseGoogle} onFailure={responseGoogle} cookiePolicy={'single_host_origin'}/>
+          {/* <Button icon={<AiFillGithub/>} className="GitHub" ><span className="btnText">Continue with GitHub</span></Button> */}
         </div>
         <div id="ligne"><hr className="x left"/><span>OR</span><hr className="x right"/></div>
         <Form
@@ -134,7 +158,6 @@ const FormRegister = ({form,setx,setCurrent}) => {
               if (!value || getFieldValue('password') === value) {
                 return Promise.resolve();
               }
-
               return Promise.reject(new Error('The two passwords that you entered do not match!'));
             },
           }),

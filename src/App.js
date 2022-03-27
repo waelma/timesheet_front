@@ -1,9 +1,31 @@
 import React from 'react'
 import Register from './pages/register/Register';
+import Login from './pages/login/Login';
+import Profile from './pages/profile/Profile';
+import Navbar from './components/Navbar';
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
+
 const App = () => {
   return (
     <div>
-      <Register />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home/>}/>
+          <Route path="/login" element={<Login/>}/>
+          <Route path="/register" element={<Register/>}/>
+          <Route path="/profile" element={<Profile/>}/>
+          <Route path="*" element={<Navigate to="/" replace />}/>
+        </Routes>
+      </BrowserRouter>
+    </div>
+  )
+}
+
+const Home = () => {
+  return (
+    <div>
+      <Navbar/>
+      <h1 >Home page</h1>
     </div>
   )
 }

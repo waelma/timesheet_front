@@ -1,0 +1,20 @@
+.profile{
+    margin: 5% 5%;
+    display: flex;
+}
+.img{
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    padding: 5px;
+    width: 150px;
+}
+.edit{
+    margin-left: 70%;
+}
+.ii{
+    border-bottom: 1px solid #53565d;
+}
+.profileForm{
+    margin: 10% 10%;
+    width: 50%;
+}

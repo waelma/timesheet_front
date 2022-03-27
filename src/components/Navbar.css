@@ -1,0 +1,20 @@
+.navBar{
+    /* border: 1px solid black; */
+    display: flex;
+    /* background-color: #396481; */
+}
+.linkbtn{
+    margin-right: 0px;
+    border-radius: 7%;
+    background-color: #27A09E;
+    border: none;
+    font-size: 16px;
+    color:white;
+    font-weight: bold;
+    margin: 10px 10px;
+
+}
+.linkListe{
+    position: absolute;
+    right: 10px;
+}

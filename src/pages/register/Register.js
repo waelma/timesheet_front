@@ -8,6 +8,7 @@ import { UserOutlined, SolutionOutlined, LoadingOutlined, SmileOutlined } from '
 import FormRegister from './FormRegister';
 import EmailVerification from './EmailVerification';
 import AdminApprouve from './AdminApprouve';
+import Navbar from '../../components/Navbar';
 
 
 const Register = () => {
@@ -52,14 +53,18 @@ const steps = [
 
   
   return (
-    <div className="container">
-      <Steps current={current}>
-        {steps.map(item => (
-          <Step key={item.title} title={item.title} />
-        ))}
-      </Steps>
-      <div className="steps-content" >{steps[current].content}</div>
+    <div>
+      <Navbar/>
+      <div className="container">
+        <Steps current={current}>
+          {steps.map(item => (
+            <Step key={item.title} title={item.title} />
+          ))}
+        </Steps>
+        <div className="steps-content" >{steps[current].content}</div>
+      </div>
     </div>
+
   )
 }
 
