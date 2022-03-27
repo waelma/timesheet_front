@@ -12,8 +12,8 @@ const Profile = () => {
     const [speciality,setSpeciality] = useState([])
     const [phone,setPhone] = useState([])
     const [image,setImage] = useState([])
+    const token=localStorage.getItem('token')
     useEffect(()=>{
-        const token=localStorage.getItem('token')
         axios.get(`http://localhost:8000/api/employe/userProfil`,{headers: {"Authorization" : `Bearer ${token}`}}).then(response => {
             setEmail(response.data[0].email);
             setFirstName(response.data[0].firstName);
@@ -23,23 +23,20 @@ const Profile = () => {
             setImage(response.data[0].photo);
         })
     },[])
-    const upload = ({ fileList }) => {
-    //     const token=localStorage.getItem('token')
-    //     let data = new FormData();
-    //     data.append('photo', fileList[0]);
-        // let data={
-        //     photo:fileList[0]
-        // }
-        // axios.post(`http://localhost:8000/api/employe/updatePhoto`,data,{headers: {"Authorization" : `Bearer ${token}`,
-        // 'Content-Type': `multipart/form-data`}})
-        // .then(response => {
-        //     console.log(response.data);
-        // });
-
-        // console.log('fileList', fileList[0]);
-
-        // you store them in state, so that you can make a http req with them later
-        // this.setState({ fileList });
+ 
+    const props = {
+        name: 'photo',
+        action: 'http://localhost:8000/api/employe/updatePhoto',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        showUploadList:false,
+        onChange(info) {
+            setTimeout(() => {
+                window.location.reload(false); 
+            }, 1000);
+            
+           },
       };
   return (
     <div className="profile">
@@ -48,14 +45,7 @@ const Profile = () => {
         className="img"
         src={image}
         />
-        <Upload className="edit"
-            
-            action="http://localhost:3000/profile"
-            listType="picture"
-            accept=".png,.jpeg,.jpg"
-            showUploadList={false}
-            onChange={upload}
-            beforeUpload={file => {}}
+        <Upload className="edit" {...props}
         >
          <Button  shape="circle" icon={<RiEdit2Line/>}></Button>
         </Upload>

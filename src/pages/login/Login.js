@@ -1,15 +1,17 @@
-import React from 'react'
+import { React,useState } from 'react'
 import 'antd/dist/antd.css';
 import { Form, Input, Button, Tooltip, Typography, Space} from 'antd';
 import './Login.css';
 import { FcGoogle } from 'react-icons/fc';
-import { AiFillGithub } from 'react-icons/ai';
+import { AiFillGithub, AiOutlineConsoleSql } from 'react-icons/ai';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import Navbar from '../../components/Navbar';
 import {GoogleLogin} from 'react-google-login';
+import CodeConfirmation from './CodeConfirmation';
 
 const Login = () => {
+    const [email,setEmail]= useState('');
     let navigate = useNavigate();
     const onFinish = (values) => {
         let data={
@@ -48,7 +50,7 @@ const Login = () => {
           }
         });
       }
-    
+
       return (
         <div>
           <Navbar/>  
@@ -84,7 +86,7 @@ const Login = () => {
                     },
                     ]}
                 >
-                    <Input placeholder="Enter Email"/>
+                    <Input placeholder="Enter Email" onBlur={(e)=>{setEmail(e.target.defaultValue)}}/>
                 </Form.Item>
 
 
@@ -103,8 +105,23 @@ const Login = () => {
 
                 </Form.Item>
                 
-                <Tooltip  >
-                    <Typography.Link href="#API">Forget password ?</Typography.Link>
+                <Tooltip>
+                    <Typography.Link onClick={()=>{
+                        if(email===''){
+                            alert('please input your email')
+                        }else{
+                            axios.get(`http://localhost:8000/api/employe/forgetPwdMessage`,{
+                                params: {
+                                  email: email
+                                }
+                              }).then(response => {
+                                  console.log(response.data)
+                                  if(response.data==="success"){
+                                      navigate("/codeConfirmation")
+                                  }
+                            })
+                        }
+                    }}>Forget password ?</Typography.Link>
                 </Tooltip>
             </Space>
         </Form.Item>
