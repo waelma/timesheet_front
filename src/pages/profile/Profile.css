@@ -15,6 +15,15 @@
     border-bottom: 1px solid #53565d;
 }
 .profileForm{
-    margin: 10% 10%;
+    margin: 5% 10%;
     width: 50%;
 }
+.userName{
+    margin-bottom: 10%;
+}
+.libChangePwd{
+    margin-top: 8%;
+    text-align: left;
+}
+
+  

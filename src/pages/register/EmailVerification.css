@@ -1,9 +1,10 @@
-.text{
+.emailVerif{
     text-align: center;
-    margin-left: 28%;
+    padding-top: 4%;
+    padding-bottom: 4%;
 }
+
 .input{
-    width: 25%;
-    margin-left:32% ;
+    width: 30%;
     margin-top: 2%;
 }

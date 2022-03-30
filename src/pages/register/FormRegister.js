@@ -55,149 +55,159 @@ const FormRegister = ({form,setx,setCurrent}) => {
       }
     
       return (
-        <>
-        <div className="btn">
-          <GoogleLogin className="Google" clientId="454166173619-s076fdpbdcj06psli2h9o067vg5eh434.apps.googleusercontent.com"
-          render={renderProps => (
-            <Button icon={<FcGoogle/>}  className="Google" onClick={renderProps.onClick} disabled={renderProps.disabled}><span className="btnText">Continue with Google</span></Button>
-          )}
-           buttonText="Continue with Google" onSuccess={responseGoogle} onFailure={responseGoogle} cookiePolicy={'single_host_origin'}/>
-          {/* <Button icon={<AiFillGithub/>} className="GitHub" ><span className="btnText">Continue with GitHub</span></Button> */}
-        </div>
-        <div id="ligne"><hr className="x left"/><span>OR</span><hr className="x right"/></div>
-        <Form
-          scrollToFirstError
-          form={form}
-          labelCol={{
-            span: 8,
-          }}
-          wrapperCol={{
-            span: 16,
-          }}
-          
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-          autoComplete="off"
-        >
-          <Form.Item
-            label="LastName"
-            name="lastName"
-            rules={[
-              {
-                required: true,
-                message: 'Please input your LastName!',
-              },
-            ]}
+        <div  className="cont">
+          <div className="content">
+          <div className="btn">
+            <GoogleLogin className="Google" clientId="454166173619-s076fdpbdcj06psli2h9o067vg5eh434.apps.googleusercontent.com"
+            render={renderProps => (
+              <Button icon={<FcGoogle/>}  className="Google" onClick={renderProps.onClick} disabled={renderProps.disabled}><span className="btnText">Continue with Google</span></Button>
+            )}
+            buttonText="Continue with Google" onSuccess={responseGoogle} onFailure={responseGoogle} cookiePolicy={'single_host_origin'}/>
+            {/* <Button icon={<AiFillGithub/>} className="GitHub" ><span className="btnText">Continue with GitHub</span></Button> */}
+          </div>
+          <div id="ligne"><hr className="x left"/><span>OR</span><hr className="x right"/></div>
+          <Form
+            className="form"
+            scrollToFirstError
+            form={form}
+            labelCol={{
+              span: 8,
+            }}
+            wrapperCol={{
+              span: 16,
+            }}
+            
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+            autoComplete="off"
           >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            label="FirsName"
-            name="firsName"
-            rules={[
-              {
-                required: true,
-                message: 'Please input your FirsName!',
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-        name="email"
-        label="E-mail"
-        rules={[
-          {
-            type: 'email',
-            message: 'The input is not valid E-mail!',
-          },
-          {
-            required: true,
-            message: 'Please input your E-mail!',
-          },
-        ]}
-      >
-        <Input />
-      </Form.Item>
-    
-          <Form.Item
-            label="Password"
-            name="password"
-            rules={[
-              {
-                required: true,
-                message: 'Please input your password!',
-              },
-              ({ getFieldValue }) => ({
-                validator(_, value) {
-                  if (!pwdValidator(value)) {
-                    return Promise.reject(new Error('Invalide password !'));
-                  }
-                  return Promise.resolve();
+            <Form.Item
+            className="form-item"
+              // label="LastName"
+              name="lastName"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your LastName!',
                 },
-              }),
-            ]}
-          >
-            <Input.Password />
-          </Form.Item>
+              ]}
+            >
+              <Input className="inputRegF" placeholder="LastName"/>
+            </Form.Item>
 
-          <Form.Item
-        name="confirm"
-        label="Confirm Password"
-        dependencies={['password']}
-        hasFeedback
-        rules={[
-          {
-            required: true,
-            message: 'Please confirm your password!',
-          },
-          ({ getFieldValue }) => ({
-            validator(_, value) {
-              if (!value || getFieldValue('password') === value) {
-                return Promise.resolve();
-              }
-              return Promise.reject(new Error('The two passwords that you entered do not match!'));
+            <Form.Item
+            className="form-item"
+              // label="FirsName"
+              name="firsName"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your FirsName!',
+                },
+              ]}
+            >
+              <Input className="inputRegF" placeholder="FirsName"/>
+            </Form.Item>
+
+            <Form.Item
+            className="form-item"
+          name="email"
+          // label="E-mail"
+          rules={[
+            {
+              type: 'email',
+              message: 'The input is not valid E-mail!',
             },
-          }),
-        ]}
-      >
-        <Input.Password />
-      </Form.Item>
+            {
+              required: true,
+              message: 'Please input your E-mail!',
+            },
+          ]}
+        >
+          <Input className="inputRegF" placeholder="E-mail"/>
+        </Form.Item>
+      
+            <Form.Item
+            className="form-item"
+              // label="Password"
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your password!',
+                },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!pwdValidator(value)) {
+                      return Promise.reject(new Error('Invalide password !'));
+                    }
+                    return Promise.resolve();
+                  },
+                }),
+              ]}
+            >
+              <Input.Password className="inputRegF" placeholder="Password"/>
+            </Form.Item>
+
+            <Form.Item
+            className="form-item"
+          name="confirm"
+          // label="Confirm Password"
+          dependencies={['password']}
+          hasFeedback
+          rules={[
+            {
+              required: true,
+              message: 'Please confirm your password!',
+            },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || getFieldValue('password') === value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(new Error('The two passwords that you entered do not match!'));
+              },
+            }),
+          ]}
+        >
+          <Input.Password className="inputRegF" placeholder="Confirm Password"/>
+        </Form.Item>
 
 
-          
-      <Form.Item
-        name="phone"
-        label="Phone Number"
-        rules={[
-          {
-            required: true,
-            message: 'Please input your phone number!',
-          },
-        ]}
-      >
-        <Input/>
-      </Form.Item>
+            
+        <Form.Item
+        className="form-item"
+          name="phone"
+          // label="Phone Number"
+          rules={[
+            {
+              required: true,
+              message: 'Please input your phone number!',
+            },
+          ]}
+        >
+          <Input className="inputRegF" placeholder="Phone Number"/>
+        </Form.Item>
 
-      <Form.Item
-        name="speciality"
-        label="Speciality"
-        rules={[
-          {
-            required: true,
-            message: 'Please input your phone speciality!',
-          },
-        ]}
-      >
-        <Input/>
-      </Form.Item>
-      <Button type="primary" htmlType="submit">
-            Next
-          </Button>
-        </Form>
-        </>
+        <Form.Item
+        className="form-item"
+          name="speciality"
+          // label="Speciality"
+          rules={[
+            {
+              required: true,
+              message: 'Please input your phone speciality!',
+            },
+          ]}
+        >
+          <Input className="inputRegF" placeholder="Speciality"/>
+        </Form.Item>
+        <Button className="btnRg" type="primary" htmlType="submit">
+              Next
+            </Button>
+          </Form>
+          </div>
+        </div>
       );
       
 }

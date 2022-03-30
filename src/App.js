@@ -4,8 +4,8 @@ import Login from './pages/login/Login';
 import Profile from './pages/profile/Profile';
 import Navbar from './components/Navbar';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
-import CodeConfirmation from './pages/login/CodeConfirmation';
-
+import UpdatePwd from './pages/login/forgetPwd/UpdatePwd';
+import ForgetPwdCodeConfirmation from './pages/login/forgetPwd/ForgetPwdCodeConfirmation';
 const App = () => {
   return (
     <div>
@@ -15,7 +15,8 @@ const App = () => {
           <Route path="/login" element={<Login/>}/>
           <Route path="/register" element={<Register/>}/>
           <Route path="/profile" element={<Profile/>}/>
-          <Route path="/codeConfirmation" element={<CodeConfirmation/>}/>
+          <Route path="/ForgetPwdCodeConfirmation" element={<ForgetPwdCodeConfirmation/>}/>
+          <Route path="/updatePwd" element={<UpdatePwd/>}/>
           <Route path="*" element={<Navigate to="/" replace />}/>
         </Routes>
       </BrowserRouter>

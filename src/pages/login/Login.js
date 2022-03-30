@@ -3,12 +3,11 @@ import 'antd/dist/antd.css';
 import { Form, Input, Button, Tooltip, Typography, Space} from 'antd';
 import './Login.css';
 import { FcGoogle } from 'react-icons/fc';
-import { AiFillGithub, AiOutlineConsoleSql } from 'react-icons/ai';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import Navbar from '../../components/Navbar';
 import {GoogleLogin} from 'react-google-login';
-import CodeConfirmation from './CodeConfirmation';
+import ForgetPwdCodeConfirmation from './forgetPwd/ForgetPwdCodeConfirmation';
 
 const Login = () => {
     const [email,setEmail]= useState('');
@@ -21,8 +20,8 @@ const Login = () => {
         axios.post(`http://localhost:8000/api/employe/login`,data)
         .then(response => {
             console.log(response.data);
-            localStorage.setItem('token',response.data.token);
             if(response.status===200){
+                localStorage.setItem('token',response.data.token);
                 navigate("/profile");
             }
             // console.log(localStorage.getItem('token'))
@@ -116,8 +115,9 @@ const Login = () => {
                                 }
                               }).then(response => {
                                   console.log(response.data)
-                                  if(response.data==="success"){
-                                      navigate("/codeConfirmation")
+                                  if(response.data.message==="success"){
+                                      navigate("/ForgetPwdCodeConfirmation",{state:{email:email,
+                                       phone:response.data.phone}})
                                   }
                             })
                         }

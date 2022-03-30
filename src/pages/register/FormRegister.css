@@ -1,23 +1,33 @@
+.cont{
+  display: inline;
+  text-align: center;
+  padding-top: 5%;
+  margin: auto;
+  margin-top: 5%;
+  width: 60%;
+}
+.content{
+  text-align: center;
+  margin: auto;
+  padding-top: 4%;
+  padding-bottom: 4%;
+  width: 50%;
+}
 
-.btn{
-    margin-left: 33.5%; 
-  }
+
   .Google{
-    margin-right: 2.5%;
     width:100%;
   }
-  .GitHub{
-    width:45%;
-  }
+
   .btnText{
     margin-left: 5%;
   }
   .x{
     height: 2px;
-    width: 30%;
+    width: 40%;
     border-width:0;
     background-color:gray;
-    margin-left: 33.5%;
+    margin-top: 2%;
   }
   .left{
     margin-right: 2%;
@@ -30,4 +40,21 @@
     margin-top: 1%;
     margin-bottom: 1%;
     display: flex;
+  }
+  .form{
+    text-align: center;
+    width:100% ;
+    display: inline-block;
+    
+  }
+  .form-item{
+    text-align: center;
+    width: 100%;
+  }
+  .inputRegF{
+    margin-right:-50% ;
+    width: 150%;
+  }
+  .btnRg{
+    width: 100%;
   }

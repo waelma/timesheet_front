@@ -2,7 +2,6 @@ import { React, useEffect } from 'react'
 import { Result, Button } from 'antd'
 import './AdminApprouve.css'
 import { useNavigate } from "react-router-dom";
-
 const AdminApprouve = () => {
   let navigate = useNavigate();
   useEffect(()=>{
@@ -11,7 +10,7 @@ const AdminApprouve = () => {
     }, 3000);
   },[])
   return (
-    <div className="cont">
+    <div className="AdminAppCont">
         <Result
     status="success"
     title="Votre demande a ete enregistrer avec Succé !"

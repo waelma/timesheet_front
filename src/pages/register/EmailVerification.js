@@ -27,8 +27,8 @@ const EmailVerification = ({x,setCurrent}) => {
     console.log('Failed:', errorInfo);
   }
   return (
-    <div >
-      <span className="text">A confirmation email has been sent to {x.email} check your mail</span><br/>
+    <div className="emailVerif">
+      <span className="emailVerifText">A confirmation email has been sent to {x.email} check your mail</span><br/>
       <Form
       onFinish={verifier}
       onFinishFailed={onFinishFailed}
