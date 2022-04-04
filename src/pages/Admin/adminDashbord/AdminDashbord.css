@@ -1,0 +1,20 @@
+.ant-dropdown-link{
+   font-size: 16px;
+}
+
+.ant-tabs-extra-content{
+    margin-right: 1%;
+}
+
+.ant-dropdown-menu{
+    width: 100%;
+}
+.ant-dropdown-menu-title-content{
+    display:flex;
+}
+.ant-dropdown-menu-item{
+    background-color: transparent;
+} 
+.ant-dropdown-menu-item-only-child{
+    background-color: transparent;
+}

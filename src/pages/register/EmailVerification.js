@@ -17,6 +17,8 @@ const EmailVerification = ({x,setCurrent}) => {
     axios.post(`http://localhost:8000/api/employe/register/${values.code}`,data)
     .then(response => {console.log(response.data)
       if(response.data.message==="success"){
+        localStorage.setItem('token',response.data.token);
+        localStorage.setItem('role',response.data.role);
         setCurrent(2)
       }else{
         alert("Incorrect code")

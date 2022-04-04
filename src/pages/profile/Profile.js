@@ -4,8 +4,12 @@ import { Form, Input, Upload, Button } from 'antd'
 import './Profile.css'
 import { RiEdit2Line } from 'react-icons/ri';
 import { useEffect, useState } from 'react';
+import { HiOutlineLogout } from 'react-icons/hi';
+import { useNavigate } from 'react-router';
 import axios from 'axios';
 const Profile = () => {
+    let navigate = useNavigate();
+    const token=localStorage.getItem('token')
     const [form] = Form.useForm()
     const [lastName,setLastName] = useState("")
     const [firstName,setFirstName] = useState("")
@@ -13,8 +17,11 @@ const Profile = () => {
     const [phone,setPhone] = useState("")
     const [speciality,setSpeciality] = useState("")
     const [image,setImage] = useState([])
-    const token=localStorage.getItem('token')
+    let x;
     useEffect(()=>{
+      // if (!token&&localStorage.getItem('role')==3) {
+      //   navigate('/login');
+      // }
         axios.get(`http://localhost:8000/api/employe/userProfil`,{headers: {"Authorization" : `Bearer ${token}`}}).then(response => {
             setImage(response.data[0].photo);
             form.setFieldsValue({
@@ -28,7 +35,7 @@ const Profile = () => {
             setLastName(response.data[0].lastName);
             setEmail(response.data[0].email)
         })
-    },[image,firstName,lastName,email,phone,speciality])
+    },[image,firstName,lastName,email,phone,speciality,x])
     const props = {
         name: 'photo',
         action: 'http://localhost:8000/api/employe/updatePhoto',
@@ -63,8 +70,30 @@ const Profile = () => {
             c_new_password:values.c_new_password,
             email:email
           }
+
         axios.put(`http://localhost:8000/api/employe/updatePassword`,data,{headers: {"Authorization" : `Bearer ${token}`}}).then(response => {
             console.log(response.data);
+        })
+      }
+
+      const pwdValidator = (pwd) => {
+        const str=pwd
+        if (str.match( /[0-9]/g) && 
+        str.match( /[A-Z]/g) && 
+        str.match(/[a-z]/g) && 
+        str.match( /[^a-zA-Z\d]/g) &&
+        str.length >= 8)  
+          return true
+        else 
+          return false 
+      };
+
+      const logout=()=>{
+        axios.delete(`http://localhost:8000/api/employe/logout`,{headers: {"Authorization" : `Bearer ${token}`}}).then(response => {
+            console.log(response.data);
+            localStorage.removeItem('token');
+            localStorage.removeItem('role');
+            navigate("/")
         })
       }
   return (
@@ -156,12 +185,34 @@ const Profile = () => {
             <Form.Item
             name="new_password"
             label="New Password"
+            rules={[
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!pwdValidator(value)) {
+                      return Promise.reject(new Error('Invalide password !'));
+                    }
+                    return Promise.resolve();
+                  },
+                }),
+              ]}
         >
             <Input.Password bordered={false} className="ii" placeholder="********"/>
         </Form.Item> 
         <Form.Item
             name="c_new_password"
             label="Confirm New Password"
+            dependencies={['new_password']}
+            hasFeedback
+            rules={[
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue('new_password') === value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                  },
+                }),
+              ]}
         >
             <Input.Password bordered={false} className="ii" placeholder="********"/>
         </Form.Item> 
@@ -172,6 +223,8 @@ const Profile = () => {
                     </Button>
             </Form>
         </div>
+        <HiOutlineLogout className="logoutIcon" onClick={logout} cursor="pointer"></HiOutlineLogout>
+
         
     </div>
   )

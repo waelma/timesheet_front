@@ -1,6 +1,7 @@
 .profile{
     margin: 5% 5%;
     display: flex;
+    width: 80%;
 }
 .img{
     border: 1px solid #ddd;
@@ -25,5 +26,10 @@
     margin-top: 8%;
     text-align: left;
 }
+.logoutIcon{
+    margin-top: 5%;
+    font-size: 200%;
+    margin-left: -10%;
+    color:#53565d;
+}
 
-  

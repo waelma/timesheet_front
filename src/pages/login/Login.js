@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import Navbar from '../../components/Navbar';
 import {GoogleLogin} from 'react-google-login';
-import ForgetPwdCodeConfirmation from './forgetPwd/ForgetPwdCodeConfirmation';
 
 const Login = () => {
     const [email,setEmail]= useState('');
@@ -19,9 +18,9 @@ const Login = () => {
         }
         axios.post(`http://localhost:8000/api/employe/login`,data)
         .then(response => {
-            console.log(response.data);
             if(response.status===200){
                 localStorage.setItem('token',response.data.token);
+                localStorage.setItem('role',response.data.role);
                 navigate("/profile");
             }
             // console.log(localStorage.getItem('token'))
@@ -42,8 +41,9 @@ const Login = () => {
           photo:response.profileObj.imageUrl
         }
         axios.post(`http://localhost:8000/api/login/google`,data)
-        .then(response => {console.log(response.data)
+        .then(response => {
           localStorage.setItem('token',response.data.token);
+          localStorage.setItem('role',response.data.role);
           if(response.status===200 || response.status===201){
               navigate("/profile");
           }
