@@ -1,7 +1,9 @@
 .notifcation{
 
 }
-
+.notifApprouve{
+  z-index: 10;
+}
 
 .notifLink:hover {
     background-color: #f0f0f0;
