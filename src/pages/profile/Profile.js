@@ -1,26 +1,28 @@
-import { React, useRef } from "react";
+import { React } from "react";
 import Image from "rc-image";
-import { Form, Input, Upload, Button } from "antd";
+import { Form, Input, Upload, Button, message } from "antd";
 import "./Profile.css";
 import { RiEdit2Line } from "react-icons/ri";
 import { useEffect, useState } from "react";
-import { HiOutlineLogout } from "react-icons/hi";
-import { useNavigate } from "react-router";
+import "antd/dist/antd.css";
 import axios from "axios";
+import SideMenu from "../../components/SideMenu";
+import HeaderMenu from "../../components/HeaderMenu";
 const Profile = () => {
-  let navigate = useNavigate();
   const token = localStorage.getItem("token");
   const [form] = Form.useForm();
+  const [ChangePwdForm] = Form.useForm();
   const [lastName, setLastName] = useState("");
   const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [speciality, setSpeciality] = useState("");
   const [image, setImage] = useState([]);
+  const [loadImg, setLoadImg] = useState(true);
+
+  const key = "updatable";
+
   useEffect(() => {
-    // if (!token&&localStorage.getItem('role')==3) {
-    //   navigate('/login');
-    // }
     axios
       .get(`http://localhost:8000/api/employe/userProfil`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -57,6 +59,7 @@ const Profile = () => {
     },
   };
   const onFinish = (values) => {
+    message.loading({ content: "Loading...", key });
     let data = {
       email: values.email,
       phone: values.phone,
@@ -72,23 +75,30 @@ const Profile = () => {
         console.log(response.data);
         setSpeciality(response.data.speciality);
         setEmail(response.data.email);
+        message.success({ content: "Changed successfuly!", key, duration: 2 });
+      })
+      .catch(() => {
+        message.error({ content: "Retry!", key, duration: 2 });
       });
   };
   const changePassword = (values) => {
+    message.loading({ content: "Loading...", key });
     let data = {
-      old_password: values.old_password,
       new_password: values.new_password,
       c_new_password: values.c_new_password,
-      email: email,
     };
-
     axios
       .put(`http://localhost:8000/api/employe/updatePassword`, data, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
         console.log(response.data);
+        message.success({ content: "Changed successfuly!", key, duration: 2 });
+      })
+      .catch(() => {
+        message.error({ content: "Retry!", key, duration: 2 });
       });
+    ChangePwdForm.resetFields();
   };
 
   const pwdValidator = (pwd) => {
@@ -104,144 +114,131 @@ const Profile = () => {
     else return false;
   };
 
-  const logout = () => {
-    axios
-      .delete(`http://localhost:8000/api/employe/logout`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((response) => {
-        console.log(response.data);
-        localStorage.removeItem("token");
-        localStorage.removeItem("role");
-        navigate("/");
-      });
-  };
   return (
-    <div className="profile">
-      <div>
-        <Image className="img" src={image} />
-        <Upload className="edit" {...props}>
-          <Button shape="circle" icon={<RiEdit2Line />}></Button>
-        </Upload>
-      </div>
+    <div>
+      <HeaderMenu></HeaderMenu>
+      <div style={{ display: "flex" }}>
+        <SideMenu></SideMenu>
+        <div className="profile">
+          <div>
+            <Image className="img" src={image} />
+            <Upload className="edit" {...props}>
+              <Button shape="circle" icon={<RiEdit2Line />}></Button>
+            </Upload>
+          </div>
 
-      <div className="profileForm">
-        <div className="userName">
-          <h1>
-            {firstName} {lastName}
-          </h1>
+          <div className="profileForm">
+            <div className="userName">
+              <h1>
+                {firstName} {lastName}
+              </h1>
+            </div>
+            <div>
+              <Form
+                layout="vertical"
+                scrollToFirstError
+                form={form}
+                labelCol={{
+                  span: 8,
+                }}
+                wrapperCol={{
+                  span: 16,
+                }}
+                onFinish={onFinish}
+                //   onFinishFailed={onFinishFailed}
+                autoComplete="off"
+              >
+                <Form.Item label="LastName" name="lastName">
+                  <Input bordered={false} className="ii" />
+                </Form.Item>
+
+                <Form.Item label="FirstName" name="firstName">
+                  <Input bordered={false} className="ii" />
+                </Form.Item>
+
+                <Form.Item name="email" label="E-mail">
+                  <Input bordered={false} className="ii" />
+                </Form.Item>
+
+                <Form.Item name="phone" label="Phone Number">
+                  <Input bordered={false} className="ii" />
+                </Form.Item>
+
+                <Form.Item name="speciality" label="Speciality">
+                  <Input bordered={false} className="ii" />
+                </Form.Item>
+                <Button type="primary" htmlType="submit">
+                  Save Change
+                </Button>
+              </Form>
+            </div>
+
+            <h3 className="libChangePwd">Change Password</h3>
+            <Form
+              form={ChangePwdForm}
+              className="updatePwdForm"
+              layout="vertical"
+              onFinish={changePassword}
+              //   onFinishFailed={onFinishFailed}
+            >
+              <Form.Item
+                name="new_password"
+                label="New Password"
+                rules={[
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      if (!pwdValidator(value)) {
+                        return Promise.reject(new Error("Invalide password !"));
+                      }
+                      return Promise.resolve();
+                    },
+                  }),
+                ]}
+              >
+                <Input.Password
+                  bordered={false}
+                  className="ii"
+                  placeholder="********"
+                />
+              </Form.Item>
+              <Form.Item
+                name="c_new_password"
+                label="Confirm New Password"
+                dependencies={["new_password"]}
+                hasFeedback
+                rules={[
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      if (!value || getFieldValue("new_password") === value) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(
+                        new Error(
+                          "The two passwords that you entered do not match!"
+                        )
+                      );
+                    },
+                  }),
+                ]}
+              >
+                <Input.Password
+                  bordered={false}
+                  className="ii"
+                  placeholder="********"
+                />
+              </Form.Item>
+
+              <Button
+                className="updatePwdFormBtn"
+                type="primary"
+                htmlType="submit"
+              >
+                Save Change
+              </Button>
+            </Form>
+          </div>
         </div>
-        <div>
-          <Form
-            layout="vertical"
-            scrollToFirstError
-            form={form}
-            labelCol={{
-              span: 8,
-            }}
-            wrapperCol={{
-              span: 16,
-            }}
-            onFinish={onFinish}
-            //   onFinishFailed={onFinishFailed}
-            autoComplete="off"
-          >
-            <Form.Item label="LastName" name="lastName">
-              <Input bordered={false} className="ii" />
-            </Form.Item>
-
-            <Form.Item label="FirstName" name="firstName">
-              <Input bordered={false} className="ii" />
-            </Form.Item>
-
-            <Form.Item name="email" label="E-mail">
-              <Input bordered={false} className="ii" />
-            </Form.Item>
-
-            <Form.Item name="phone" label="Phone Number">
-              <Input bordered={false} className="ii" />
-            </Form.Item>
-
-            <Form.Item name="speciality" label="Speciality">
-              <Input bordered={false} className="ii" />
-            </Form.Item>
-            <Button type="primary" htmlType="submit">
-              Save Change
-            </Button>
-          </Form>
-        </div>
-
-        <h3 className="libChangePwd">Change Password</h3>
-        <Form
-          className="updatePwdForm"
-          layout="vertical"
-          onFinish={changePassword}
-          //   onFinishFailed={onFinishFailed}
-        >
-          <Form.Item label="Old Password" name="old_password">
-            <Input.Password
-              bordered={false}
-              className="ii"
-              placeholder="********"
-            />
-          </Form.Item>
-          <Form.Item
-            name="new_password"
-            label="New Password"
-            rules={[
-              ({ getFieldValue }) => ({
-                validator(_, value) {
-                  if (!pwdValidator(value)) {
-                    return Promise.reject(new Error("Invalide password !"));
-                  }
-                  return Promise.resolve();
-                },
-              }),
-            ]}
-          >
-            <Input.Password
-              bordered={false}
-              className="ii"
-              placeholder="********"
-            />
-          </Form.Item>
-          <Form.Item
-            name="c_new_password"
-            label="Confirm New Password"
-            dependencies={["new_password"]}
-            hasFeedback
-            rules={[
-              ({ getFieldValue }) => ({
-                validator(_, value) {
-                  if (!value || getFieldValue("new_password") === value) {
-                    return Promise.resolve();
-                  }
-                  return Promise.reject(
-                    new Error(
-                      "The two passwords that you entered do not match!"
-                    )
-                  );
-                },
-              }),
-            ]}
-          >
-            <Input.Password
-              bordered={false}
-              className="ii"
-              placeholder="********"
-            />
-          </Form.Item>
-
-          <Button className="updatePwdFormBtn" type="primary" htmlType="submit">
-            Save Change
-          </Button>
-        </Form>
       </div>
-      <HiOutlineLogout
-        className="logoutIcon"
-        onClick={logout}
-        cursor="pointer"
-      ></HiOutlineLogout>
     </div>
   );
 };

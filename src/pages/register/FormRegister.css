@@ -42,10 +42,7 @@
     display: flex;
   }
   .form{
-    text-align: center;
-    width:100% ;
-    display: inline-block;
-    
+    width:100%;
   }
   .form-item{
     text-align: center;

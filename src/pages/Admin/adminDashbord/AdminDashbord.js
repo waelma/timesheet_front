@@ -18,39 +18,47 @@ const AdminNavbar = () => {
   const [nbrCp, setNbrCp] = useState(0);
   const [refresh, setRefresh] = useState(0);
   const [activeTabKey2, setActiveTabKey2] = useState("Comptes_List");
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     if (!token) {
       navigate("/admin/login");
     }
     axios
-      .get(`http://localhost:8000/api/admin/comptesToApprouve`, {
+      .get(`http://localhost:8000/api/admin/adminNotification`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
         setNbrCp(response.data.length);
+      });
+    axios
+      .get(`http://localhost:8000/api/admin/comptesToApprouve`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        setData(response.data);
       });
 
     const pusher = new Pusher("e43b09785ab7ef07b82f", {
       cluster: "eu",
       encrypted: true,
     });
-    const channel = pusher.subscribe("my-channel");
+    const channel = pusher.subscribe("adminChannel");
     channel.bind("my-event", (data) => {
       console.log(data);
       setRefresh(refresh + 2);
     });
-    return () => pusher.unsubscribe("my-channel");
+    return () => pusher.unsubscribe(channel);
   }, [refresh]);
 
   const tabListNoTitle = [
     {
       key: "Comptes_List",
-      tab: "Comptes List",
+      tab: "Accounts",
     },
     {
       key: "Comptes_To_Approuve",
-      tab: "Comptes To Approuve",
+      tab: "Requests",
     },
     {
       key: "project",
@@ -103,18 +111,15 @@ const AdminNavbar = () => {
     </Menu>
   );
 
-  const notificationMenu = nbrCp ? (
+  const notificationMenu = (
     <Menu style={{ width: "300px" }}>
       <Menu.Item hidden></Menu.Item>
       <Notifications
         setActiveTabKey2={setActiveTabKey2}
         refresh={refresh}
         setRefresh={setRefresh}
+        data={data}
       ></Notifications>
-    </Menu>
-  ) : (
-    <Menu style={{ width: "300px" }}>
-      <Menu.Item style={{ textAlign: "center" }}> No notifications </Menu.Item>
     </Menu>
   );
 
@@ -136,7 +141,19 @@ const AdminNavbar = () => {
                 trigger={["click"]}
                 placement="bottomRight"
               >
-                <a href onClick={(e) => e.preventDefault()}>
+                <a
+                  href
+                  onClick={(e) => {
+                    e.preventDefault();
+                    axios.get(
+                      `http://localhost:8000/api/admin/adminNotificationMarkAsRead`,
+                      {
+                        headers: { Authorization: `Bearer ${token}` },
+                      }
+                    );
+                    setNbrCp(0);
+                  }}
+                >
                   <Badge count={nbrCp} size="small" style={{ fontSize: "8px" }}>
                     <IoMdNotificationsOutline
                       style={{ fontSize: "23px", color: "black" }}

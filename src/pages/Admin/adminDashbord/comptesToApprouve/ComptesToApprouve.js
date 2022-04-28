@@ -244,7 +244,7 @@ const ComptesToApprouve = ({ setRefresh, refresh }) => {
       sorter: (a, b) => a.key - b.key,
     },
     {
-      title: "Role",
+      title: "Position",
       dataIndex: "role",
       key: "role",
     },
@@ -256,7 +256,7 @@ const ComptesToApprouve = ({ setRefresh, refresh }) => {
   ];
   return (
     <div style={{ textAlign: "center" }}>
-      <h1>Comptes To Approuve</h1>
+      <h1>Accounts To Approuve</h1>
       <div className="comptesToApprouveTab">
         <Table dataSource={dataSource} loading={loading} columns={columns} />
       </div>

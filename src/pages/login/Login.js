@@ -39,6 +39,8 @@ const Login = () => {
         if (response.status === 200) {
           localStorage.setItem("token", response.data.token);
           localStorage.setItem("role", response.data.role);
+          localStorage.setItem("user_id", response.data.user_id);
+          localStorage.setItem("verifier", response.data.email_verified_at);
           navigate("/profile");
         }
       })
@@ -64,6 +66,8 @@ const Login = () => {
       .then((response) => {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("role", response.data.role);
+        localStorage.setItem("user_id", response.data.user_id);
+        localStorage.setItem("verifier", response.data.email_verified_at);
         if (response.status === 200 || response.status === 201) {
           navigate("/profile");
         }
@@ -116,11 +120,11 @@ const Login = () => {
             rules={[
               {
                 type: "email",
-                message: "The input is not valid E-mail!",
+                message: "This E-mail is not valid!",
               },
               {
                 required: true,
-                message: "Please input your E-mail!",
+                message: "Please enter your E-mail!",
               },
             ]}
           >
@@ -140,7 +144,7 @@ const Login = () => {
                 rules={[
                   {
                     required: true,
-                    message: "Please input your password!",
+                    message: "Please enter your password!",
                   },
                 ]}
               >

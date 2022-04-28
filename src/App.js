@@ -15,12 +15,16 @@ import NotFound from "./components/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminProtectedRoute from "./components/AdminProtectedRoute";
 import { SortableTable } from "./components/DraggableBodyRow";
+import Header from "./components/HeaderMenu";
+import SideMenu from "./components/SideMenu";
+import EmployeLayout from "./components/EmployeLayout";
 
 const App = () => {
   return (
     <div>
       <BrowserRouter>
         <Routes>
+          <Route path="/test" element={<EmployeLayout />} />
           {/* Admin Routes */}
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route element={<AdminProtectedRoute />}>
@@ -32,7 +36,7 @@ const App = () => {
           {/* User route */}
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          <Route path="/register" element={<Register step={0} />} />
           <Route element={<ProtectedRoute />}>
             <Route path="/profile" element={<Profile />} />
           </Route>

@@ -246,7 +246,7 @@ const ComptesList = ({ setRefresh, refresh }) => {
       sorter: (a, b) => a.key - b.key,
     },
     {
-      title: "Role",
+      title: "Position",
       dataIndex: "role",
       key: "role",
     },
@@ -259,7 +259,7 @@ const ComptesList = ({ setRefresh, refresh }) => {
 
   return (
     <div style={{ textAlign: "center" }}>
-      <h1>Comptes List</h1>
+      <h1>List of accounts</h1>
       <div className="comptesListTab">
         <Table dataSource={dataSource} columns={columns} loading={loading} />
       </div>
