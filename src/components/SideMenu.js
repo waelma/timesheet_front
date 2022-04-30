@@ -1,23 +1,23 @@
 import React from "react";
-import { Menu } from 'antd';
+import { Menu } from "antd";
 import {
-    MailOutlined,
-    CalendarOutlined,
-    AppstoreOutlined,
-    SettingOutlined,
-    FolderOpenOutlined
-  } from '@ant-design/icons';
+  MessageOutlined,
+  CalendarOutlined,
+  AppstoreOutlined,
+  FolderOpenOutlined,
+} from "@ant-design/icons";
 
 const { SubMenu } = Menu;
 const SideMenu = () => {
-  return <div  style={{width:'20%'}}>
-<Menu
-        style={{ height: '100%', width:'100%'}}
-        defaultSelectedKeys={['1']}
-        defaultOpenKeys={['sub1']}
-        mode={'inline'}
+  return (
+    <div style={{ width: "20%" }}>
+      <Menu
+        style={{ height: "100%", width: "100%" }}
+        defaultSelectedKeys={["1"]}
+        defaultOpenKeys={["sub1"]}
+        mode={"inline"}
       >
-                <SubMenu key="sub1" icon={<AppstoreOutlined />} title="Projets">
+        <SubMenu key="sub1" icon={<AppstoreOutlined />} title="Projets">
           <Menu.Item key="3">Option 3</Menu.Item>
           <Menu.Item key="4">Option 4</Menu.Item>
           <SubMenu key="sub1-2" title="Submenu">
@@ -25,7 +25,7 @@ const SideMenu = () => {
             <Menu.Item key="6">Option 6</Menu.Item>
           </SubMenu>
         </SubMenu>
-        <Menu.Item key="1" icon={<MailOutlined />}>
+        <Menu.Item key="1" icon={<MessageOutlined />}>
           Messaging
         </Menu.Item>
         <Menu.Item key="2" icon={<CalendarOutlined />}>
@@ -38,7 +38,8 @@ const SideMenu = () => {
           <Menu.Item key="10">Option 10</Menu.Item>
         </SubMenu>
       </Menu>
-  </div>;
+    </div>
+  );
 };
 
 export default SideMenu;

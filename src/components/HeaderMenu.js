@@ -95,7 +95,6 @@ const HeaderMenu = () => {
                   </Badge>
                 </Dropdown>
               </div>
-              ,
               <div>
                 <Dropdown
                   overlay={menu}

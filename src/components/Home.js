@@ -1,10 +1,8 @@
 import { React, useState } from "react";
-import { Card, Col, Row, Drawer, Button, Steps } from "antd";
+import { Card, Col, Row, Button, Steps } from "antd";
 import "./Home.css";
 import { AiOutlinePlus } from "react-icons/ai";
-
 import CreateProject from "./CreateProject";
-
 
 const Home = () => {
   const [visible, setVisible] = useState(false);
@@ -35,17 +33,7 @@ const Home = () => {
           </Card>
         </Col>
       </Row>
-      <Drawer
-        title={"Create new project"}
-        placement="right"
-        size={"large"}
-        onClose={() => {
-          setVisible(false);
-        }}
-        visible={visible}
-      >
-        <CreateProject></CreateProject>
-      </Drawer>
+      <CreateProject setVisible={setVisible} visible={visible}></CreateProject>
     </div>
   );
 };
