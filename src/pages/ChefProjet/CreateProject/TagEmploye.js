@@ -1,7 +1,7 @@
 import {React, useEffect, useState, useCallback, createRef} from "react";
 import {Button, AutoComplete, Tag } from "antd";
 import { BsArrowReturnLeft } from "react-icons/bs";
-const TagEmploye = ({setCurrent}) => {
+const TagEmploye = ({setCurrent, tags, setTags}) => {
   const [, updateState] = useState();
   const forceUpdate = useCallback(() => updateState({}), []);
   let [name,setName]=useState('');
@@ -23,7 +23,6 @@ const TagEmploye = ({setCurrent}) => {
         id:10
       }
       ];
-      let [tags,setTags]=useState([]);
       useEffect(()=>{
         console.log(tags)
       })

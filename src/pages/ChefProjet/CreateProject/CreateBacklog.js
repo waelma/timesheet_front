@@ -5,14 +5,10 @@ import { AiOutlineClose } from 'react-icons/ai';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { BsArrowReturnLeft } from "react-icons/bs";
 
-const CreateBacklog = ({setCurrent}) => {
+const CreateBacklog = ({setCurrent, backlog, setBacklog}) => {
     const [, updateState] = useState();
     const forceUpdate = useCallback(() => updateState({}), []);
     let [task,setTask]=useState('');
-  const [data, setData] = useState(['Burns Bay Road','Downing Street','Wall Street','Wael Ma']);
-  useEffect(()=>{
-    console.log(data)
-  })
   return (
     <div>
       <div>
@@ -39,8 +35,8 @@ const CreateBacklog = ({setCurrent}) => {
             <Button 
             onClick={()=>{
                 const inp=document.getElementById('inputRef')
-                if(task && data.findIndex(x => x.toUpperCase().split(" ").join("")===task.toUpperCase().split(" ").join("") )===-1){
-                    data.push(task);
+                if(task && backlog.findIndex(x => x.toUpperCase().split(" ").join("")===task.toUpperCase().split(" ").join("") )===-1){
+                    backlog.push(task);
                     forceUpdate(); 
                 }
             }} 
@@ -64,13 +60,13 @@ const CreateBacklog = ({setCurrent}) => {
             <br />
             <InfiniteScroll
               height={'160px'}
-              dataLength={data.length}
+              dataLength={backlog.length}
             >
-            {data.map((t) => (
+            {backlog.map((t) => (
                 <Tag
                 closable
                 visible={true}
-                onClose={() => {setData(data.filter(x => x !== t));
+                onClose={() => {setBacklog(backlog.filter(x => x !== t));
                 forceUpdate(); }}
                 style={{marginBottom:'4px', width:'97%',height:'25px', borderRadius:'5px', backgroundColor:"#D0D3D4"}}
                 >

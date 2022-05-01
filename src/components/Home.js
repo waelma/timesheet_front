@@ -2,7 +2,7 @@ import { React, useState } from "react";
 import { Card, Col, Row, Button, Steps } from "antd";
 import "./Home.css";
 import { AiOutlinePlus } from "react-icons/ai";
-import CreateProject from "./CreateProject";
+import CreateProject from "../pages/ChefProjet/CreateProject/CreateProject";
 
 const Home = () => {
   const [visible, setVisible] = useState(false);
