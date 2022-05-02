@@ -4,6 +4,7 @@ import SideMenu from "./SideMenu";
 import HeaderMenu from "./HeaderMenu";
 import Profile from "../pages/profile/Profile";
 import Home from "./Home";
+import KanbanChefProjet from "./KanbanChefProjet";
 const { Header, Sider, Content } = Layout;
 const EmployeLayout = () => {
   return (
@@ -11,7 +12,8 @@ const EmployeLayout = () => {
       <HeaderMenu></HeaderMenu>
       <div style={{ display: "flex" }}>
         <SideMenu></SideMenu>
-        <Home></Home>
+        {/* <Home></Home> */}
+        <KanbanChefProjet></KanbanChefProjet>
       </div>
     </div>
   );

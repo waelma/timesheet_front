@@ -10,7 +10,7 @@ import {
 const { SubMenu } = Menu;
 const SideMenu = () => {
   return (
-    <div style={{ width: "20%" }}>
+    <div style={{ width: "15%" }}>
       <Menu
         style={{ height: "100%", width: "100%" }}
         defaultSelectedKeys={["1"]}

@@ -18,6 +18,7 @@ import { SortableTable } from "./components/DraggableBodyRow";
 import Header from "./components/HeaderMenu";
 import SideMenu from "./components/SideMenu";
 import EmployeLayout from "./components/EmployeLayout";
+import KanbanChefProjet from "./components/KanbanChefProjet";
 
 const App = () => {
   return (
