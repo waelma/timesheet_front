@@ -74,7 +74,11 @@ const HeaderMenu = () => {
         <PageHeader
           className="site-page-header"
           onBack={() => window.history.back()}
-          title="PoinTache"
+          title={
+            <a href="/home" style={{ cursor: "pointer" }}>
+              PoinTache
+            </a>
+          }
           subTitle="This is a subtitle"
           extra={[
             <div style={{ display: "flex" }}>

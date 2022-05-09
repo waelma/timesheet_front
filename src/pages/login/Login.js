@@ -41,7 +41,7 @@ const Login = () => {
           localStorage.setItem("role", response.data.role);
           localStorage.setItem("user_id", response.data.user_id);
           localStorage.setItem("verifier", response.data.email_verified_at);
-          navigate("/profile");
+          navigate("/home");
         }
       })
       .catch(() => {
@@ -69,7 +69,7 @@ const Login = () => {
         localStorage.setItem("user_id", response.data.user_id);
         localStorage.setItem("verifier", response.data.email_verified_at);
         if (response.status === 200 || response.status === 201) {
-          navigate("/profile");
+          navigate("/home");
         }
       });
   };

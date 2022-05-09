@@ -18,7 +18,7 @@ const AdminApprouve = () => {
       if (window.document.URL === "http://localhost:3000/profile") {
         window.location.reload();
       } else {
-        navigate("/profile");
+        navigate("/home");
       }
     });
     return () => pusher.unsubscribe(channel);

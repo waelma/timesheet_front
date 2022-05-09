@@ -1,4 +1,4 @@
-import React from "react";
+import { React, useEffect, useState } from "react";
 import { Menu } from "antd";
 import {
   MessageOutlined,
@@ -6,24 +6,33 @@ import {
   AppstoreOutlined,
   FolderOpenOutlined,
 } from "@ant-design/icons";
-
+import axios from "axios";
+const token = localStorage.getItem("token");
 const { SubMenu } = Menu;
 const SideMenu = () => {
+  let [projects, setProjects] = useState([]);
+  useEffect(() => {
+    axios
+      .get(`http://localhost:8000/api/chefProjet/getChefProjects`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        console.log(response.data);
+        setProjects(response.data);
+      });
+  }, []);
   return (
     <div style={{ width: "15%" }}>
       <Menu
         style={{ height: "100%", width: "100%" }}
-        defaultSelectedKeys={["1"]}
-        defaultOpenKeys={["sub1"]}
+        // defaultSelectedKeys={["1"]}
+        // defaultOpenKeys={["sub1"]}
         mode={"inline"}
       >
         <SubMenu key="sub1" icon={<AppstoreOutlined />} title="Projets">
-          <Menu.Item key="3">Option 3</Menu.Item>
-          <Menu.Item key="4">Option 4</Menu.Item>
-          <SubMenu key="sub1-2" title="Submenu">
-            <Menu.Item key="5">Option 5</Menu.Item>
-            <Menu.Item key="6">Option 6</Menu.Item>
-          </SubMenu>
+          {projects.map((project) => (
+            <Menu.Item key={project.id}>{project.name}</Menu.Item>
+          ))}
         </SubMenu>
         <Menu.Item key="1" icon={<MessageOutlined />}>
           Messaging

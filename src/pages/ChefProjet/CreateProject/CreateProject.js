@@ -2,10 +2,12 @@ import { React, useState } from "react";
 import { Steps, Input, Button, Drawer, Form } from "antd";
 import { RiUserAddLine } from "react-icons/ri";
 import { MdDriveFileRenameOutline, MdDoneAll } from "react-icons/md";
+import { IoIosTimer } from "react-icons/io";
 import { FaTasks } from "react-icons/fa";
 import TagEmploye from "./TagEmploye";
 import CreateBacklog from "./CreateBacklog";
 import SuccessCreate from "./SuccessCreate";
+import AddDates from "./AddDates";
 
 const { Step } = Steps;
 const CreateProject = ({ setVisible, visible }) => {
@@ -13,6 +15,7 @@ const CreateProject = ({ setVisible, visible }) => {
   const [title, setTitle] = useState("");
   let [tags, setTags] = useState([]);
   let [backlog, setBacklog] = useState([]);
+  let [dates, setDates] = useState([]);
 
   const onFinish = () => {
     setCurrent(current + 1);
@@ -102,12 +105,25 @@ const CreateProject = ({ setVisible, visible }) => {
     },
     {
       key: 3,
+      icon: <IoIosTimer />,
+      content: (
+        <AddDates
+          setCurrent={setCurrent}
+          setDates={setDates}
+          dates={dates}
+        ></AddDates>
+      ),
+    },
+    {
+      key: 4,
       icon: <MdDoneAll />,
       content: (
         <SuccessCreate
+          setCurrent={setCurrent}
           title={title}
           tags={tags}
           backlog={backlog}
+          dates={dates}
         ></SuccessCreate>
       ),
     },
