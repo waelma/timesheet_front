@@ -1,7 +1,7 @@
 import React from "react";
 import { Calendar, Badge } from "antd";
-import HeaderMenu from "../HeaderMenu";
-import SideMenu from "../SideMenu";
+import HeaderMenu from "../../../components/HeaderMenu";
+import SideMenu from "../../../components/SideMenu";
 import "./EmployeCalendar.css";
 
 const EmployeCalendar = () => {

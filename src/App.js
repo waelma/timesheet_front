@@ -11,12 +11,12 @@ import AdminDashbord from "./pages/Admin/adminDashbord/AdminDashbord";
 import NotFound from "./components/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminProtectedRoute from "./components/AdminProtectedRoute";
-import EmployeHome from "./components/Employe/EmployeHome";
-import Kanban from "./components/Employe/Kanban";
+import EmployeHome from "./pages/Employe/EmployeHome";
+import Kanban from "./pages/Employe/Project/Kanban/Kanban";
 import HeaderMenu from "./components/HeaderMenu";
 import SideMenu from "./components/SideMenu";
-import Calendar from "./components/Employe/EmployeCalendar";
-import TaskModel from "./components/Employe/TaskModel";
+import Calendar from "./pages/Employe/Calendar/EmployeCalendar";
+import TaskModel from "./pages/Employe/Project/Kanban/Task/TaskModel";
 
 const App = () => {
   return (

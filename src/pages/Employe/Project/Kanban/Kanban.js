@@ -3,10 +3,10 @@ import Board, { moveCard } from "@lourenci/react-kanban";
 import "@lourenci/react-kanban/dist/styles.css";
 import "./Kanban.css";
 import { Card, Avatar, Tooltip } from "antd";
-import Task from "./Task";
-import HeaderMenu from "../HeaderMenu";
-import SideMenu from "../SideMenu";
-import KanbanSideMenu from "./KanbanSideMenu";
+import Task from "./Task/Task";
+import HeaderMenu from "../../../../components/HeaderMenu";
+import SideMenu from "../../../../components/SideMenu";
+import KanbanSideMenu from "./KanbanSideMenu/KanbanSideMenu";
 import axios from "axios";
 import { useParams } from "react-router";
 

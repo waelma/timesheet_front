@@ -32,7 +32,7 @@ const SideMenu = () => {
         // defaultOpenKeys={["sub1"]}
         mode={"inline"}
       >
-        <SubMenu key="sub1" icon={<AppstoreOutlined />} title="Projets">
+        <SubMenu key="sub1" icon={<AppstoreOutlined />} title="Projects">
           {projects.map((project) => (
             <Menu.Item
               key={project.id}
