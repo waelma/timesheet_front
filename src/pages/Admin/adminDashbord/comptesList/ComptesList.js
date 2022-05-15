@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from "react";
-import { Table, Image, Input, Button, Space, Dropdown, Select } from "antd";
+import { Table, Image, Input, Button, Select } from "antd";
 import "./ComptesList.css";
 import { AiOutlineSearch } from "react-icons/ai";
 import axios from "axios";

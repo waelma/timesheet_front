@@ -2,9 +2,10 @@ import React from "react";
 import { Menu } from "antd";
 import { MessageOutlined, CalendarOutlined } from "@ant-design/icons";
 import { FiPaperclip } from "react-icons/fi";
-import { HiOutlineUsers } from "react-icons/hi";
+import { HiOutlineUsers, HiOutlineArchive } from "react-icons/hi";
 import { MdAddTask } from "react-icons/md";
 import { BsKanban } from "react-icons/bs";
+import { AiOutlineSetting } from "react-icons/ai";
 
 import "./KanbanSideMenu.css";
 const KanbanSideMenu = () => {
@@ -36,6 +37,12 @@ const KanbanSideMenu = () => {
         </Menu.Item>
         <Menu.Item key="5" icon={<FiPaperclip />}>
           Project files
+        </Menu.Item>
+        <Menu.Item key="6" icon={<AiOutlineSetting />}>
+          Setting
+        </Menu.Item>
+        <Menu.Item key="7" icon={<HiOutlineArchive />}>
+          Archive
         </Menu.Item>
       </Menu>
     </div>

@@ -3,7 +3,7 @@ import { Layout } from "antd";
 import SideMenu from "./SideMenu";
 import HeaderMenu from "./HeaderMenu";
 import Profile from "../pages/profile/Profile";
-import Home from "./EmployeHome";
+import Home from "./Employe/EmployeHome";
 
 const { Header, Sider, Content } = Layout;
 const EmployeLayout = () => {

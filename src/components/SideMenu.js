@@ -7,9 +7,12 @@ import {
   FolderOpenOutlined,
 } from "@ant-design/icons";
 import axios from "axios";
+import { useNavigate } from "react-router";
 const token = localStorage.getItem("token");
 const { SubMenu } = Menu;
+
 const SideMenu = () => {
+  let navigate = useNavigate();
   let [projects, setProjects] = useState([]);
   useEffect(() => {
     axios
@@ -17,10 +20,10 @@ const SideMenu = () => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        console.log(response.data);
         setProjects(response.data);
       });
   }, []);
+
   return (
     <div style={{ width: "15%" }}>
       <Menu
@@ -31,21 +34,28 @@ const SideMenu = () => {
       >
         <SubMenu key="sub1" icon={<AppstoreOutlined />} title="Projets">
           {projects.map((project) => (
-            <Menu.Item key={project.id}>{project.name}</Menu.Item>
+            <Menu.Item
+              key={project.id}
+              onClick={() => {
+                navigate(`/project/kanbanTable/${project.id}`);
+              }}
+            >
+              {project.name}
+            </Menu.Item>
           ))}
         </SubMenu>
         <Menu.Item key="1" icon={<MessageOutlined />}>
           Messaging
         </Menu.Item>
-        <Menu.Item key="2" icon={<CalendarOutlined />}>
+        <Menu.Item
+          key="2"
+          icon={<CalendarOutlined />}
+          onClick={() => {
+            navigate(`/calendar`);
+          }}
+        >
           Calendar
         </Menu.Item>
-        <SubMenu key="sub2" icon={<FolderOpenOutlined />} title="Shared files">
-          <Menu.Item key="7">Option 7</Menu.Item>
-          <Menu.Item key="8">Option 8</Menu.Item>
-          <Menu.Item key="9">Option 9</Menu.Item>
-          <Menu.Item key="10">Option 10</Menu.Item>
-        </SubMenu>
       </Menu>
     </div>
   );

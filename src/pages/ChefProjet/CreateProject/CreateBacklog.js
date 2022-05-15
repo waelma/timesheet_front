@@ -73,8 +73,8 @@ const CreateBacklog = ({ setCurrent, backlog, setBacklog }) => {
                 width: "30%",
                 backgroundColor: "#5499C7",
                 color: "white",
-                left: "40%",
                 borderRadius: "4px",
+                left: "40%",
               }}
             >
               Next
@@ -84,6 +84,7 @@ const CreateBacklog = ({ setCurrent, backlog, setBacklog }) => {
           <InfiniteScroll height={"160px"} dataLength={backlog.length}>
             {backlog.map((t) => (
               <Tag
+                key={t}
                 closable
                 visible={true}
                 onClose={() => {

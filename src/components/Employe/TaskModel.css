@@ -1,0 +1,26 @@
+.TaskModel .ant-divider {
+    height: 80%;
+    background-color: #D7DBDD;
+}
+.addMemberTache:hover{
+    cursor: pointer;
+    background-color: #D0D3D4;
+}
+.chekboxTacheDelete{
+    cursor:pointer;
+    padding-top: 4px;
+    visibility: hidden;
+    color:#979A9A;
+}
+.chekboxTache:hover{
+    background-color: #FBFCFC;
+}
+.chekboxTache:hover .chekboxTacheDelete{
+    visibility:initial;
+}
+.addMemberDropDown:hover{
+    background-color: #FBFCFC;
+}
+.updateDescIcon:hover{
+    color: #5DADE2;
+}

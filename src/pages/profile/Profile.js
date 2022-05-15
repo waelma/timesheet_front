@@ -15,10 +15,8 @@ const Profile = () => {
   const [lastName, setLastName] = useState("");
   const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
   const [speciality, setSpeciality] = useState("");
   const [image, setImage] = useState([]);
-  const [loadImg, setLoadImg] = useState(true);
 
   const key = "updatable";
 

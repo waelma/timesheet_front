@@ -1,14 +1,19 @@
-import { React, useState } from "react";
+import { React, useEffect, useState } from "react";
 import Board, { moveCard } from "@lourenci/react-kanban";
 import "@lourenci/react-kanban/dist/styles.css";
 import "./Kanban.css";
 import { Card, Avatar, Tooltip } from "antd";
 import Task from "./Task";
-import HeaderMenu from "./HeaderMenu";
-import SideMenu from "./SideMenu";
+import HeaderMenu from "../HeaderMenu";
+import SideMenu from "../SideMenu";
 import KanbanSideMenu from "./KanbanSideMenu";
+import axios from "axios";
+import { useParams } from "react-router";
+
+const token = localStorage.getItem("token");
 
 const Kanban = () => {
+  const { id } = useParams();
   const board = {
     columns: [
       {
@@ -85,6 +90,15 @@ const Kanban = () => {
       },
     ],
   };
+  useEffect(() => {
+    axios
+      .get(`http://localhost:8000/api/project/getProject/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        console.log(response.data);
+      });
+  }, [id]);
 
   function ControlledBoard() {
     const [controlledBoard, setBoard] = useState(board);
@@ -121,39 +135,43 @@ const Kanban = () => {
         ) =>
           state === "Backlog" ? (
             <Task
+              key={id}
               description={description}
               id={id}
               title={title}
               color={"#CACFD2 "}
               removeCard={removeCard}
-              dragging={dragging}
+              // dragging={dragging}
             ></Task>
           ) : state === "Doing" ? (
             <Task
-              description={description}
-              id={id}
-              title={title}
-              color={"#58D68D"}
-              removeCard={removeCard}
-              dragging={dragging}
-            ></Task>
-          ) : state === "Test" ? (
-            <Task
-              description={description}
-              id={id}
-              title={title}
-              color={"#F5B041"}
-              removeCard={removeCard}
-              dragging={dragging}
-            ></Task>
-          ) : (
-            <Task
+              key={id}
               description={description}
               id={id}
               title={title}
               color={"#5DADE2"}
               removeCard={removeCard}
-              dragging={dragging}
+              // dragging={dragging}
+            ></Task>
+          ) : state === "Test" ? (
+            <Task
+              key={id}
+              description={description}
+              id={id}
+              title={title}
+              color={"#F5B041"}
+              removeCard={removeCard}
+              // dragging={dragging}
+            ></Task>
+          ) : (
+            <Task
+              key={id}
+              description={description}
+              id={id}
+              title={title}
+              color={"#58D68D"}
+              removeCard={removeCard}
+              // dragging={dragging}
             ></Task>
           )
         }

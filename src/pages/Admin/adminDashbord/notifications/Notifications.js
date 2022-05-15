@@ -22,18 +22,16 @@ const Notifications = ({ setActiveTabKey2, refresh, setRefresh, data }) => {
       return ~~(diff / 1440) + " days";
     }
   };
-  useEffect(() => {
-    // console.log(data[0].created_at);
-    console.log(calculTime());
-  }, []);
+
   return data.length ? (
     <div className="notifcation">
       <List>
         <VirtualList data={data} itemHeight={47} itemKey="email">
           {(item) => (
-            <a
+            <div
+              style={{ cursor: "pointer" }}
+              key={item.email}
               className="notifLink"
-              href
               onClick={() => {
                 window.dispatchEvent(
                   new KeyboardEvent("keydown", {
@@ -71,7 +69,7 @@ const Notifications = ({ setActiveTabKey2, refresh, setRefresh, data }) => {
                   </span>
                 </div>
               </List.Item>
-            </a>
+            </div>
           )}
         </VirtualList>
       </List>

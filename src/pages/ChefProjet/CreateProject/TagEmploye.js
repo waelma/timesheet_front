@@ -102,6 +102,7 @@ const TagEmploye = ({ setCurrent, tags, setTags }) => {
           <div id="tags">
             {tags.map((emp) => (
               <Tag
+                key={emp.id}
                 closable
                 visible={true}
                 onClose={() => {

@@ -1,7 +1,7 @@
 import { React, useEffect, useState } from "react";
 import { PageHeader, Affix, Avatar, Dropdown, Menu, Badge } from "antd";
 import { IoMdNotificationsOutline } from "react-icons/io";
-import { HiOutlineLogout } from "react-icons/hi";
+import { HiOutlineLogout, HiOutlineArchive } from "react-icons/hi";
 import { AiOutlineSetting } from "react-icons/ai";
 import { CgProfile } from "react-icons/cg";
 import "./HeaderMenu.css";
@@ -54,7 +54,12 @@ const HeaderMenu = () => {
         <AiOutlineSetting style={{ marginLeft: "30px" }}></AiOutlineSetting>
       </Menu.Item>
       <Menu.Divider />
-      <Menu.Item onClick={logout} key="3" danger>
+      <Menu.Item key="3">
+        <span>Archive</span>
+        <HiOutlineArchive style={{ marginLeft: "30px" }}></HiOutlineArchive>
+      </Menu.Item>
+      <Menu.Divider />
+      <Menu.Item onClick={logout} key="4" danger>
         {" "}
         <span>Logout</span>
         <HiOutlineLogout style={{ marginLeft: "31px" }}></HiOutlineLogout>

@@ -21,9 +21,6 @@ const AdminNavbar = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    if (!token) {
-      navigate("/admin/login");
-    }
     axios
       .get(`http://localhost:8000/api/admin/adminNotification`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -82,15 +79,15 @@ const AdminNavbar = () => {
   const adminMenu = (
     <Menu>
       <Menu.Item key="0">
-        <a href>
+        <div style={{ cursor: "pointer" }}>
           <span>Setting</span>
           <AiOutlineSetting style={{ marginLeft: "30px" }}></AiOutlineSetting>
-        </a>
+        </div>
       </Menu.Item>
       <Menu.Divider />
       <Menu.Item key="2">
-        <a
-          href
+        <div
+          style={{ cursor: "pointer" }}
           onClick={() => {
             axios
               .delete(`http://localhost:8000/api/admin/logout`, {
@@ -106,7 +103,7 @@ const AdminNavbar = () => {
         >
           <span>Logout</span>
           <HiOutlineLogout style={{ marginLeft: "30px" }}></HiOutlineLogout>
-        </a>
+        </div>
       </Menu.Item>
     </Menu>
   );
@@ -141,8 +138,8 @@ const AdminNavbar = () => {
                 trigger={["click"]}
                 placement="bottomRight"
               >
-                <a
-                  href
+                <div
+                  style={{ display: "flex" }}
                   onClick={(e) => {
                     e.preventDefault();
                     axios.get(
@@ -156,21 +153,25 @@ const AdminNavbar = () => {
                 >
                   <Badge count={nbrCp} size="small" style={{ fontSize: "8px" }}>
                     <IoMdNotificationsOutline
-                      style={{ fontSize: "23px", color: "black" }}
+                      style={{
+                        fontSize: "23px",
+                        color: "black",
+                        cursor: "pointer",
+                      }}
                     ></IoMdNotificationsOutline>
                   </Badge>
-                </a>
+                </div>
               </Dropdown>
             </div>
             <Dropdown overlay={adminMenu} trigger={["click"]}>
-              <a
-                href
+              <div
+                style={{ display: "flex", cursor: "pointer" }}
                 className="ant-dropdown-link"
                 onClick={(e) => e.preventDefault()}
               >
                 Admin{" "}
                 <AiOutlineDown style={{ paddingTop: "5px" }}></AiOutlineDown>
-              </a>
+              </div>
             </Dropdown>
           </div>
         }
