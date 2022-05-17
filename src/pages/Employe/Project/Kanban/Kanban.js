@@ -24,19 +24,19 @@ const Kanban = () => {
             id: 1,
             title: "Card title 1",
             description: "Card content",
-            state: "Backlog",
+            state: "todo",
           },
           {
             id: 2,
             title: "Card title 2",
             description: "Card content",
-            state: "Backlog",
+            state: "todo",
           },
           {
             id: 3,
             title: "Card title 3",
             description: "Card content",
-            state: "Backlog",
+            state: "todo",
           },
         ],
       },
@@ -48,7 +48,7 @@ const Kanban = () => {
             id: 9,
             title: "Card title 9",
             description: "Card content",
-            state: "Doing",
+            state: "inprogress",
           },
         ],
       },
@@ -60,13 +60,13 @@ const Kanban = () => {
             id: 10,
             title: "Card title 10",
             description: "Card content",
-            state: "Test",
+            state: "test",
           },
           {
             id: 11,
             title: "Card title 11",
             description: "Card content",
-            state: "Test",
+            state: "test",
           },
         ],
       },
@@ -78,13 +78,13 @@ const Kanban = () => {
             id: 12,
             title: "Card title 12",
             description: "Card content",
-            state: "Finish",
+            state: "done",
           },
           {
             id: 13,
             title: "Card title 13",
             description: "Card content",
-            state: "Finish",
+            state: "done",
           },
         ],
       },
@@ -108,13 +108,13 @@ const Kanban = () => {
       console.log(_card);
       console.log(destination.toColumnId);
       if (destination.toColumnId === 1) {
-        _card.state = "Backlog";
+        _card.state = "todo";
       } else if (destination.toColumnId === 2) {
-        _card.state = "Doing";
+        _card.state = "inprogress";
       } else if (destination.toColumnId === 3) {
-        _card.state = "Test";
+        _card.state = "test";
       } else if (destination.toColumnId === 4) {
-        _card.state = "Finish";
+        _card.state = "done";
       }
       setBoard(updatedBoard);
     }
@@ -122,6 +122,18 @@ const Kanban = () => {
     function handleCardRemove(_card) {
       console.log(_card);
     }
+
+    const color = (etat) => {
+      if (etat === "todo") {
+        return "#CACFD2";
+      } else if (etat === "inprogress") {
+        return "#5DADE2";
+      } else if (etat === "test") {
+        return "#F5B041";
+      } else {
+        return "#58D68D";
+      }
+    };
 
     return (
       <Board
@@ -132,49 +144,17 @@ const Kanban = () => {
         renderCard={(
           { description, id, title, state },
           { removeCard, dragging }
-        ) =>
-          state === "Backlog" ? (
-            <Task
-              key={id}
-              description={description}
-              id={id}
-              title={title}
-              color={"#CACFD2 "}
-              removeCard={removeCard}
-              // dragging={dragging}
-            ></Task>
-          ) : state === "Doing" ? (
-            <Task
-              key={id}
-              description={description}
-              id={id}
-              title={title}
-              color={"#5DADE2"}
-              removeCard={removeCard}
-              // dragging={dragging}
-            ></Task>
-          ) : state === "Test" ? (
-            <Task
-              key={id}
-              description={description}
-              id={id}
-              title={title}
-              color={"#F5B041"}
-              removeCard={removeCard}
-              // dragging={dragging}
-            ></Task>
-          ) : (
-            <Task
-              key={id}
-              description={description}
-              id={id}
-              title={title}
-              color={"#58D68D"}
-              removeCard={removeCard}
-              // dragging={dragging}
-            ></Task>
-          )
-        }
+        ) => (
+          <Task
+            key={id}
+            description={description}
+            id={id}
+            title={title}
+            color={color(state)}
+            removeCard={removeCard}
+            // dragging={dragging}
+          ></Task>
+        )}
       >
         {controlledBoard}
       </Board>

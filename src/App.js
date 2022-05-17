@@ -13,10 +13,9 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import AdminProtectedRoute from "./components/AdminProtectedRoute";
 import EmployeHome from "./pages/Employe/EmployeHome";
 import Kanban from "./pages/Employe/Project/Kanban/Kanban";
-import HeaderMenu from "./components/HeaderMenu";
-import SideMenu from "./components/SideMenu";
 import Calendar from "./pages/Employe/Calendar/EmployeCalendar";
 import TaskModel from "./pages/Employe/Project/Kanban/Task/TaskModel";
+import MessageBox from "./pages/Employe/Messages/MessageBox";
 
 const App = () => {
   return (
@@ -35,6 +34,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register step={0} />} />
           <Route path="/home" element={<EmployeHome />} />
+          <Route path="/messages" element={<MessageBox />} />
           <Route element={<ProtectedRoute />}>
             <Route path="/profile" element={<Profile />} />
           </Route>

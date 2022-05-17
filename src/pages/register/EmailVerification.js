@@ -59,7 +59,7 @@ const EmailVerification = ({ x, setCurrent }) => {
             },
           ]}
         >
-          <Input placeholder="Code" className="input" />
+          <Input placeholder="Code *" className="input" />
         </Form.Item>
         <Button type="primary" htmlType="submit">
           Next

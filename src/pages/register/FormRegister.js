@@ -50,6 +50,10 @@ const FormRegister = ({ form, setx, setCurrent }) => {
       return true;
     else return false;
   };
+  const phoneValidator = (number) => {
+    if (number > 9999999 && number <= 99999999) return true;
+    else return false;
+  };
 
   const responseGoogle = (response) => {
     console.log(response.profileObj);
@@ -127,7 +131,7 @@ const FormRegister = ({ form, setx, setCurrent }) => {
               },
             ]}
           >
-            <Input className="inputRegF" placeholder="LastName" />
+            <Input className="inputRegF" placeholder="LastName *" />
           </Form.Item>
 
           <Form.Item
@@ -141,7 +145,7 @@ const FormRegister = ({ form, setx, setCurrent }) => {
               },
             ]}
           >
-            <Input className="inputRegF" placeholder="FirsName" />
+            <Input className="inputRegF" placeholder="FirsName *" />
           </Form.Item>
 
           <Form.Item
@@ -159,7 +163,7 @@ const FormRegister = ({ form, setx, setCurrent }) => {
               },
             ]}
           >
-            <Input className="inputRegF" placeholder="E-mail" />
+            <Input className="inputRegF" placeholder="E-mail *" />
           </Form.Item>
 
           <Form.Item
@@ -181,7 +185,7 @@ const FormRegister = ({ form, setx, setCurrent }) => {
               }),
             ]}
           >
-            <Input.Password className="inputRegF" placeholder="Password" />
+            <Input.Password className="inputRegF" placeholder="Password *" />
           </Form.Item>
 
           <Form.Item
@@ -211,7 +215,7 @@ const FormRegister = ({ form, setx, setCurrent }) => {
           >
             <Input.Password
               className="inputRegF"
-              placeholder="Confirm Password"
+              placeholder="Confirm Password *"
             />
           </Form.Item>
 
@@ -224,9 +228,21 @@ const FormRegister = ({ form, setx, setCurrent }) => {
                 required: true,
                 message: "Please input your phone number!",
               },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!phoneValidator(value)) {
+                    return Promise.reject(new Error("Invalide phone number !"));
+                  }
+                  return Promise.resolve();
+                },
+              }),
             ]}
           >
-            <Input className="inputRegF" placeholder="Phone Number" />
+            <Input
+              className="inputRegF"
+              placeholder="Phone Number *"
+              prefix="+216 "
+            />
           </Form.Item>
 
           <Form.Item
@@ -240,7 +256,7 @@ const FormRegister = ({ form, setx, setCurrent }) => {
               },
             ]}
           >
-            <Input className="inputRegF" placeholder="Speciality" />
+            <Input className="inputRegF" placeholder="Speciality *" />
           </Form.Item>
           <Button className="btnRg" type="primary" htmlType="submit">
             Next

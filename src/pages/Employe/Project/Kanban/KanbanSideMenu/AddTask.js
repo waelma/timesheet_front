@@ -33,15 +33,31 @@ const AddTask = ({ setVisible, visible }) => {
       >
         <div>
           <span style={{ fontWeight: "bold" }}>Task name</span>
-          <Form.Item name="name" rules={[]}>
-            <Input placeholder="Task name" />
+          <Form.Item
+            name="name"
+            rules={[
+              {
+                required: true,
+                message: "Please task name!",
+              },
+            ]}
+          >
+            <Input placeholder="Task name *" />
           </Form.Item>
           <span style={{ fontWeight: "bold" }}>Task description</span>
           <Form.Item name="description" rules={[]}>
             <TextArea placeholder="Task description" />
           </Form.Item>
           <span style={{ fontWeight: "bold" }}>Task begin and end date</span>
-          <Form.Item name="dates">
+          <Form.Item
+            name="dates"
+            rules={[
+              {
+                required: true,
+                message: "Please entre date!",
+              },
+            ]}
+          >
             <RangePicker
               style={{ width: "100%" }}
               onChange={(value, dateString) => {

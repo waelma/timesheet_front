@@ -44,7 +44,13 @@ const SideMenu = () => {
             </Menu.Item>
           ))}
         </SubMenu>
-        <Menu.Item key="1" icon={<MessageOutlined />}>
+        <Menu.Item
+          key="1"
+          icon={<MessageOutlined />}
+          // onClick={() => {
+          //   navigate(`/messages`);
+          // }}
+        >
           Messages
         </Menu.Item>
         <Menu.Item
