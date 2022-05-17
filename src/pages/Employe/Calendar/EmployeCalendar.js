@@ -17,7 +17,6 @@ const EmployeCalendar = () => {
       case 10:
         listData = [
           { type: "warning", content: "This is warning event." },
-          { type: "success", content: "This is usual event." },
           { type: "error", content: "This is error event." },
         ];
         break;
@@ -25,10 +24,6 @@ const EmployeCalendar = () => {
         listData = [
           { type: "warning", content: "This is warning event" },
           { type: "success", content: "This is very long usual event。。...." },
-          { type: "error", content: "This is error event 1." },
-          { type: "error", content: "This is error event 2." },
-          { type: "error", content: "This is error event 3." },
-          { type: "error", content: "This is error event 4." },
         ];
         break;
       default:
@@ -49,31 +44,13 @@ const EmployeCalendar = () => {
     );
   }
 
-  function getMonthData(value) {
-    if (value.month() === 8) {
-      return 1394;
-    }
-  }
-
-  function monthCellRender(value) {
-    const num = getMonthData(value);
-    return num ? (
-      <div className="notes-month">
-        <section>{num}</section>
-        <span>Backlog number</span>
-      </div>
-    ) : null;
-  }
   return (
     <div>
       <HeaderMenu></HeaderMenu>
       <div style={{ display: "flex" }}>
         <SideMenu></SideMenu>
         <div className="calendar">
-          <Calendar
-            dateCellRender={dateCellRender}
-            monthCellRender={monthCellRender}
-          />
+          <Calendar dateCellRender={dateCellRender} />
         </div>
       </div>
     </div>

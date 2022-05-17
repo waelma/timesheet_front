@@ -1,16 +1,18 @@
 import { React, useState } from "react";
-import { Menu, Badge } from "antd";
+import { Menu, Badge, Statistic } from "antd";
 import { MessageOutlined, CalendarOutlined } from "@ant-design/icons";
 import { HiOutlineUsers, HiOutlineArchive } from "react-icons/hi";
 import { MdAddTask } from "react-icons/md";
 import { BsKanban } from "react-icons/bs";
 import { AiOutlineSetting } from "react-icons/ai";
+import { ImStatsBars } from "react-icons/im";
 import GroupeMessaging from "./GroupeMessaging";
 import ProjectCalendar from "./ProjectCalendar";
 import ProjectTeam from "./ProjectTeam";
 import AddTask from "./AddTask";
 import ProjectSetting from "./ProjectSetting";
 import ProjectArchive from "./ProjectArchive";
+import Statistics from "./Statistics";
 
 const KanbanSideMenu = () => {
   const [groupeMessaging, setGroupeMessaging] = useState(false);
@@ -19,6 +21,7 @@ const KanbanSideMenu = () => {
   const [addTask, setAddTask] = useState(false);
   const [projectSetting, setProjectSetting] = useState(false);
   const [projectArchive, setProjectArchive] = useState(false);
+  const [statistics, setStatistics] = useState(false);
   return (
     <div>
       <Menu
@@ -70,6 +73,15 @@ const KanbanSideMenu = () => {
         </Menu.Item>
         <Menu.Item
           key="4"
+          icon={<ImStatsBars />}
+          onClick={() => {
+            setStatistics(true);
+          }}
+        >
+          Project statistics
+        </Menu.Item>
+        <Menu.Item
+          key="5"
           icon={<CalendarOutlined />}
           onClick={() => {
             setProjectCalendar(true);
@@ -78,7 +90,7 @@ const KanbanSideMenu = () => {
           Project Calendar
         </Menu.Item>
         <Menu.Item
-          key="5"
+          key="6"
           icon={<AiOutlineSetting />}
           onClick={() => {
             setProjectSetting(true);
@@ -87,7 +99,7 @@ const KanbanSideMenu = () => {
           Project Setting
         </Menu.Item>
         <Menu.Item
-          key="6"
+          key="7"
           icon={<HiOutlineArchive />}
           onClick={() => {
             setProjectArchive(true);
@@ -117,6 +129,7 @@ const KanbanSideMenu = () => {
         setVisible={setProjectArchive}
         visible={projectArchive}
       ></ProjectArchive>
+      <Statistics setVisible={setStatistics} visible={statistics}></Statistics>
     </div>
   );
 };

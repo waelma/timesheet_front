@@ -1,0 +1,25 @@
+.Statistics .ant-timeline.ant-timeline-label .ant-timeline-item-label{
+    width: calc(35% - 12px);
+}
+.Statistics .ant-timeline.ant-timeline-label .ant-timeline-item-tail{
+    left:35%;
+}
+.Statistics .ant-timeline.ant-timeline-label .ant-timeline-item-head{
+    left:35%;
+}
+.Statistics .ant-timeline.ant-timeline-label .ant-timeline-item-left .ant-timeline-item-content {
+    left: calc(35% - 4px);
+    width: calc(65% - 14px);
+}
+.Statistics .statCard{
+    margin-left: 10%;
+    margin-bottom:50px;
+    margin-top: 10px;
+  width: 130px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 2px 5px 0 rgba(0, 0, 0, 0.19);
+  text-align: center;
+}
+
+.Statistics .ant-statistic-content{
+    font-size: 16px;
+}

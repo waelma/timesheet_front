@@ -45,7 +45,7 @@ const SideMenu = () => {
           ))}
         </SubMenu>
         <Menu.Item key="1" icon={<MessageOutlined />}>
-          Messaging
+          Messages
         </Menu.Item>
         <Menu.Item
           key="2"

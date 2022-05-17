@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from "react";
-import { Card, Col, Row } from "antd";
+import { Card, Col, Row, Badge } from "antd";
 import "./EmployeHome.css";
 import { AiOutlinePlus } from "react-icons/ai";
 import CreateProject from "./Project/CreateProject/CreateProject";
@@ -25,7 +25,17 @@ const EmployeHome = () => {
         setProjects(response.data);
       });
   }, []);
-
+  const color=(etat)=>{
+    if(etat==="todo"){
+      return "#CACFD2"
+    }else if(etat==="inprogress"){
+      return "#5DADE2"
+    }else if(etat==="test"){
+      return "#F5B041"
+    }else{
+      return "#58D68D"
+    }
+  }
   return (
     <div>
       <HeaderMenu></HeaderMenu>
@@ -35,6 +45,7 @@ const EmployeHome = () => {
           <Row>
             <Col key="0">
               <Card
+                style={{marginRight:'20px'}}
                 className="card"
                 bordered={true}
                 onClick={() => {
@@ -48,16 +59,20 @@ const EmployeHome = () => {
             </Col>
             {projects.map((project) => (
               <Col key={project.id}>
-                <Card
-                  className="card"
-                  title={project.name}
-                  bordered={true}
-                  onClick={() => {
-                    navigate(`/project/kanbanTable/${project.id}`);
-                  }}
-                >
-                  {project.etat}
-                </Card>
+                <div style={{marginRight:'20px'}}>  
+                <Badge.Ribbon text={project.etat} color={color(project.etat)} style={{marginTop:'-10px'}}>
+                  <Card
+                    className="card"
+                    // title={project.name}
+                    bordered={true}
+                    onClick={() => {
+                      navigate(`/project/kanbanTable/${project.id}`);
+                    }}
+                  ><br />
+                    <span style={{fontWeight:"bold"}}>{project.name}</span>
+                  </Card>
+                </Badge.Ribbon>
+                </div>
               </Col>
             ))}
           </Row>

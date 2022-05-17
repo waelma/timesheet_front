@@ -17,3 +17,15 @@
   .notes-month section {
     font-size: 28px;
   }
+.calendar .ant-picker-calendar-full .ant-picker-panel .ant-picker-calendar-date-content{
+  height: 45px;
+  line-height: 1;
+}
+.calendar .ant-picker-body{
+  width: 1150px;
+  margin-right: 25px;
+  margin-left: 25px;
+}
+.calendar .ant-picker-calendar-header{
+  margin-right: 25px;
+}

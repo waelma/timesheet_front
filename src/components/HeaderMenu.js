@@ -37,6 +37,11 @@ const HeaderMenu = () => {
         navigate("/");
       });
   };
+  const notif = (
+    <Menu style={{ width: "300px" }}>
+      <Menu.Item style={{ textAlign: "center" }}> No notifications </Menu.Item>
+    </Menu>
+  );
   const menu = (
     <Menu>
       <Menu.Item
@@ -89,7 +94,7 @@ const HeaderMenu = () => {
             <div style={{ display: "flex" }}>
               <div style={{ marginTop: "3px", marginRight: "40px" }}>
                 <Dropdown
-                  overlay={menu}
+                  overlay={notif}
                   trigger={["click"]}
                   placement="bottomRight"
                 >

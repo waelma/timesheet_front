@@ -109,7 +109,7 @@ const GroupeMessaging = ({ setVisible, visible }) => {
               />
             </InfiniteScroll>
           ) : (
-            <Empty description={"No message"} />
+            <Empty description={"No message"} style={{ height: "480px", paddingTop:'100px' }} />
           )}
         </div>
         <div style={{ position: "revert", bottom: "10px", marginTop: "5px" }}>

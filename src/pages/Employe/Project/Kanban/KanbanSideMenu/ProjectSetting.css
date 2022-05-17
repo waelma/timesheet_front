@@ -1,0 +1,7 @@
+.archiveTheProject{
+    display: flex;
+    cursor: pointer;
+}
+.archiveTheProject:hover{
+    color: #E74C3C;
+}
