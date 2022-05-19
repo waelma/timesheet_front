@@ -25,7 +25,7 @@ const SideMenu = () => {
   }, []);
 
   return (
-    <div style={{ width: "15%" }}>
+    <div style={{ width: "15%", height: "90vh" }}>
       <Menu
         style={{ height: "100%", width: "100%" }}
         // defaultSelectedKeys={["1"]}
@@ -47,9 +47,9 @@ const SideMenu = () => {
         <Menu.Item
           key="1"
           icon={<MessageOutlined />}
-          // onClick={() => {
-          //   navigate(`/messages`);
-          // }}
+          onClick={() => {
+            navigate(`/messages`);
+          }}
         >
           Messages
         </Menu.Item>
