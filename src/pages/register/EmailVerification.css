@@ -4,7 +4,12 @@
     padding-bottom: 4%;
 }
 
-.input{
+.emailVerif .input{
+    border-radius: 15px;
+    border-color: 	#C0C0C0;
     width: 30%;
     margin-top: 2%;
+}
+.emailVerif .btn{
+    border-radius: 15px;
 }

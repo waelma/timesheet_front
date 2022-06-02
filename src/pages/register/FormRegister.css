@@ -17,6 +17,8 @@
 
   .Google{
     width:100%;
+    background-color: #F8F9F9;
+    border-radius: 15px;
   }
 
   .btnText{
@@ -31,15 +33,18 @@
   }
   .left{
     margin-right: 2%;
+    background-color:#C0C0C0;
   }
   .right{
     margin-left: 2%;
+    background-color:#C0C0C0;
   }
   
   #ligne{
     margin-top: 1%;
     margin-bottom: 1%;
     display: flex;
+    color:#808080;
   }
   .form{
     width:100%;
@@ -51,7 +56,10 @@
   .inputRegF{
     margin-right:-50% ;
     width: 150%;
+    border-radius: 15px;
+    border-color: 	#C0C0C0;
   }
   .btnRg{
+    border-radius: 15px;
     width: 100%;
   }

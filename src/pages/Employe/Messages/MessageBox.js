@@ -22,8 +22,12 @@ import MenuDivider from "antd/lib/menu/MenuDivider";
 import VirtualList from "rc-virtual-list";
 import InfiniteScroll from "react-infinite-scroll-component";
 import moment from "moment";
+import { useParams } from "react-router";
+import { useNavigate } from "react-router";
 const { Option } = Select;
 const MessageBox = () => {
+  const { id } = useParams();
+  let navigate = useNavigate();
   const token = localStorage.getItem("token");
   const [form] = Form.useForm();
   const [, updateState] = useState();
@@ -117,7 +121,7 @@ const MessageBox = () => {
       id: 3,
       email: "aaaatzahri@gmail.com",
       photo:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQEZrATmgHOi5ls0YCCQBTkocia_atSw0X-Q&usqp=CAU",
+        "https://media.istockphoto.com/photos/shot-of-a-young-man-using-his-smartphone-to-send-text-messages-picture-id1358205700?b=1&k=20&m=1358205700&s=170667a&w=0&h=9pXGgsARkOerFs8_XloUCdGhsQXYKyMntJlgDliOEtY=",
       firstName: "Wassef",
       lastName: "Talbi",
     },
@@ -127,7 +131,7 @@ const MessageBox = () => {
       photo: "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png",
       firstName: "Mohamed",
       lastName: "Helmi",
-    },
+    }
   ]);
   let [searchUsers, setSearchUsers] = useState(users);
   useEffect(() => {
@@ -138,7 +142,8 @@ const MessageBox = () => {
       .then((response) => {
         setOptions(response.data);
       });
-  }, []);
+    console.log("hey")
+  }, [id]);
 
   return (
     <div>
@@ -147,10 +152,9 @@ const MessageBox = () => {
         <SideMenu></SideMenu>
         <div className="messageBox">
           <div style={{ width: "75%" }}>
+            {id?(<>
             <div style={{ height: "8%" }}>
-              {/* <Skeleton.Avatar active={true} size="large" shape="circle" />
-              <Skeleton.Input active={true} className="skeletonUserName" /> */}
-              <Avatar size={40} src={users[1].photo} />
+              <Avatar size={40} src={(users.filter(item=>item.id===parseInt(id)))[0].photo} />
               <span
                 style={{
                   fontSize: "20px",
@@ -158,25 +162,18 @@ const MessageBox = () => {
                   marginLeft: "15px",
                 }}
               >
-                {users[1].firstName + " " + users[1].lastName}
+                {(users.filter(item=>item.id===parseInt(id)))[0].firstName + " " + (users.filter(item=>item.id===parseInt(id)))[0].lastName}
               </span>
             </div>
             <Divider />
             <div style={{ height: "82%" }}>
-              {/* <Skeleton avatar active={true} paragraph={{ rows: 2 }} />
-              <Skeleton
-                active={true}
-                paragraph={{ rows: 2 }}
-                className="messageFromMe"
-              />
-              <Skeleton avatar active={true} paragraph={{ rows: 2 }} /> */}
               <InfiniteScroll height="435px" dataLength={messages.length}>
               {messages.map((item) =>
                 item.transmitter !== localStorage.getItem("user_id") ? (
                   <div style={{width:"100%"}}>
                   <Comment
                     className="messageComponent"
-                    avatar={<Avatar src={item.transmitter_photo} />}
+                    avatar={<Avatar src={(users.filter(item=>item.id===parseInt(id)))[0].photo} />}
                     content={
                       <div
                         className="message"
@@ -278,7 +275,29 @@ const MessageBox = () => {
                   </Tooltip>
                 </div>
               </Form>
+            </div></>):(
+              <>
+            <div style={{ height: "8%" }}>
+              <Skeleton.Avatar active={true} size="large" shape="circle" />
+              <Skeleton.Input active={true} className="skeletonUserName" />
+                          </div>
+            <Divider />
+            <div style={{ height: "82%" }}>
+              <Skeleton avatar active={true} paragraph={{ rows: 2 }} />
+              <Skeleton
+                active={true}
+                paragraph={{ rows: 2 }}
+                className="messageFromMe"
+              />
+              <Skeleton avatar active={true} paragraph={{ rows: 2 }} />
+              <Skeleton
+                active={true}
+                paragraph={{ rows: 2 }}
+                className="messageFromMe"
+              />
             </div>
+            </>)}
+            
           </div>
           <Divider type="vertical" plain />
           <div style={{ width: "25%", marginTop: "5px", marginBottom: "5px" }}>
@@ -296,7 +315,7 @@ const MessageBox = () => {
               <List>
                 <VirtualList data={searchUsers} itemHeight={47} itemKey="email">
                   {(item) => (
-                    <div className="userDiscussion">
+                    <div className="userDiscussion" onClick={()=>{navigate(`/messages/${item.id}`);}}>
                       <List.Item key={item.email}>
                         <List.Item.Meta
                           avatar={

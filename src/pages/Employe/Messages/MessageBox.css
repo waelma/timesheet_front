@@ -41,3 +41,7 @@
     max-width:70%;
 }
 
+
+.messageBox .messageFromMe .ant-skeleton-content{
+    float: right;
+}

@@ -1,7 +1,26 @@
+
+.forgetPwdPage{
+    padding-top: 2%;
+  }
+  
+  .forgetPwdPage::before{
+  content:"";
+  background-image: linear-gradient(
+    rgba(0, 0, 0, 0.3), 
+    rgba(0, 0, 0, 0.9)
+  ),url('C:\Users\Wael\Desktop\rapport PFE\background.PNG');
+  /* opacity:0.5; */
+  position:absolute;
+  top:0;
+  bottom:0;
+  right:0;
+  left:0;
+  z-index:-3;
+  }
 .codeConf{
     border: 1px #797777;
     border-radius: 10px;
-    background-color: #f3f3f3;
+    background-color: #fff;
     padding-top: 2%;
     padding-bottom: 2%;
     margin:auto;
@@ -21,20 +40,20 @@
 h3{
     text-align: center;
 }
+.forgetPwdPage .inp{
+    border-radius: 15px;
+}
+.forgetPwdPage .btn{
+    border-radius: 15px;
+}
 
-.inpBtn{
+/* .inpBtn{
     text-align: center; 
-    display: inline-block;
-
- 
-    /* margin: auto; */
-    width:90%;
+    width:100%;
 }
 
-.inp{
-    width: 100%;
-}
+
 
 .formCodeConfirmationForgetPwd{
     display: flex;
-}
+} */

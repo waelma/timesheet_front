@@ -38,12 +38,11 @@ const CodeConfirmation = () => {
     console.log("Failed:", errorInfo);
   };
   return (
-    <div>
-      <Navbar />
+    <div className="forgetPwdPage">
       <div className="codeConf">
         <div className="code">
           <h3>
-            a message has been sent to your phone number {location.state.phone}
+            A message has been sent to your phone number {location.state.phone}
           </h3>
           <div className="inpBtn">
             <Form
@@ -64,13 +63,19 @@ const CodeConfirmation = () => {
               >
                 <Input
                   className="inp"
+                  placeholder="Enter the code"
                   onBlur={(e) => {
                     setCode(e.target.defaultValue);
                   }}
                 />
               </Form.Item>
 
-              <Button htmlType="submit" type="primary" size="middle">
+              <Button
+                className="btn"
+                htmlType="submit"
+                type="primary"
+                size="middle"
+              >
                 Submit
               </Button>
             </Form>

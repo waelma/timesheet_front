@@ -162,9 +162,9 @@ const Profile = () => {
                   <Input bordered={false} className="ii" />
                 </Form.Item>
 
-                <Form.Item name="speciality" label="Speciality">
+                {/* <Form.Item name="speciality" label="Speciality">
                   <Input bordered={false} className="ii" />
-                </Form.Item>
+                </Form.Item> */}
                 <Button type="primary" htmlType="submit">
                   Save Change
                 </Button>

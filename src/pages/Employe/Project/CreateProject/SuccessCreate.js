@@ -46,7 +46,7 @@ const SuccessCreate = ({ title, tags, backlog, dates, setCurrent }) => {
                 )
                 .then((response) => {
                   console.log(response.data);
-                  navigate("/project/kanbanTable");
+                  navigate(`/project/kanbanTable/${response.data.id}`);
                 });
             }}
           >

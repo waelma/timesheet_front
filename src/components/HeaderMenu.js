@@ -86,7 +86,7 @@ const HeaderMenu = () => {
           onBack={() => window.history.back()}
           title={
             <a href="/home" style={{ cursor: "pointer" }}>
-              PoinTache
+              PoinTâche
             </a>
           }
           subTitle="This is a subtitle"

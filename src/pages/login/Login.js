@@ -75,11 +75,9 @@ const Login = () => {
   };
 
   return (
-    <div>
-      <Navbar />
+      <div className="loginPage">
       <div className="loginForm">
         <h1 className="login-page-new__main-form-title"> Log in </h1>
-
         <div className="oauht2">
           <GoogleLogin
             className="Google"
@@ -105,7 +103,7 @@ const Login = () => {
         </div>
         <div className="or oauht2">
           <hr className="lig" />
-          <span>OR</span>
+          <span style={{color:"#808080"}}>OR</span>
           <hr className="lig" />
         </div>
         <Form
@@ -129,6 +127,7 @@ const Login = () => {
             ]}
           >
             <Input
+            className="inp"
               placeholder="Enter Email"
               onBlur={(e) => {
                 setEmail(e.target.defaultValue);
@@ -148,7 +147,7 @@ const Login = () => {
                   },
                 ]}
               >
-                <Input.Password placeholder="Enter Password" />
+                <Input.Password className="inp" placeholder="Enter Password" />
               </Form.Item>
 
               <Tooltip>
@@ -191,9 +190,11 @@ const Login = () => {
               Log in
             </Button>
           </Form.Item>
+          <div style={{width:"100%",textAlign:"center", color:"#808080"}}>Don't have an account?<a href="/register"> Sign up </a></div>
         </Form>
       </div>
-    </div>
+      </div>
+
   );
 };
 

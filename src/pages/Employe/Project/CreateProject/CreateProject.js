@@ -40,18 +40,15 @@ const CreateProject = ({ setVisible, visible }) => {
             <div style={{ width: "50%", display: "grid" }}>
               <span style={{ fontWeight: "bold" }}>Project name</span>
               <Form.Item
+                style={{
+                  marginBottom: "0px",
+                }}
                 name="Title"
                 rules={[
-                  () => ({
-                    validator() {
-                      if (!title) {
-                        return Promise.reject(
-                          new Error("Please enter your project title !")
-                        );
-                      }
-                      return Promise.resolve();
-                    },
-                  }),
+                  {
+                    required: true,
+                    message: "Please enter your project title !",
+                  },
                 ]}
               >
                 <Input

@@ -61,10 +61,14 @@ const EmailVerification = ({ x, setCurrent }) => {
         >
           <Input placeholder="Code *" className="input" />
         </Form.Item>
-        <Button type="primary" htmlType="submit">
+        <Button className="btn" type="primary" htmlType="submit">
           Next
         </Button>
-        <Button style={{ margin: "0 8px" }} onClick={() => setCurrent(0)}>
+        <Button
+          className="btn"
+          style={{ margin: "0 8px" }}
+          onClick={() => setCurrent(0)}
+        >
           Previous
         </Button>
       </Form>

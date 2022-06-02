@@ -30,11 +30,12 @@ const App = () => {
           </Route>
 
           {/* User route */}
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register step={0} />} />
           <Route path="/home" element={<EmployeHome />} />
           <Route path="/messages" element={<MessageBox />} />
+          <Route path="/messages/:id" element={<MessageBox />} />
           <Route element={<ProtectedRoute />}>
             <Route path="/profile" element={<Profile />} />
           </Route>

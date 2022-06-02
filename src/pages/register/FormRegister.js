@@ -245,7 +245,7 @@ const FormRegister = ({ form, setx, setCurrent }) => {
             />
           </Form.Item>
 
-          <Form.Item
+          {/* <Form.Item
             className="form-item"
             name="speciality"
             // label="Speciality"
@@ -257,10 +257,20 @@ const FormRegister = ({ form, setx, setCurrent }) => {
             ]}
           >
             <Input className="inputRegF" placeholder="Speciality *" />
-          </Form.Item>
+          </Form.Item> */}
           <Button className="btnRg" type="primary" htmlType="submit">
             Next
           </Button>
+          <div
+            style={{
+              marginTop: "10px",
+              width: "100%",
+              textAlign: "center",
+              color: "#808080",
+            }}
+          >
+            Already have an account?<a href="/login"> Log In </a>
+          </div>
         </Form>
       </div>
     </div>

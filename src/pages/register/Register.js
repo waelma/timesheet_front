@@ -55,16 +55,15 @@ const Register = ({ step }) => {
   ];
 
   return (
-    <div>
-      <Navbar />
-      <div className="container">
-        <Steps current={current}>
-          {steps.map((item) => (
-            <Step key={item.title} title={item.title} />
-          ))}
-        </Steps>
-        <div className="steps-content">{steps[current].content}</div>
-      </div>
+    <div className="registerPage">
+    <div className="container">
+      <Steps current={current}>
+        {steps.map((item) => (
+          <Step key={item.title} title={item.title} />
+        ))}
+      </Steps>
+      <div className="steps-content">{steps[current].content}</div>
+    </div>
     </div>
   );
 };

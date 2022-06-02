@@ -1,12 +1,12 @@
 import { React, useState, useCallback } from "react";
-import { Input, Button, Tag } from "antd";
+import { Input, Button, Tag, Form } from "antd";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { BsArrowReturnLeft } from "react-icons/bs";
 
 const CreateBacklog = ({ setCurrent, backlog, setBacklog }) => {
+  const [form] = Form.useForm();
   const [, updateState] = useState();
   const forceUpdate = useCallback(() => updateState({}), []);
-  let [task, setTask] = useState("");
   return (
     <div>
       <div>
@@ -31,55 +31,66 @@ const CreateBacklog = ({ setCurrent, backlog, setBacklog }) => {
         <br></br>
         <div style={{ width: "50%", display: "grid" }}>
           <span style={{ fontWeight: "bold" }}>Task name</span>
-          <Input
-            onBlur={(x) => {
-              setTask(x.target.defaultValue);
+          <Form
+            form={form}
+            onFinish={(values) => {
+              if (
+                values.task &&
+                backlog.findIndex(
+                  (x) =>
+                    x.toUpperCase().split(" ").join("") ===
+                    values.task.toUpperCase().split(" ").join("")
+                ) === -1
+              ) {
+                backlog.push(values.task);
+                form.resetFields();
+                forceUpdate();
+              }
             }}
-            placeholder="Task name"
-            style={{ borderRadius: "4px", borderColor: "#5499C7" }}
-          />
-          <br />
-          <div>
-            <Button
-              onClick={() => {
-                if (
-                  task &&
-                  backlog.findIndex(
-                    (x) =>
-                      x.toUpperCase().split(" ").join("") ===
-                      task.toUpperCase().split(" ").join("")
-                  ) === -1
-                ) {
-                  backlog.push(task);
-                  forceUpdate();
-                }
-              }}
+          >
+            <Form.Item
+              name="task"
               style={{
-                width: "30%",
-                backgroundColor: "#28B463",
-                color: "white",
-                borderRadius: "4px",
-                left: "40%",
-                borderColor: "white",
+                marginBottom: "0px",
               }}
             >
-              Add
-            </Button>
-            <Button
-              onClick={() => {
-                setCurrent(3);
-              }}
-              style={{
-                width: "30%",
-                backgroundColor: "#5499C7",
-                color: "white",
-                borderRadius: "4px",
-                left: "40%",
-              }}
-            >
-              Next
-            </Button>
-          </div>
+              <Input
+                placeholder="Task name"
+                style={{ borderRadius: "4px", borderColor: "#5499C7" }}
+              />
+            </Form.Item>
+            <br />
+            <div>
+              <Button
+                type="primary"
+                htmlType="submit"
+                style={{
+                  width: "30%",
+                  backgroundColor: "#28B463",
+                  color: "white",
+                  borderRadius: "4px",
+                  left: "40%",
+                  borderColor: "white",
+                }}
+              >
+                Add
+              </Button>
+              <Button
+                onClick={() => {
+                  setCurrent(3);
+                }}
+                style={{
+                  width: "30%",
+                  backgroundColor: "#5499C7",
+                  color: "white",
+                  borderRadius: "4px",
+                  left: "40%",
+                }}
+              >
+                Next
+              </Button>
+            </div>
+          </Form>
           <br />
           <InfiniteScroll height={"160px"} dataLength={backlog.length}>
             {backlog.map((t) => (

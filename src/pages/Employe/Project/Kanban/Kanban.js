@@ -25,18 +25,52 @@ const Kanban = () => {
             title: "Card title 1",
             description: "Card content",
             state: "todo",
+            members: [
+              {
+                photo:
+                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUDnkndWV6_6v_dks3oYlvJZwW6CQiCsV6Uw&usqp=CAU",
+              },
+              {
+                photo:
+                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_d3SP2vKOeGFVESn5rk6xnPiQ0naW2e-ldA&usqp=CAU",
+              },
+            ],
           },
           {
             id: 2,
             title: "Card title 2",
             description: "Card content",
             state: "todo",
+            members: [
+              {
+                photo:
+                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUDnkndWV6_6v_dks3oYlvJZwW6CQiCsV6Uw&usqp=CAU",
+              },
+              {
+                photo:
+                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_d3SP2vKOeGFVESn5rk6xnPiQ0naW2e-ldA&usqp=CAU",
+              },
+              {
+                photo:
+                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQEZrATmgHOi5ls0YCCQBTkocia_atSw0X-Q&usqp=CAU",
+              },
+            ],
           },
           {
             id: 3,
             title: "Card title 3",
             description: "Card content",
             state: "todo",
+            members: [
+              {
+                photo:
+                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUDnkndWV6_6v_dks3oYlvJZwW6CQiCsV6Uw&usqp=CAU",
+              },
+              {
+                photo:
+                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_d3SP2vKOeGFVESn5rk6xnPiQ0naW2e-ldA&usqp=CAU",
+              },
+            ],
           },
         ],
       },
@@ -49,6 +83,16 @@ const Kanban = () => {
             title: "Card title 9",
             description: "Card content",
             state: "inprogress",
+            members: [
+              {
+                photo:
+                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUDnkndWV6_6v_dks3oYlvJZwW6CQiCsV6Uw&usqp=CAU",
+              },
+              {
+                photo:
+                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQEZrATmgHOi5ls0YCCQBTkocia_atSw0X-Q&usqp=CAU",
+              },
+            ],
           },
         ],
       },
@@ -61,12 +105,32 @@ const Kanban = () => {
             title: "Card title 10",
             description: "Card content",
             state: "test",
+            members: [
+              {
+                photo:
+                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_d3SP2vKOeGFVESn5rk6xnPiQ0naW2e-ldA&usqp=CAU",
+              },
+              {
+                photo:
+                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQEZrATmgHOi5ls0YCCQBTkocia_atSw0X-Q&usqp=CAU",
+              },
+            ],
           },
           {
             id: 11,
             title: "Card title 11",
             description: "Card content",
             state: "test",
+            members: [
+              {
+                photo:
+                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUDnkndWV6_6v_dks3oYlvJZwW6CQiCsV6Uw&usqp=CAU",
+              },
+              {
+                photo:
+                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQEZrATmgHOi5ls0YCCQBTkocia_atSw0X-Q&usqp=CAU",
+              },
+            ],
           },
         ],
       },
@@ -79,17 +143,35 @@ const Kanban = () => {
             title: "Card title 12",
             description: "Card content",
             state: "done",
+            members: [
+              {
+                photo:
+                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUDnkndWV6_6v_dks3oYlvJZwW6CQiCsV6Uw&usqp=CAU",
+              },
+            ],
           },
           {
             id: 13,
             title: "Card title 13",
             description: "Card content",
             state: "done",
+            members: [
+              {
+                photo:
+                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUDnkndWV6_6v_dks3oYlvJZwW6CQiCsV6Uw&usqp=CAU",
+              },
+              {
+                photo:
+                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_d3SP2vKOeGFVESn5rk6xnPiQ0naW2e-ldA&usqp=CAU",
+              },
+            ],
           },
         ],
       },
     ],
   };
+  // let [ok, setOk] = useState(true);
+  const [controlledBoard, setBoard] = useState(board);
   useEffect(() => {
     axios
       .get(`http://localhost:8000/api/project/getProject/${id}`, {
@@ -97,12 +179,14 @@ const Kanban = () => {
       })
       .then((response) => {
         console.log(response.data);
+        // setBoard(response.data);
+        // setTimeout(() => {
+        //   setOk(false);
+        // }, timeout);
       });
   }, [id]);
 
   function ControlledBoard() {
-    const [controlledBoard, setBoard] = useState(board);
-
     function handleCardMove(_card, source, destination) {
       const updatedBoard = moveCard(controlledBoard, source, destination);
       console.log(_card);
@@ -142,7 +226,7 @@ const Kanban = () => {
         allowRemoveCard
         onCardRemove={handleCardRemove}
         renderCard={(
-          { description, id, title, state },
+          { description, id, title, state, members },
           { removeCard, dragging }
         ) => (
           <Task
@@ -151,6 +235,7 @@ const Kanban = () => {
             id={id}
             title={title}
             color={color(state)}
+            members={members}
             removeCard={removeCard}
             // dragging={dragging}
           ></Task>

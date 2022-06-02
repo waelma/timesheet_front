@@ -1,11 +1,11 @@
 import { React, useEffect, useState, useCallback } from "react";
-import { Button, AutoComplete, Tag } from "antd";
+import { Button, AutoComplete, Tag, Form } from "antd";
 import { BsArrowReturnLeft } from "react-icons/bs";
 import axios from "axios";
 const TagEmploye = ({ setCurrent, tags, setTags }) => {
+  const [form] = Form.useForm();
   const [, updateState] = useState();
   const forceUpdate = useCallback(() => updateState({}), []);
-  let [name, setName] = useState("");
   let [options, setOptions] = useState([]);
   const token = localStorage.getItem("token");
   useEffect(() => {
@@ -38,65 +38,76 @@ const TagEmploye = ({ setCurrent, tags, setTags }) => {
           Build your team. You can edit him and add more later.
         </p>
         <br></br>
+
         <div style={{ width: "50%", display: "grid" }}>
           <span style={{ fontWeight: "bold" }}>Add employe</span>
-          <AutoComplete
-            style={{
-              width: "100%",
+          <Form
+            form={form}
+            onFinish={(values) => {
+              let newItem = options.filter(
+                (item) => item.value === values.member
+              )[0];
+              if (
+                newItem &&
+                tags.findIndex((x) => x.id === newItem.id) === -1
+              ) {
+                tags.push(newItem);
+                form.resetFields();
+                forceUpdate();
+              }
             }}
-            options={options}
-            placeholder="Employe"
-            onChange={() => {
-              name = "";
-            }}
-            onSelect={(n) => {
-              name = n;
-              console.log(n);
-            }}
-            filterOption={(inputValue, option) =>
-              option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !==
-              -1
-            }
-          />
-          <br />
-          <div>
-            <Button
-              onClick={() => {
-                let newItem = options.filter((item) => item.value === name)[0];
-                if (
-                  newItem &&
-                  tags.findIndex((x) => x.id === newItem.id) === -1
-                ) {
-                  tags.push(newItem);
-                  forceUpdate();
+          >
+            <Form.Item
+              name="member"
+              style={{
+                marginBottom: "0px",
+              }}
+            >
+              <AutoComplete
+                style={{
+                  width: "100%",
+                }}
+                options={options}
+                placeholder="Employe"
+                filterOption={(inputValue, option) =>
+                  option.value
+                    .toUpperCase()
+                    .indexOf(inputValue.toUpperCase()) !== -1
                 }
-              }}
-              style={{
-                width: "30%",
-                backgroundColor: "#28B463",
-                color: "white",
-                borderRadius: "4px",
-                left: "40%",
-                borderColor: "white",
-              }}
-            >
-              Add
-            </Button>
-            <Button
-              onClick={() => {
-                setCurrent(2);
-              }}
-              style={{
-                width: "30%",
-                backgroundColor: "#5499C7",
-                color: "white",
-                borderRadius: "4px",
-                left: "40%",
-              }}
-            >
-              Next
-            </Button>
-          </div>
+              />
+            </Form.Item>
+            <br />
+            <div>
+              <Button
+                type="primary"
+                htmlType="submit"
+                style={{
+                  width: "30%",
+                  backgroundColor: "#28B463",
+                  color: "white",
+                  borderRadius: "4px",
+                  left: "40%",
+                  borderColor: "white",
+                }}
+              >
+                Add
+              </Button>
+              <Button
+                onClick={() => {
+                  setCurrent(2);
+                }}
+                style={{
+                  width: "30%",
+                  backgroundColor: "#5499C7",
+                  color: "white",
+                  borderRadius: "4px",
+                  left: "40%",
+                }}
+              >
+                Next
+              </Button>
+            </div>
+          </Form>
           <br />
           <br />
           <div id="tags">

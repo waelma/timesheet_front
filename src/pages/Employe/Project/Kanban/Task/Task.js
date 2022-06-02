@@ -4,7 +4,15 @@ import { AiOutlineClose } from "react-icons/ai";
 import { BiTimeFive } from "react-icons/bi";
 import "./Task.css";
 import TaskModel from "./TaskModel";
-const Task = ({ description, id, title, color, removeCard, dragging }) => {
+const Task = ({
+  description,
+  id,
+  title,
+  color,
+  removeCard,
+  dragging,
+  members,
+}) => {
   const [visible, setVisible] = useState(false);
   return (
     <>
@@ -47,9 +55,12 @@ const Task = ({ description, id, title, color, removeCard, dragging }) => {
               backgroundColor: "#D0D3D4",
             }}
           >
-            <Avatar src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUDnkndWV6_6v_dks3oYlvJZwW6CQiCsV6Uw&usqp=CAU" />
+            {/* <Avatar src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUDnkndWV6_6v_dks3oYlvJZwW6CQiCsV6Uw&usqp=CAU" />
             <Avatar src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_d3SP2vKOeGFVESn5rk6xnPiQ0naW2e-ldA&usqp=CAU" />
-            <Avatar src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQEZrATmgHOi5ls0YCCQBTkocia_atSw0X-Q&usqp=CAU" />
+            <Avatar src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQEZrATmgHOi5ls0YCCQBTkocia_atSw0X-Q&usqp=CAU" /> */}
+            {members.map((member) => (
+              <Avatar src={member.photo} />
+            ))}
           </Avatar.Group>
         </div>
       </Card>
