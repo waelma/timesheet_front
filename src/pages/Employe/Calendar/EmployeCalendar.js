@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import moment from "moment";
-import { Calendar, Badge } from "antd";
+import { Calendar, Badge, Tooltip } from "antd";
+import axios from "axios";
 import HeaderMenu from "../../../components/HeaderMenu";
 import SideMenu from "../../../components/SideMenu";
 import "./EmployeCalendar.css";
@@ -35,22 +36,42 @@ const calendar = {
 
 const EmployeCalendar = () => {
   // const [mounth, setMounth] = useState(Number(moment().format("MM")));
+  const [data, setData] = useState({});
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    axios
+      .get(
+        "https://8dcd-197-244-176-194.eu.ngrok.io/api/employe/getEmployeCalendar",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then((res) => {
+        setData(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
   function getListData(value) {
     let mounth = value.month() + 1;
-    if (!calendar[mounth]) return [];
+    if (!data[mounth]) return [];
     const day = Number(value.format("DD"));
 
-    return calendar[mounth][day] || [];
+    return data[mounth][day] || [];
   }
 
   function dateCellRender(value) {
     const listData = getListData(value);
     return (
       <ul className='events'>
-        {listData.map((item) => (
-          <li key={item.content}>
-            <Badge status={item.type} text={item.content} />
-          </li>
+        {listData.map((item, index) => (
+          <Tooltip
+            key={index}
+            placement='topLeft'
+            title={`Deadline of task : ${item}`}>
+            <Badge status={"success"} text={item} />
+          </Tooltip>
         ))}
       </ul>
     );
