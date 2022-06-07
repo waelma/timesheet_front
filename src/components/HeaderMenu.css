@@ -1,4 +1,23 @@
 .ant-page-header {
-    background-color: #F7F9F9;
-    padding: 8px 24px;
+  background-color: #f7f9f9;
+  padding: 8px 24px;
+}
+.notifcations-empty {
+  margin: 0;
+  text-transform: capitalize;
+}
+.notification-container {
+  gap: 1rem;
+  display: flex;
+  margin: 0.5rem 0;
+}
+
+.notification-content h3 {
+  text-align: left;
+  margin: 0;
+  text-transform: capitalize;
+}
+.notification-content p {
+  margin: 0;
+  text-align: left;
 }

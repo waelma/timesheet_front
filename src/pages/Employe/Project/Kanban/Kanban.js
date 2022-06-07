@@ -14,6 +14,7 @@ const token = localStorage.getItem("token");
 
 const Kanban = () => {
   const { id } = useParams();
+  const [, forceUpdate] = useState(0);
   const board = {
     columns: [
       {
@@ -174,9 +175,12 @@ const Kanban = () => {
   const [controlledBoard, setBoard] = useState(board);
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/api/project/getProject/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .get(
+        `https://8dcd-197-244-176-194.eu.ngrok.io/api/project/getProject/${id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
       .then((response) => {
         console.log(response.data);
         // setBoard(response.data);
@@ -230,6 +234,7 @@ const Kanban = () => {
           { removeCard, dragging }
         ) => (
           <Task
+            forceUpdate={forceUpdate}
             key={id}
             description={description}
             id={id}
@@ -239,8 +244,7 @@ const Kanban = () => {
             removeCard={removeCard}
             // dragging={dragging}
           ></Task>
-        )}
-      >
+        )}>
         {controlledBoard}
       </Board>
     );
@@ -251,7 +255,7 @@ const Kanban = () => {
       <HeaderMenu></HeaderMenu>
       <div style={{ display: "flex" }}>
         <SideMenu></SideMenu>
-        <div className="Kanban">
+        <div className='Kanban'>
           <ControlledBoard />
         </div>
         <KanbanSideMenu></KanbanSideMenu>

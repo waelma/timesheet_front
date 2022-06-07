@@ -8,6 +8,8 @@ import "./HeaderMenu.css";
 import axios from "axios";
 import { useNavigate } from "react-router";
 
+const notifications = [];
+
 const HeaderMenu = () => {
   const token = localStorage.getItem("token");
   const [avatar, setAvatar] = useState();
@@ -37,12 +39,33 @@ const HeaderMenu = () => {
         navigate("/");
       });
   };
+
   const notif = (
     <Menu style={{ width: "300px" }}>
-      <Menu.Item key='1' style={{ textAlign: "center" }}>
-        {" "}
-        No notifications{" "}
-      </Menu.Item>
+      {notifications?.length > 0 ? (
+        notifications.map((notif, index) => (
+          <Menu.Item key={index} style={{ textAlign: "center" }}>
+            <div gap={"16px"} className='notification-container'>
+              <div>
+                <Avatar
+                  size={32}
+                  style={{ cursor: "pointer" }}
+                  src={notif.photo}
+                />
+              </div>
+              <div className='notification-content'>
+                <h3>{`${notif.firstName} ${notif.lastName}`}</h3>
+                <p>{notif.content}</p>
+              </div>
+            </div>
+            <Menu.Divider />
+          </Menu.Item>
+        ))
+      ) : (
+        <Menu.Item key={"1"} style={{ textAlign: "center" }}>
+          <p className='notifcations-empty'>No notifcations</p>
+        </Menu.Item>
+      )}
     </Menu>
   );
   const menu = (

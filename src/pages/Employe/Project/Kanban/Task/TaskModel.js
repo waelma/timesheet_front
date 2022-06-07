@@ -127,7 +127,7 @@ let todos = [
   },
 ];
 
-const TaskModel = ({ visible, setVisible }) => {
+const TaskModel = ({ visible, setVisible, forceUpdate: forceRefresh }) => {
   let [dates, setDates] = useState([
     {
       startDate: "2022-05-01",
@@ -156,7 +156,7 @@ const TaskModel = ({ visible, setVisible }) => {
     <Menu style={{ paddingTop: "10px", paddingBottom: "5px" }}>
       {allUsers.map((allUser) => (
         <div
-          className="addMemberDropDown"
+          className='addMemberDropDown'
           style={{
             width: "200px",
             display: "flex",
@@ -164,13 +164,12 @@ const TaskModel = ({ visible, setVisible }) => {
             paddingRight: "10px",
             marginBottom: "5px",
           }}
-          key={allUser.id}
-        >
+          key={allUser.id}>
           <span>{allUser.firstName}</span>
           {users.filter((element) => {
             return element.id === allUser.id;
           }).length ? (
-            <Tooltip title="Delete member">
+            <Tooltip title='Delete member'>
               <UserDeleteOutlined
                 style={{
                   color: "red",
@@ -186,11 +185,10 @@ const TaskModel = ({ visible, setVisible }) => {
                   });
                   console.log(users);
                   forceUpdate();
-                }}
-              ></UserDeleteOutlined>
+                }}></UserDeleteOutlined>
             </Tooltip>
           ) : (
-            <Tooltip title="Add member">
+            <Tooltip title='Add member'>
               <UserAddOutlined
                 style={{
                   color: "green",
@@ -204,8 +202,7 @@ const TaskModel = ({ visible, setVisible }) => {
                   users.push(allUser);
                   console.log(users);
                   forceUpdate();
-                }}
-              ></UserAddOutlined>
+                }}></UserAddOutlined>
             </Tooltip>
           )}
         </div>
@@ -218,7 +215,7 @@ const TaskModel = ({ visible, setVisible }) => {
   return (
     <div>
       <Modal
-        className="TaskModel"
+        className='TaskModel'
         title={
           <div style={{ display: "flex" }}>
             <div>
@@ -230,9 +227,8 @@ const TaskModel = ({ visible, setVisible }) => {
                   onFinish={(values) => {
                     setTaskTitle(values.taskTitle);
                     setTaskTitleInput(false);
-                  }}
-                >
-                  <Form.Item style={{ marginBottom: "5px" }} name="taskTitle">
+                  }}>
+                  <Form.Item style={{ marginBottom: "5px" }} name='taskTitle'>
                     <Input
                       rows={2}
                       style={{ borderRadius: "15px", width: "100%" }}
@@ -240,18 +236,17 @@ const TaskModel = ({ visible, setVisible }) => {
                   </Form.Item>
                   <Button
                     style={{ marginLeft: "5px", borderRadius: "15px" }}
-                    htmlType="submit"
-                    type="primary"
-                  >
+                    htmlType='submit'
+                    type='primary'>
                     Edit
                   </Button>
                 </Form>
               ) : (
                 <div style={{ display: "felx" }}>
                   {taskTitle}
-                  <Tooltip title="Edit task Title">
+                  <Tooltip title='Edit task Title'>
                     <EditOutlined
-                      className="updateDescIcon"
+                      className='updateDescIcon'
                       style={{
                         marginLeft: "10px",
                         cursor: "pointer",
@@ -259,8 +254,7 @@ const TaskModel = ({ visible, setVisible }) => {
                       }}
                       onClick={() => {
                         setTaskTitleInput(true);
-                      }}
-                    ></EditOutlined>
+                      }}></EditOutlined>
                   </Tooltip>
                 </div>
               )}
@@ -282,12 +276,11 @@ const TaskModel = ({ visible, setVisible }) => {
                 }}
               />
             </div>
-            <Tooltip title="Archive task">
+            <Tooltip title='Archive task'>
               <Button
-                shape="circle"
+                shape='circle'
                 icon={<HiOutlineArchive style={{ marginTop: "5px" }} />}
-                style={{ marginLeft: "20px" }}
-              ></Button>
+                style={{ marginLeft: "20px" }}></Button>
             </Tooltip>
           </div>
         }
@@ -295,9 +288,12 @@ const TaskModel = ({ visible, setVisible }) => {
         centered
         visible={visible}
         onOk={() => setVisible(false)}
-        onCancel={() => setVisible(false)}
-        width={850}
-      >
+        onCancel={() => {
+          setVisible(false);
+          console.log("force refresh ");
+          forceRefresh(Math.random());
+        }}
+        width={850}>
         <div style={{ display: "flex" }}>
           <div style={{ width: "60%", paddingRight: "10px" }}>
             <div>
@@ -309,9 +305,8 @@ const TaskModel = ({ visible, setVisible }) => {
                   onFinish={(values) => {
                     setDescription(values.description);
                     setDescInput(false);
-                  }}
-                >
-                  <Form.Item style={{ marginBottom: "5px" }} name="description">
+                  }}>
+                  <Form.Item style={{ marginBottom: "5px" }} name='description'>
                     <TextArea rows={2} style={{ borderRadius: "15px" }} />
                   </Form.Item>
                   <Button
@@ -320,9 +315,8 @@ const TaskModel = ({ visible, setVisible }) => {
                       marginLeft: "70%",
                       borderRadius: "15px",
                     }}
-                    htmlType="submit"
-                    type="primary"
-                  >
+                    htmlType='submit'
+                    type='primary'>
                     {" "}
                     Add desciption
                   </Button>
@@ -330,9 +324,9 @@ const TaskModel = ({ visible, setVisible }) => {
               ) : (
                 <div style={{ display: "felx" }}>
                   {description}
-                  <Tooltip title="Edit description">
+                  <Tooltip title='Edit description'>
                     <EditOutlined
-                      className="updateDescIcon"
+                      className='updateDescIcon'
                       style={{
                         marginLeft: "10px",
                         cursor: "pointer",
@@ -340,8 +334,7 @@ const TaskModel = ({ visible, setVisible }) => {
                       }}
                       onClick={() => {
                         setDescInput(true);
-                      }}
-                    ></EditOutlined>
+                      }}></EditOutlined>
                   </Tooltip>
                 </div>
               )}
@@ -363,13 +356,12 @@ const TaskModel = ({ visible, setVisible }) => {
 
               {todos.map((todo) => (
                 <div
-                  className="chekboxTache"
+                  className='chekboxTache'
                   style={{
                     width: "100%",
                     display: "flex",
                     paddingRight: "9px",
-                  }}
-                >
+                  }}>
                   <Checkbox
                     key={todo.name}
                     checked={todo.verifier}
@@ -377,12 +369,11 @@ const TaskModel = ({ visible, setVisible }) => {
                     onChange={(e) => {
                       todo.verifier = !todo.verifier;
                       forceUpdate();
-                    }}
-                  >
+                    }}>
                     {todo.name}
                   </Checkbox>
                   <DeleteOutlined
-                    className="chekboxTacheDelete"
+                    className='chekboxTacheDelete'
                     onClick={() => {
                       todos = todos.filter((element) => {
                         return element.name !== todo.name;
@@ -406,29 +397,27 @@ const TaskModel = ({ visible, setVisible }) => {
                     setVisibleAddTask(false);
                     forceUpdate();
                   }}
-                  autoComplete="off"
-                >
+                  autoComplete='off'>
                   <div style={{ display: "flex", marginTop: "5px" }}>
                     <Form.Item
                       style={{ marginRight: "5px", width: "30%" }}
-                      name="todo"
+                      name='todo'
                       rules={[
                         {
                           required: true,
                           message: "Please enter a todo!",
                         },
-                      ]}
-                    >
+                      ]}>
                       <Input
-                        placeholder="Add ToDo"
+                        placeholder='Add ToDo'
                         style={{ borderRadius: "15px" }}
                       />
                     </Form.Item>
-                    <Tooltip title="Add">
+                    <Tooltip title='Add'>
                       <Button
-                        type="primary"
-                        htmlType="submit"
-                        shape="circle"
+                        type='primary'
+                        htmlType='submit'
+                        shape='circle'
                         icon={<PlusOutlined style={{ marginLeft: "1px" }} />}
                       />
                     </Tooltip>
@@ -436,15 +425,14 @@ const TaskModel = ({ visible, setVisible }) => {
                 </Form>
               ) : (
                 <Button
-                  type="dashed"
+                  type='dashed'
                   onClick={() => setVisibleAddTask(true)}
                   style={{
                     width: "30%",
                     borderRadius: "15px",
                     marginTop: "5px",
                   }}
-                  icon={<PlusOutlined />}
-                >
+                  icon={<PlusOutlined />}>
                   Add todo
                 </Button>
               )}
@@ -454,15 +442,14 @@ const TaskModel = ({ visible, setVisible }) => {
               <Upload {...props}>
                 <Button
                   style={{ borderRadius: "15px" }}
-                  icon={<UploadOutlined />}
-                >
+                  icon={<UploadOutlined />}>
                   Upload
                 </Button>
               </Upload>
             </div>
           </div>
           <div style={{ paddingTop: "5%" }}>
-            <Divider type="vertical" plain />
+            <Divider type='vertical' plain />
           </div>
           <div style={{ width: "40%", paddingLeft: "10px" }}>
             <div>
@@ -476,12 +463,11 @@ const TaskModel = ({ visible, setVisible }) => {
                   />
                 </Tooltip>
               ))}
-              <Dropdown overlay={menu} trigger={["click"]} placement="bottom">
-                <Tooltip title="add Member">
+              <Dropdown overlay={menu} trigger={["click"]} placement='bottom'>
+                <Tooltip title='add Member'>
                   <Avatar
-                    className="addMemberTache"
-                    style={{ cursor: "pointer" }}
-                  >
+                    className='addMemberTache'
+                    style={{ cursor: "pointer" }}>
                     <EditOutlined />
                   </Avatar>
                 </Tooltip>

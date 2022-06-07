@@ -12,19 +12,19 @@ const Task = ({
   removeCard,
   dragging,
   members,
+  forceUpdate,
 }) => {
   const [visible, setVisible] = useState(false);
   return (
     <>
       <Card
-        className="task"
+        className='task'
         dragging={dragging}
         onClick={() => {
           console.log(id);
           setVisible(true);
-        }}
-      >
-        <div className="taskTitle" style={{ backgroundColor: color }}>
+        }}>
+        <div className='taskTitle' style={{ backgroundColor: color }}>
           {title}
         </div>
         <div>
@@ -35,11 +35,12 @@ const Task = ({
               fontSize: "12px",
               fontWeight: "500",
               color: "#707B7C ",
-            }}
-          >
+            }}>
             <BiTimeFive
-              style={{ fontSize: "15px", marginBottom: "-3px" }}
-            ></BiTimeFive>{" "}
+              style={{
+                fontSize: "15px",
+                marginBottom: "-3px",
+              }}></BiTimeFive>{" "}
             08 apr - 12 dec
           </span>
           <Avatar.Group
@@ -53,8 +54,7 @@ const Task = ({
             maxStyle={{
               color: "",
               backgroundColor: "#D0D3D4",
-            }}
-          >
+            }}>
             {/* <Avatar src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUDnkndWV6_6v_dks3oYlvJZwW6CQiCsV6Uw&usqp=CAU" />
             <Avatar src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_d3SP2vKOeGFVESn5rk6xnPiQ0naW2e-ldA&usqp=CAU" />
             <Avatar src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQEZrATmgHOi5ls0YCCQBTkocia_atSw0X-Q&usqp=CAU" /> */}
@@ -64,7 +64,10 @@ const Task = ({
           </Avatar.Group>
         </div>
       </Card>
-      <TaskModel setVisible={setVisible} visible={visible}></TaskModel>
+      <TaskModel
+        forceUpdate={forceUpdate}
+        setVisible={setVisible}
+        visible={visible}></TaskModel>
     </>
   );
 };

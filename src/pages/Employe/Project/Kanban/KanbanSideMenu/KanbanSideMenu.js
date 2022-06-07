@@ -22,6 +22,7 @@ const KanbanSideMenu = () => {
   const [projectSetting, setProjectSetting] = useState(false);
   const [projectArchive, setProjectArchive] = useState(false);
   const [statistics, setStatistics] = useState(false);
+  const isEmployee = localStorage.getItem("role") === "1";
   return (
     <div>
       <Menu
@@ -30,105 +31,93 @@ const KanbanSideMenu = () => {
           width: "60px",
           marginTop: "10px",
         }}
-        mode="inline"
-        inlineCollapsed={true}
-      >
-        <Menu.Item key="0" icon={<BsKanban />}>
+        mode='inline'
+        inlineCollapsed={true}>
+        <Menu.Item key='0' icon={<BsKanban />}>
           kanban table
         </Menu.Item>
+        {!isEmployee && (
+          <Menu.Item
+            key='1'
+            icon={<MdAddTask />}
+            onClick={() => {
+              setAddTask(true);
+            }}>
+            Add Task
+          </Menu.Item>
+        )}
         <Menu.Item
-          key="1"
-          icon={<MdAddTask />}
-          onClick={() => {
-            setAddTask(true);
-          }}
-        >
-          Add Task
-        </Menu.Item>
-        <Menu.Item
-          key="2"
+          key='2'
           icon={<HiOutlineUsers />}
           onClick={() => {
             setProjectTeam(true);
-          }}
-        >
+          }}>
           Project Team
         </Menu.Item>
         <Menu.Item
-          key="3"
+          key='3'
           icon={
             <Badge
               count={5}
-              size="small"
-              style={{ fontSize: "8px", marginTop: "7px" }}
-            >
+              size='small'
+              style={{ fontSize: "8px", marginTop: "7px" }}>
               <MessageOutlined />
             </Badge>
           }
           onClick={() => {
             setGroupeMessaging(true);
-          }}
-        >
+          }}>
           Groupe messaging
         </Menu.Item>
         <Menu.Item
-          key="4"
+          key='4'
           icon={<ImStatsBars />}
           onClick={() => {
             setStatistics(true);
-          }}
-        >
+          }}>
           Project statistics
         </Menu.Item>
         <Menu.Item
-          key="5"
+          key='5'
           icon={<CalendarOutlined />}
           onClick={() => {
             setProjectCalendar(true);
-          }}
-        >
+          }}>
           Project Calendar
         </Menu.Item>
         <Menu.Item
-          key="6"
+          key='6'
           icon={<AiOutlineSetting />}
           onClick={() => {
             setProjectSetting(true);
-          }}
-        >
+          }}>
           Project Setting
         </Menu.Item>
         <Menu.Item
-          key="7"
+          key='7'
           icon={<HiOutlineArchive />}
           onClick={() => {
             setProjectArchive(true);
-          }}
-        >
+          }}>
           Project Archive
         </Menu.Item>
       </Menu>
       <GroupeMessaging
         setVisible={setGroupeMessaging}
-        visible={groupeMessaging}
-      ></GroupeMessaging>
+        visible={groupeMessaging}></GroupeMessaging>
       <ProjectCalendar
         setVisible={setProjectCalendar}
-        visible={projectCalendar}
-      ></ProjectCalendar>
+        visible={projectCalendar}></ProjectCalendar>
       <ProjectTeam
         setVisible={setProjectTeam}
-        visible={projectTeam}
-      ></ProjectTeam>
+        visible={projectTeam}></ProjectTeam>
       <AddTask setVisible={setAddTask} visible={addTask}></AddTask>
       <ProjectSetting
         setVisible={setProjectSetting}
-        visible={projectSetting}
-      ></ProjectSetting>
+        visible={projectSetting}></ProjectSetting>
       <ProjectArchive
         setVisible={setProjectArchive}
-        visible={projectArchive}
-      ></ProjectArchive>
+        visible={projectArchive}></ProjectArchive>
       <Statistics setVisible={setStatistics} visible={statistics}></Statistics>
     </div>
   );
