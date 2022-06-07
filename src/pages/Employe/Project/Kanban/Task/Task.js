@@ -31,6 +31,7 @@ const Task = ({
   subTache,
   projectMembers,
   comment,
+  forceUpdate,
 }) => {
   const [visible, setVisible] = useState(false);
   useEffect(() => {
@@ -106,6 +107,7 @@ const Task = ({
         comment={comment}
         setVisible={setVisible}
         visible={visible}
+        forceUpdate={forceUpdate}
       ></TaskModel>
     </>
   );

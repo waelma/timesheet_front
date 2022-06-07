@@ -13,6 +13,7 @@ import VirtualList from "rc-virtual-list";
 import { UserDeleteOutlined } from "@ant-design/icons";
 const ProjectTeam = ({ members, setVisible, visible }) => {
   const token = localStorage.getItem("token");
+  const isEmployee = localStorage.getItem("role") === "1";
   const [form] = Form.useForm();
   const [, updateState] = useState();
   const forceUpdate = useCallback(() => updateState({}), []);
@@ -62,7 +63,7 @@ const ProjectTeam = ({ members, setVisible, visible }) => {
   ]);
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/api/employe/getEmployes`, {
+      .get(`https://8dcd-197-244-176-194.eu.ngrok.io/api/employe/getEmployes`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
@@ -79,51 +80,53 @@ const ProjectTeam = ({ members, setVisible, visible }) => {
       }}
       visible={visible}
     >
-      <Form
-        form={form}
-        onFinish={(values) => {
-          setUsers((oldArray) => [
-            ...oldArray,
-            {
-              id: 5,
-              email: "zzzzz@gmail.com",
-              photo:
-                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQEZrATmgHOi5ls0YCCQBTkocia_atSw0X-Q&usqp=CAU",
-              firstName: values.selectEmploye,
-              // lastName:"atofsdui"
-            },
-          ]);
-          form.resetFields();
-          forceUpdate();
-        }}
-      >
-        <span style={{ fontWeight: "bold" }}>Add employe</span>
-        <div style={{ display: "flex" }}>
-          <Form.Item
-            name="selectEmploye"
-            style={{
-              width: "80%",
-            }}
-            rules={[
+      {!isEmployee && (
+        <Form
+          form={form}
+          onFinish={(values) => {
+            setUsers((oldArray) => [
+              ...oldArray,
               {
-                required: true,
-                message: "Please select member!",
+                id: 5,
+                email: "zzzzz@gmail.com",
+                photo:
+                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQEZrATmgHOi5ls0YCCQBTkocia_atSw0X-Q&usqp=CAU",
+                firstName: values.selectEmploye,
+                // lastName:"atofsdui"
               },
-            ]}
-          >
-            <AutoComplete options={options} placeholder="Employe" />
-          </Form.Item>
-          <Button
-            htmlType="submit"
-            type="primary"
-            style={{
-              width: "20%",
-            }}
-          >
-            Add
-          </Button>
-        </div>
-      </Form>
+            ]);
+            form.resetFields();
+            forceUpdate();
+          }}
+        >
+          <span style={{ fontWeight: "bold" }}>Add employe</span>
+          <div style={{ display: "flex" }}>
+            <Form.Item
+              name="selectEmploye"
+              style={{
+                width: "80%",
+              }}
+              rules={[
+                {
+                  required: true,
+                  message: "Please select member!",
+                },
+              ]}
+            >
+              <AutoComplete options={options} placeholder="Employe" />
+            </Form.Item>
+            <Button
+              htmlType="submit"
+              type="primary"
+              style={{
+                width: "20%",
+              }}
+            >
+              Add
+            </Button>
+          </div>
+        </Form>
+      )}
       <div style={{ marginTop: "20px" }}>
         <span style={{ fontWeight: "bold" }}>Project team</span>
         <List>
@@ -141,25 +144,27 @@ const ProjectTeam = ({ members, setVisible, visible }) => {
                     title={item.lastName + " " + item.firstName}
                     description={item.email}
                   />
-                  <div style={{ marginBottom: "22px", marginRight: "10px" }}>
-                    <Tooltip title="Delete member">
-                      <UserDeleteOutlined
-                        style={{
-                          color: "red",
-                          cursor: "pointer",
-                        }}
-                        onClick={() => {
-                          console.log(users);
-                          setUsers(
-                            users.filter((element) => {
-                              return element.id !== item.id;
-                            })
-                          );
-                          forceUpdate();
-                        }}
-                      />
-                    </Tooltip>
-                  </div>
+                  {!isEmployee && (
+                    <div style={{ marginBottom: "22px", marginRight: "10px" }}>
+                      <Tooltip title="Delete member">
+                        <UserDeleteOutlined
+                          style={{
+                            color: "red",
+                            cursor: "pointer",
+                          }}
+                          onClick={() => {
+                            console.log(users);
+                            setUsers(
+                              users.filter((element) => {
+                                return element.id !== item.id;
+                              })
+                            );
+                            forceUpdate();
+                          }}
+                        />
+                      </Tooltip>
+                    </div>
+                  )}
                 </List.Item>
               </div>
             )}

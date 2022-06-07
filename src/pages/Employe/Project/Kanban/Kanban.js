@@ -17,11 +17,16 @@ const Kanban = () => {
   let [ok, setOk] = useState(true);
   const [controlledBoard, setBoard] = useState();
   const [projectDate, setProjectDate] = useState([]);
+  const [, forceUpdate] = useState(0);
+
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/api/project/getProject/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .get(
+        `https://8dcd-197-244-176-194.eu.ngrok.io/api/project/getProject/${id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
       .then((response) => {
         console.log(response.data);
         setBoard(response.data);
@@ -98,6 +103,7 @@ const Kanban = () => {
           { removeCard, dragging }
         ) => (
           <Task
+            forceUpdate={forceUpdate}
             key={id}
             description={description}
             id={id}

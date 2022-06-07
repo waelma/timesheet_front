@@ -22,6 +22,7 @@ const KanbanSideMenu = ({ id, members }) => {
   const [projectSetting, setProjectSetting] = useState(false);
   const [projectArchive, setProjectArchive] = useState(false);
   const [statistics, setStatistics] = useState(false);
+  const isEmployee = localStorage.getItem("role") === "1";
   return (
     <div>
       <Menu
@@ -36,15 +37,17 @@ const KanbanSideMenu = ({ id, members }) => {
         <Menu.Item key="0" icon={<BsKanban />}>
           kanban table
         </Menu.Item>
-        <Menu.Item
-          key="1"
-          icon={<MdAddTask />}
-          onClick={() => {
-            setAddTask(true);
-          }}
-        >
-          Add Task
-        </Menu.Item>
+        {!isEmployee && (
+          <Menu.Item
+            key="1"
+            icon={<MdAddTask />}
+            onClick={() => {
+              setAddTask(true);
+            }}
+          >
+            Add Task
+          </Menu.Item>
+        )}
         <Menu.Item
           key="2"
           icon={<HiOutlineUsers />}
