@@ -24,3 +24,10 @@
 .updateDescIcon:hover{
     color: #5DADE2;
 }
+.btn-archive .ant-btn:hover,.btn-archive .ant-btn:focus {
+    color: red;
+    border-color:red ;
+}
+.btn-archive:hover svg{
+    stroke: red;
+}

@@ -165,7 +165,11 @@ const Profile = () => {
                 {/* <Form.Item name="speciality" label="Speciality">
                   <Input bordered={false} className="ii" />
                 </Form.Item> */}
-                <Button type="primary" htmlType="submit">
+                <Button
+                  style={{ borderRadius: "15px" }}
+                  type="primary"
+                  htmlType="submit"
+                >
                   Save Change
                 </Button>
               </Form>

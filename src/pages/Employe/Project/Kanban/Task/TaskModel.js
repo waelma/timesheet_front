@@ -13,6 +13,8 @@ import {
   DatePicker,
   Dropdown,
   Menu,
+  Popconfirm,
+  message,
 } from "antd";
 import "./TaskModel.css";
 import TaskComments from "./TaskComments";
@@ -26,6 +28,7 @@ import {
 } from "@ant-design/icons";
 import { HiOutlineArchive } from "react-icons/hi";
 import moment from "moment";
+import axios from "axios";
 
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
@@ -61,100 +64,57 @@ const props = {
     },
   ],
 };
-const allUsers = [
-  {
-    id: 0,
-    photo:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_d3SP2vKOeGFVESn5rk6xnPiQ0naW2e-ldA&usqp=CAU",
-    firstName: "Wael machlouch",
-  },
-  {
-    id: 1,
-    photo:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUDnkndWV6_6v_dks3oYlvJZwW6CQiCsV6Uw&usqp=CAU",
-    firstName: "Firas machlouch",
-  },
-  {
-    id: 2,
-    photo:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQEZrATmgHOi5ls0YCCQBTkocia_atSw0X-Q&usqp=CAU",
-    firstName: "Zahri atoui",
-  },
-  {
-    id: 4,
-    photo: "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png",
-    firstName: "Rabeb machlouch",
-  },
-  {
-    id: 5,
-    photo:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQEZrATmgHOi5ls0YCCQBTkocia_atSw0X-Q&usqp=CAU",
-    firstName: "Yassmin tlemsani",
-  },
-];
-let users = [
-  {
-    id: 0,
-    photo:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_d3SP2vKOeGFVESn5rk6xnPiQ0naW2e-ldA&usqp=CAU",
-    firstName: "Wael machlouch",
-  },
-  {
-    id: 1,
-    photo:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUDnkndWV6_6v_dks3oYlvJZwW6CQiCsV6Uw&usqp=CAU",
-    firstName: "Firas machlouch",
-  },
-  {
-    id: 2,
-    photo:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQEZrATmgHOi5ls0YCCQBTkocia_atSw0X-Q&usqp=CAU",
-    firstName: "Zahri atoui",
-  },
-];
-let todos = [
-  {
-    name: "sous tache 1",
-    verifier: true,
-  },
-  {
-    name: "sous tache 2",
-    verifier: true,
-  },
-  {
-    name: "sous tache 3",
-    verifier: false,
-  },
-];
 
-const TaskModel = ({ visible, setVisible }) => {
-  let [dates, setDates] = useState([
-    {
-      startDate: "2022-05-01",
-      endDate: "2022-06-30",
-    },
-  ]);
+const TaskModel = ({
+  description,
+  id,
+  title,
+  members,
+  dateD,
+  dateF,
+  projectMembers,
+  subTache,
+  comment,
+  visible,
+  setVisible,
+}) => {
+  const token = localStorage.getItem("token");
+  let [dates, setDates] = useState(
+    dateD && dateF
+      ? [
+          {
+            startDate: dateD,
+            endDate: dateF,
+          },
+        ]
+      : null
+  );
   const [visibleAddTask, setVisibleAddTask] = useState(false);
   const [form] = Form.useForm();
   const [, updateState] = useState();
   const forceUpdate = useCallback(() => updateState({}), []);
   const [formDesc] = Form.useForm();
-  const [description, setDescription] = useState("in this task we will...");
+  const [desc, setDesc] = useState(description);
   const [descInput, setDescInput] = useState(true);
-  const [taskTitle, setTaskTitle] = useState("Task title");
+  const [taskTitle, setTaskTitle] = useState(title);
   const [taskTitleInput, setTaskTitleInput] = useState(false);
+  let [todos, setTodos] = useState(subTache);
   const sliderVal = (todos) => {
-    return Math.floor(
-      (todos.filter((element) => {
-        return element.verifier === true;
-      }).length *
-        100) /
-        todos.length
-    );
+    if (todos.length) {
+      return Math.floor(
+        (todos.filter((element) => {
+          return element.verified === 1;
+        }).length *
+          100) /
+          todos.length
+      );
+    } else {
+      return 0;
+    }
   };
   const menu = (
     <Menu style={{ paddingTop: "10px", paddingBottom: "5px" }}>
-      {allUsers.map((allUser) => (
+      {projectMembers.map((allUser) => (
         <div
           className="addMemberDropDown"
           style={{
@@ -167,7 +127,7 @@ const TaskModel = ({ visible, setVisible }) => {
           key={allUser.id}
         >
           <span>{allUser.firstName}</span>
-          {users.filter((element) => {
+          {members.filter((element) => {
             return element.id === allUser.id;
           }).length ? (
             <Tooltip title="Delete member">
@@ -180,11 +140,22 @@ const TaskModel = ({ visible, setVisible }) => {
                   cursor: "pointer",
                 }}
                 onClick={() => {
-                  console.log(users);
-                  users = users.filter((element) => {
-                    return element.id !== allUser.id;
-                  });
-                  console.log(users);
+                  for (var i = 0; i < members.length; i++) {
+                    if (members[i].id === allUser.id) {
+                      members.splice(i, 1);
+                    }
+                  }
+                  let data = {
+                    user_id: allUser.id,
+                    tache_id: id,
+                  };
+                  axios
+                    .post(`http://localhost:8000/api/task/removeMember`, data, {
+                      headers: { Authorization: `Bearer ${token}` },
+                    })
+                    .then((response) => {
+                      console.log(response.data);
+                    });
                   forceUpdate();
                 }}
               ></UserDeleteOutlined>
@@ -200,9 +171,18 @@ const TaskModel = ({ visible, setVisible }) => {
                   cursor: "pointer",
                 }}
                 onClick={() => {
-                  console.log(users);
-                  users.push(allUser);
-                  console.log(users);
+                  members.push(allUser);
+                  let data = {
+                    user_id: allUser.id,
+                    tache_id: id,
+                  };
+                  axios
+                    .post(`http://localhost:8000/api/task/addMember`, data, {
+                      headers: { Authorization: `Bearer ${token}` },
+                    })
+                    .then((response) => {
+                      console.log(response.data);
+                    });
                   forceUpdate();
                 }}
               ></UserAddOutlined>
@@ -230,6 +210,20 @@ const TaskModel = ({ visible, setVisible }) => {
                   onFinish={(values) => {
                     setTaskTitle(values.taskTitle);
                     setTaskTitleInput(false);
+                    let data = {
+                      title: values.taskTitle,
+                    };
+                    axios
+                      .put(
+                        `http://localhost:8000/api/task/editTitle/${id}`,
+                        data,
+                        {
+                          headers: { Authorization: `Bearer ${token}` },
+                        }
+                      )
+                      .then((response) => {
+                        console.log(response.data);
+                      });
                   }}
                 >
                   <Form.Item style={{ marginBottom: "5px" }} name="taskTitle">
@@ -272,22 +266,59 @@ const TaskModel = ({ visible, setVisible }) => {
                   borderRadius: "15px",
                   width: "250px",
                 }}
-                defaultValue={[
-                  moment(dates[0].startDate, "YYYY-MM-DD"),
-                  moment(dates[0].endDate, "YYYY-MM-DD"),
-                ]}
+                defaultValue={
+                  dates
+                    ? [
+                        moment(dates[0].startDate, "YYYY-MM-DD"),
+                        moment(dates[0].endDate, "YYYY-MM-DD"),
+                      ]
+                    : null
+                }
                 allowClear={false}
                 onChange={(value, dateString) => {
-                  console.log(dateString);
+                  let data = {
+                    dateDebut: dateString[0],
+                    dateFin: dateString[1],
+                  };
+                  axios
+                    .put(
+                      `http://localhost:8000/api/task/editDate/${id}`,
+                      data,
+                      {
+                        headers: { Authorization: `Bearer ${token}` },
+                      }
+                    )
+                    .then((response) => {
+                      console.log(response.data);
+                    });
                 }}
               />
             </div>
             <Tooltip title="Archive task">
-              <Button
-                shape="circle"
-                icon={<HiOutlineArchive style={{ marginTop: "5px" }} />}
-                style={{ marginLeft: "20px" }}
-              ></Button>
+              <Popconfirm
+                title="Are you sure to delete this task?"
+                onConfirm={() => {
+                  message.success("Task removed");
+                  axios
+                    .delete(`http://localhost:8000/api/task/removeTask/${id}`, {
+                      headers: { Authorization: `Bearer ${token}` },
+                    })
+                    .then((response) => {
+                      setVisible(false);
+                      window.location.reload();
+                    });
+                }}
+                okText="Yes"
+                cancelText="No"
+              >
+                <div className="btn-archive">
+                  <Button
+                    shape="circle"
+                    icon={<HiOutlineArchive style={{ marginTop: "5px" }} />}
+                    style={{ marginLeft: "20px" }}
+                  ></Button>
+                </div>
+              </Popconfirm>
             </Tooltip>
           </div>
         }
@@ -305,10 +336,24 @@ const TaskModel = ({ visible, setVisible }) => {
               {descInput ? (
                 <Form
                   form={formDesc}
-                  initialValues={{ description: description }}
+                  initialValues={{ description: desc }}
                   onFinish={(values) => {
-                    setDescription(values.description);
+                    setDesc(values.description);
                     setDescInput(false);
+                    let data = {
+                      desc: values.description,
+                    };
+                    axios
+                      .put(
+                        `http://localhost:8000/api/task/editDescription/${id}`,
+                        data,
+                        {
+                          headers: { Authorization: `Bearer ${token}` },
+                        }
+                      )
+                      .then((response) => {
+                        console.log(response.data);
+                      });
                   }}
                 >
                   <Form.Item style={{ marginBottom: "5px" }} name="description">
@@ -329,7 +374,7 @@ const TaskModel = ({ visible, setVisible }) => {
                 </Form>
               ) : (
                 <div style={{ display: "felx" }}>
-                  {description}
+                  {desc}
                   <Tooltip title="Edit description">
                     <EditOutlined
                       className="updateDescIcon"
@@ -361,7 +406,7 @@ const TaskModel = ({ visible, setVisible }) => {
                 <></>
               )}
 
-              {todos.map((todo) => (
+              {todos.map((todo, index) => (
                 <div
                   className="chekboxTache"
                   style={{
@@ -369,13 +414,50 @@ const TaskModel = ({ visible, setVisible }) => {
                     display: "flex",
                     paddingRight: "9px",
                   }}
+                  key={index}
                 >
                   <Checkbox
                     key={todo.name}
-                    checked={todo.verifier}
+                    checked={todo.verified === 1}
                     style={{ width: "100%", marginLeft: "10px" }}
                     onChange={(e) => {
-                      todo.verifier = !todo.verifier;
+                      if (todo.verified === 1) {
+                        todo.verified = 0;
+                        let data = {
+                          verif: 1,
+                          tache_id: id,
+                          name: todo.name,
+                        };
+                        axios
+                          .put(
+                            `http://localhost:8000/api/task/verifiedTodo/${todo.id}`,
+                            data,
+                            {
+                              headers: { Authorization: `Bearer ${token}` },
+                            }
+                          )
+                          .then((response) => {
+                            console.log(response.data);
+                          });
+                      } else {
+                        todo.verified = 1;
+                        let data = {
+                          verif: 1,
+                          tache_id: id,
+                          name: todo.name,
+                        };
+                        axios
+                          .put(
+                            `http://localhost:8000/api/task/verifiedTodo/${todo.id}`,
+                            data,
+                            {
+                              headers: { Authorization: `Bearer ${token}` },
+                            }
+                          )
+                          .then((response) => {
+                            console.log(response.data);
+                          });
+                      }
                       forceUpdate();
                     }}
                   >
@@ -384,9 +466,11 @@ const TaskModel = ({ visible, setVisible }) => {
                   <DeleteOutlined
                     className="chekboxTacheDelete"
                     onClick={() => {
-                      todos = todos.filter((element) => {
-                        return element.name !== todo.name;
-                      });
+                      setTodos(
+                        todos.filter((element) => {
+                          return element.name !== todo.name;
+                        })
+                      );
                       forceUpdate();
                       console.log(todos);
                     }}
@@ -404,6 +488,17 @@ const TaskModel = ({ visible, setVisible }) => {
                     });
                     form.resetFields();
                     setVisibleAddTask(false);
+                    let data = {
+                      name: values.todo,
+                      tache_id: id,
+                    };
+                    axios
+                      .post(`http://localhost:8000/api/task/addTodo`, data, {
+                        headers: { Authorization: `Bearer ${token}` },
+                      })
+                      .then((response) => {
+                        console.log(response.data);
+                      });
                     forceUpdate();
                   }}
                   autoComplete="off"
@@ -467,8 +562,8 @@ const TaskModel = ({ visible, setVisible }) => {
           <div style={{ width: "40%", paddingLeft: "10px" }}>
             <div>
               <h2 style={{ color: "#626567" }}>Members</h2>
-              {users.map((user) => (
-                <Tooltip title={user.firstName}>
+              {members.map((user) => (
+                <Tooltip key={user.id} title={user.firstName}>
                   <Avatar
                     key={user.firstName}
                     src={user.photo}
@@ -490,7 +585,7 @@ const TaskModel = ({ visible, setVisible }) => {
 
             <div>
               <h2 style={{ color: "#626567", marginTop: "15px" }}>Comments</h2>
-              <TaskComments></TaskComments>
+              <TaskComments comment={comment}></TaskComments>
             </div>
           </div>
         </div>

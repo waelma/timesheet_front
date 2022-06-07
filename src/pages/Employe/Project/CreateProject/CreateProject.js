@@ -145,8 +145,8 @@ const CreateProject = ({ setVisible, visible }) => {
           current={current}
           style={{ position: "absolute", bottom: "40px", width: "90%" }}
         >
-          {steps.map((item) => (
-            <Step key={item.title} icon={item.icon} />
+          {steps.map((item, index) => (
+            <Step key={index} icon={item.icon} />
           ))}
         </Steps>
       </div>

@@ -1,10 +1,11 @@
 import { React, useEffect, useState } from "react";
 import { Drawer, Form, Button, Input, DatePicker, Select } from "antd";
 import axios from "axios";
+import moment from "moment";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 const { TextArea } = Input;
-const AddTask = ({ setVisible, visible }) => {
+const AddTask = ({ id, setVisible, visible }) => {
   const token = localStorage.getItem("token");
   const [form] = Form.useForm();
   let [options, setOptions] = useState([]);
@@ -28,7 +29,23 @@ const AddTask = ({ setVisible, visible }) => {
     >
       <Form
         onFinish={(values) => {
-          console.log(values);
+          let data = {
+            name: values.name,
+            details: values.description,
+            dateDebut: values.date[0].format("YYYY-MM-DD"),
+            dateFin: values.date[1].format("YYYY-MM-DD"),
+            project_id: parseInt(id),
+            members: values.members,
+          };
+          axios
+            .post(`http://localhost:8000/api/task/createTask`, data, {
+              headers: { Authorization: `Bearer ${token}` },
+            })
+            .then((response) => {
+              console.log(response.data);
+              setVisible(false);
+              window.location.reload();
+            });
         }}
       >
         <div>
@@ -48,9 +65,9 @@ const AddTask = ({ setVisible, visible }) => {
           <Form.Item name="description" rules={[]}>
             <TextArea placeholder="Task description" />
           </Form.Item>
-          <span style={{ fontWeight: "bold" }}>Task begin and end date</span>
+          <span style={{ fontWeight: "bold" }}>Task start and end date</span>
           <Form.Item
-            name="dates"
+            name="date"
             rules={[
               {
                 required: true,

@@ -2,7 +2,7 @@ import { React, useEffect, useState } from "react";
 import Board, { moveCard } from "@lourenci/react-kanban";
 import "@lourenci/react-kanban/dist/styles.css";
 import "./Kanban.css";
-import { Card, Avatar, Tooltip } from "antd";
+import { Spin } from "antd";
 import Task from "./Task/Task";
 import HeaderMenu from "../../../../components/HeaderMenu";
 import SideMenu from "../../../../components/SideMenu";
@@ -14,164 +14,9 @@ const token = localStorage.getItem("token");
 
 const Kanban = () => {
   const { id } = useParams();
-  const board = {
-    columns: [
-      {
-        id: 1,
-        title: "Backlog",
-        cards: [
-          {
-            id: 1,
-            title: "Card title 1",
-            description: "Card content",
-            state: "todo",
-            members: [
-              {
-                photo:
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUDnkndWV6_6v_dks3oYlvJZwW6CQiCsV6Uw&usqp=CAU",
-              },
-              {
-                photo:
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_d3SP2vKOeGFVESn5rk6xnPiQ0naW2e-ldA&usqp=CAU",
-              },
-            ],
-          },
-          {
-            id: 2,
-            title: "Card title 2",
-            description: "Card content",
-            state: "todo",
-            members: [
-              {
-                photo:
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUDnkndWV6_6v_dks3oYlvJZwW6CQiCsV6Uw&usqp=CAU",
-              },
-              {
-                photo:
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_d3SP2vKOeGFVESn5rk6xnPiQ0naW2e-ldA&usqp=CAU",
-              },
-              {
-                photo:
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQEZrATmgHOi5ls0YCCQBTkocia_atSw0X-Q&usqp=CAU",
-              },
-            ],
-          },
-          {
-            id: 3,
-            title: "Card title 3",
-            description: "Card content",
-            state: "todo",
-            members: [
-              {
-                photo:
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUDnkndWV6_6v_dks3oYlvJZwW6CQiCsV6Uw&usqp=CAU",
-              },
-              {
-                photo:
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_d3SP2vKOeGFVESn5rk6xnPiQ0naW2e-ldA&usqp=CAU",
-              },
-            ],
-          },
-        ],
-      },
-      {
-        id: 2,
-        title: "Doing",
-        cards: [
-          {
-            id: 9,
-            title: "Card title 9",
-            description: "Card content",
-            state: "inprogress",
-            members: [
-              {
-                photo:
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUDnkndWV6_6v_dks3oYlvJZwW6CQiCsV6Uw&usqp=CAU",
-              },
-              {
-                photo:
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQEZrATmgHOi5ls0YCCQBTkocia_atSw0X-Q&usqp=CAU",
-              },
-            ],
-          },
-        ],
-      },
-      {
-        id: 3,
-        title: "Test",
-        cards: [
-          {
-            id: 10,
-            title: "Card title 10",
-            description: "Card content",
-            state: "test",
-            members: [
-              {
-                photo:
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_d3SP2vKOeGFVESn5rk6xnPiQ0naW2e-ldA&usqp=CAU",
-              },
-              {
-                photo:
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQEZrATmgHOi5ls0YCCQBTkocia_atSw0X-Q&usqp=CAU",
-              },
-            ],
-          },
-          {
-            id: 11,
-            title: "Card title 11",
-            description: "Card content",
-            state: "test",
-            members: [
-              {
-                photo:
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUDnkndWV6_6v_dks3oYlvJZwW6CQiCsV6Uw&usqp=CAU",
-              },
-              {
-                photo:
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQEZrATmgHOi5ls0YCCQBTkocia_atSw0X-Q&usqp=CAU",
-              },
-            ],
-          },
-        ],
-      },
-      {
-        id: 4,
-        title: "Finish",
-        cards: [
-          {
-            id: 12,
-            title: "Card title 12",
-            description: "Card content",
-            state: "done",
-            members: [
-              {
-                photo:
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUDnkndWV6_6v_dks3oYlvJZwW6CQiCsV6Uw&usqp=CAU",
-              },
-            ],
-          },
-          {
-            id: 13,
-            title: "Card title 13",
-            description: "Card content",
-            state: "done",
-            members: [
-              {
-                photo:
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUDnkndWV6_6v_dks3oYlvJZwW6CQiCsV6Uw&usqp=CAU",
-              },
-              {
-                photo:
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_d3SP2vKOeGFVESn5rk6xnPiQ0naW2e-ldA&usqp=CAU",
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  };
-  // let [ok, setOk] = useState(true);
-  const [controlledBoard, setBoard] = useState(board);
+  let [ok, setOk] = useState(true);
+  const [controlledBoard, setBoard] = useState();
+  const [projectDate, setProjectDate] = useState([]);
   useEffect(() => {
     axios
       .get(`http://localhost:8000/api/project/getProject/${id}`, {
@@ -179,26 +24,39 @@ const Kanban = () => {
       })
       .then((response) => {
         console.log(response.data);
-        // setBoard(response.data);
-        // setTimeout(() => {
-        //   setOk(false);
-        // }, timeout);
+        setBoard(response.data);
+        setOk(false);
       });
   }, [id]);
+
+  const changeState = (id, newState) => {
+    let data = {
+      state: newState,
+    };
+    axios
+      .put(`http://localhost:8000/api/task/changeState/${id}`, data, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        console.log(response.data);
+      });
+  };
 
   function ControlledBoard() {
     function handleCardMove(_card, source, destination) {
       const updatedBoard = moveCard(controlledBoard, source, destination);
-      console.log(_card);
-      console.log(destination.toColumnId);
-      if (destination.toColumnId === 1) {
+      if (destination.toColumnId === 0) {
         _card.state = "todo";
-      } else if (destination.toColumnId === 2) {
+        changeState(_card.id, "todo");
+      } else if (destination.toColumnId === 1) {
         _card.state = "inprogress";
-      } else if (destination.toColumnId === 3) {
+        changeState(_card.id, "inprogress");
+      } else if (destination.toColumnId === 2) {
         _card.state = "test";
-      } else if (destination.toColumnId === 4) {
+        changeState(_card.id, "test");
+      } else if (destination.toColumnId === 3) {
         _card.state = "done";
+        changeState(_card.id, "done");
       }
       setBoard(updatedBoard);
     }
@@ -226,7 +84,17 @@ const Kanban = () => {
         allowRemoveCard
         onCardRemove={handleCardRemove}
         renderCard={(
-          { description, id, title, state, members },
+          {
+            description,
+            id,
+            title,
+            state,
+            members,
+            dateD,
+            dateF,
+            subTache,
+            comments,
+          },
           { removeCard, dragging }
         ) => (
           <Task
@@ -237,6 +105,11 @@ const Kanban = () => {
             color={color(state)}
             members={members}
             removeCard={removeCard}
+            dateD={dateD}
+            dateF={dateF}
+            subTache={subTache}
+            projectMembers={controlledBoard.employes_projects}
+            comment={comments}
             // dragging={dragging}
           ></Task>
         )}
@@ -248,13 +121,26 @@ const Kanban = () => {
 
   return (
     <div>
-      <HeaderMenu></HeaderMenu>
+      <HeaderMenu projectTitle={controlledBoard?.name || ""}></HeaderMenu>
       <div style={{ display: "flex" }}>
         <SideMenu></SideMenu>
-        <div className="Kanban">
-          <ControlledBoard />
-        </div>
-        <KanbanSideMenu></KanbanSideMenu>
+        {ok ? (
+          <div
+            style={{ width: "100%", textAlign: "center", paddingTop: "150px" }}
+          >
+            <Spin size="large" />
+          </div>
+        ) : (
+          <>
+            <div className="Kanban">
+              <ControlledBoard />
+            </div>
+            <KanbanSideMenu
+              id={id}
+              members={controlledBoard.employes_projects}
+            ></KanbanSideMenu>
+          </>
+        )}
       </div>
     </div>
   );

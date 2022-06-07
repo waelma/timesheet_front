@@ -1,4 +1,4 @@
-import { React, useState, useCallback, useEffect } from "react";
+import { React, useState, useCallback, useEffect, useRef } from "react";
 import {
   Comment,
   Tooltip,
@@ -13,6 +13,7 @@ import moment from "moment";
 import { SendOutlined } from "@ant-design/icons";
 import { MdAddComment } from "react-icons/md";
 import InfiniteScroll from "react-infinite-scroll-component";
+import axios from "axios";
 const data = [
   // {
   //     author: "Han Solo",
@@ -65,35 +66,54 @@ const data = [
     ),
   },
 ];
-const TaskComments = () => {
+const TaskComments = ({ comment }) => {
   const [form] = Form.useForm();
+  const commentsRef = useRef();
   const [commentHeight, setCommentHeight] = useState();
+  const [avatar, setAvatar] = useState();
   const [, updateState] = useState();
   const forceUpdate = useCallback(() => updateState({}), []);
-  // useEffect(()=>{
-  // setCommentHeight(document.getElementById('commentsId').clientHeight-10);
-  // },[])
+  const token = localStorage.getItem("token");
+  useEffect(() => {
+    axios
+      .get(`http://localhost:8000/api/employe/userPhoto`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        setAvatar(response.data);
+      });
+    if (comment.length) {
+      const commentsDiv = commentsRef.current.querySelector(
+        ".infinite-scroll-component"
+      );
+
+      commentsDiv.scrollTo(0, 100000);
+    }
+    // setCommentHeight(document.getElementById('commentsId').clientHeight-10);
+  }, []);
   return (
     <div style={{ height: "90%" }}>
-      <div id="commentsId" style={{ height: "300px" }}>
-        {data.length ? (
+      <div id="commentsId" ref={commentsRef} style={{ height: "300px" }}>
+        {comment.length ? (
           <InfiniteScroll
             inverse={true}
             height="290px"
-            dataLength={data.length}
+            dataLength={comment.length}
           >
             <List
               //   header={`${data.length} replies`}
               itemLayout="horizontal"
-              dataSource={data}
+              dataSource={comment}
               renderItem={(item) => (
                 <li>
                   <Comment
                     actions={item.actions}
-                    author={item.author}
-                    avatar={item.avatar}
-                    content={item.content}
-                    datetime={item.datetime}
+                    author={
+                      item.user[0].firstName + " " + item.user[0].lastName
+                    }
+                    avatar={item.user[0].photo}
+                    content={item.comment}
+                    // datetime={item.datetime}
                   />
                 </li>
               )}
@@ -108,10 +128,15 @@ const TaskComments = () => {
           form={form}
           onFinish={(values) => {
             console.log(values.comment);
-            data.push({
-              author: "Han Solo",
-              avatar: "https://joeschmoe.io/api/v1/random",
-              content: <p>{values.comment}</p>,
+            comment.push({
+              user: [
+                {
+                  firstName: "Han",
+                  lastName: " Solo",
+                  photo: avatar,
+                },
+              ],
+              comment: <p>{values.comment}</p>,
               datetime: (
                 <Tooltip
                   title={moment()
@@ -124,11 +149,17 @@ const TaskComments = () => {
             });
             form.resetFields();
             forceUpdate();
+
+            const commentsDiv = commentsRef.current.querySelector(
+              ".infinite-scroll-component"
+            );
+
+            commentsDiv.scrollTo(0, 100000);
           }}
           autoComplete="off"
         >
           <div style={{ display: "flex" }}>
-            <Avatar src="http://localhost:8000/uploads/users/photParDefault.jpeg" />
+            <Avatar src={avatar} />
             <Form.Item
               style={{ marginLeft: "10px", marginRight: "5px", width: "100%" }}
               name="comment"

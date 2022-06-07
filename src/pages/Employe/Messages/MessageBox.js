@@ -1,4 +1,4 @@
-import { React, useState, useEffect, useCallback } from "react";
+import { React, useState, useEffect, useRef, useCallback } from "react";
 import HeaderMenu from "../../../components/HeaderMenu";
 import SideMenu from "../../../components/SideMenu";
 import "./MessageBox.css";
@@ -33,6 +33,7 @@ const MessageBox = () => {
   const [, updateState] = useState();
   const forceUpdate = useCallback(() => updateState({}), []);
   let [options, setOptions] = useState([]);
+  const messagesRef = useRef();
   let [messages, setMessages] = useState([
     {
       id: 0,
@@ -72,7 +73,8 @@ const MessageBox = () => {
       message:
         "Ahla wnk cv chcrypted- tbn0.gstatic. com/images?q  =tbn:ANd9Gc T_d3SP2vK OeGFVES n5rk6xnP iQ0naW2 e-ldA&usqp=a amil",
       dateSend: "2022-05-09 01:40:12",
-    }, {
+    },
+    {
       id: 4,
       transmitter: "35",
       receiver: 50,
@@ -81,7 +83,8 @@ const MessageBox = () => {
       message:
         "Ahla wnk cv chcrypted- tbn0.gstatic. com/images?q  =tbn:ANd9Gc T_d3SP2vK OeGFVES n5rk6xnP iQ0naW2 e-ldA&usqp=a amil",
       dateSend: "2022-05-09 01:42:12",
-    }, {
+    },
+    {
       id: 5,
       transmitter: "50",
       receiver: 35,
@@ -131,7 +134,7 @@ const MessageBox = () => {
       photo: "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png",
       firstName: "Mohamed",
       lastName: "Helmi",
-    }
+    },
   ]);
   let [searchUsers, setSearchUsers] = useState(users);
   useEffect(() => {
@@ -142,7 +145,13 @@ const MessageBox = () => {
       .then((response) => {
         setOptions(response.data);
       });
-    console.log("hey")
+    if (messagesRef.current) {
+      const messagesDiv = messagesRef.current.querySelector(
+        ".infinite-scroll-component"
+      );
+      if (messagesDiv) messagesDiv.scrollTo(0, 100000);
+    }
+    console.log("hey");
   }, [id]);
 
   return (
@@ -152,170 +161,219 @@ const MessageBox = () => {
         <SideMenu></SideMenu>
         <div className="messageBox">
           <div style={{ width: "75%" }}>
-            {id?(<>
-            <div style={{ height: "8%" }}>
-              <Avatar size={40} src={(users.filter(item=>item.id===parseInt(id)))[0].photo} />
-              <span
-                style={{
-                  fontSize: "20px",
-                  fontWeight: "480",
-                  marginLeft: "15px",
-                }}
-              >
-                {(users.filter(item=>item.id===parseInt(id)))[0].firstName + " " + (users.filter(item=>item.id===parseInt(id)))[0].lastName}
-              </span>
-            </div>
-            <Divider />
-            <div style={{ height: "82%" }}>
-              <InfiniteScroll height="435px" dataLength={messages.length}>
-              {messages.map((item) =>
-                item.transmitter !== localStorage.getItem("user_id") ? (
-                  <div style={{width:"100%"}}>
-                  <Comment
-                    className="messageComponent"
-                    avatar={<Avatar src={(users.filter(item=>item.id===parseInt(id)))[0].photo} />}
-                    content={
-                      <div
-                        className="message"
-                        style={{
-                          backgroundColor: "#ECF0F1 ",
-                          padding: "5px",
-                          paddingLeft: "10px",
-                          paddingRight: "10px",
-                          borderRadius: "15px",
-                        }}
-                      >
-                        <Tooltip
-                          title={moment(item.dateSend).format(
-                            "YYYY-MM-DD HH:mm:ss"
-                          )}
-                        >
-                          {item.message}
-                        </Tooltip>
-                      </div>
-                    }
-                  /></div>
-                ) : (
-                  <Comment
-                    className="myMessageComponent"
-                    content={
-                      <div
-                        className="message"
-                        style={{
-                          backgroundColor: "#1890ff",
-                          color: "white",
-                          padding: "5px",
-                          paddingLeft: "10px",
-                          paddingRight: "10px",
-                          borderRadius: "15px",
-                          float: "right",
-                          marginRight:"3px"
-                        }}
-                      >
-                        <Tooltip
-                          title={moment(item.dateSend).format(
-                            "YYYY-MM-DD HH:mm:ss"
-                          )}
-                        >
-                          {item.message}
-                        </Tooltip>
-                      </div>
+            {id ? (
+              <>
+                <div style={{ height: "8%" }}>
+                  <Avatar
+                    size={40}
+                    src={
+                      users.filter((item) => item.id === parseInt(id))[0].photo
                     }
                   />
-                )
-              )}
-              </InfiniteScroll>
-            </div>
-            <div style={{ height: "8%"}}>
-              <Form
-                form={form}
-                onFinish={(values) => {
-                  messages.push({
-                    id: 3,
-                    transmitter: localStorage.getItem("user_id"),
-                    receiver: 50,
-                    message:values.message,
-                    dateSend: moment().format(
-                      "YYYY-MM-DD HH:mm:ss"
-                    ),
-                  })
-                  form.resetFields();
-                  forceUpdate();
-                }}
-                autoComplete="off"
-              >
-                <div style={{ display: "flex" }}>
-                  <Avatar src="https://joeschmoe.io/api/v1/random" />
-                  <Form.Item
+                  <span
                     style={{
-                      marginLeft: "10px",
-                      marginRight: "5px",
-                      width: "100%",
+                      fontSize: "20px",
+                      fontWeight: "480",
+                      marginLeft: "15px",
                     }}
-                    name="message"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter a message!",
-                      },
-                    ]}
                   >
-                    <Input
-                      placeholder="Message..."
-                      style={{ borderRadius: "15px" }}
-                    />
-                  </Form.Item>
-                  <Tooltip title="send">
-                    <Button
-                      type="primary"
-                      htmlType="submit"
-                      shape="circle"
-                      icon={<SendOutlined style={{ marginLeft: "2px" }} />}
-                    />
-                  </Tooltip>
+                    {users.filter((item) => item.id === parseInt(id))[0]
+                      .firstName +
+                      " " +
+                      users.filter((item) => item.id === parseInt(id))[0]
+                        .lastName}
+                  </span>
                 </div>
-              </Form>
-            </div></>):(
+                <Divider />
+                <div style={{ height: "82%" }} ref={messagesRef}>
+                  <InfiniteScroll
+                    height="435px"
+                    inverse
+                    dataLength={messages.length}
+                  >
+                    {messages.map((item, index) =>
+                      item.transmitter !== localStorage.getItem("user_id") ? (
+                        <div style={{ width: "100%" }} key={index}>
+                          <Comment
+                            className="messageComponent"
+                            avatar={
+                              <Avatar
+                                src={
+                                  users.filter(
+                                    (item) => item.id === parseInt(id)
+                                  )[0].photo
+                                }
+                              />
+                            }
+                            content={
+                              <div
+                                className="message"
+                                style={{
+                                  backgroundColor: "#ECF0F1 ",
+                                  padding: "5px",
+                                  paddingLeft: "10px",
+                                  paddingRight: "10px",
+                                  borderRadius: "15px",
+                                }}
+                              >
+                                <Tooltip
+                                  title={moment(item.dateSend).format(
+                                    "YYYY-MM-DD HH:mm:ss"
+                                  )}
+                                >
+                                  {item.message}
+                                </Tooltip>
+                              </div>
+                            }
+                          />
+                        </div>
+                      ) : (
+                        <Comment
+                          key={index}
+                          className="myMessageComponent"
+                          content={
+                            <div
+                              className="message"
+                              style={{
+                                backgroundColor: "#1890ff",
+                                color: "white",
+                                padding: "5px",
+                                paddingLeft: "10px",
+                                paddingRight: "10px",
+                                borderRadius: "15px",
+                                float: "right",
+                                marginRight: "3px",
+                              }}
+                            >
+                              <Tooltip
+                                title={moment(item.dateSend).format(
+                                  "YYYY-MM-DD HH:mm:ss"
+                                )}
+                              >
+                                {item.message}
+                              </Tooltip>
+                            </div>
+                          }
+                        />
+                      )
+                    )}
+                  </InfiniteScroll>
+                </div>
+                <div style={{ height: "8%" }}>
+                  <Form
+                    form={form}
+                    onFinish={(values) => {
+                      messages.push({
+                        id: 3,
+                        transmitter: localStorage.getItem("user_id"),
+                        receiver: 50,
+                        message: values.message,
+                        dateSend: moment().format("YYYY-MM-DD HH:mm:ss"),
+                      });
+                      form.resetFields();
+
+                      forceUpdate();
+                      const messagesDiv = messagesRef.current.querySelector(
+                        ".infinite-scroll-component"
+                      );
+
+                      messagesDiv.scrollTo(0, 100000);
+                    }}
+                    autoComplete="off"
+                  >
+                    <div style={{ display: "flex" }}>
+                      <Avatar src="https://joeschmoe.io/api/v1/random" />
+                      <Form.Item
+                        style={{
+                          marginLeft: "10px",
+                          marginRight: "5px",
+                          width: "100%",
+                        }}
+                        name="message"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please enter a message!",
+                          },
+                        ]}
+                      >
+                        <Input
+                          placeholder="Message..."
+                          style={{ borderRadius: "15px" }}
+                        />
+                      </Form.Item>
+                      <Tooltip title="send">
+                        <Button
+                          type="primary"
+                          htmlType="submit"
+                          shape="circle"
+                          icon={<SendOutlined style={{ marginLeft: "2px" }} />}
+                        />
+                      </Tooltip>
+                    </div>
+                  </Form>
+                </div>
+              </>
+            ) : (
               <>
-            <div style={{ height: "8%" }}>
-              <Skeleton.Avatar active={true} size="large" shape="circle" />
-              <Skeleton.Input active={true} className="skeletonUserName" />
-                          </div>
-            <Divider />
-            <div style={{ height: "82%" }}>
-              <Skeleton avatar active={true} paragraph={{ rows: 2 }} />
-              <Skeleton
-                active={true}
-                paragraph={{ rows: 2 }}
-                className="messageFromMe"
-              />
-              <Skeleton avatar active={true} paragraph={{ rows: 2 }} />
-              <Skeleton
-                active={true}
-                paragraph={{ rows: 2 }}
-                className="messageFromMe"
-              />
-            </div>
-            </>)}
-            
+                <div style={{ height: "8%" }}>
+                  <Skeleton.Avatar active={true} size="large" shape="circle" />
+                  <Skeleton.Input active={true} className="skeletonUserName" />
+                </div>
+                <Divider />
+                <div style={{ height: "82%" }}>
+                  <Skeleton avatar active={true} paragraph={{ rows: 2 }} />
+                  <Skeleton
+                    active={true}
+                    paragraph={{ rows: 2 }}
+                    className="messageFromMe"
+                  />
+                  <Skeleton avatar active={true} paragraph={{ rows: 2 }} />
+                  <Skeleton
+                    active={true}
+                    paragraph={{ rows: 2 }}
+                    className="messageFromMe"
+                  />
+                </div>
+              </>
+            )}
           </div>
           <Divider type="vertical" plain />
           <div style={{ width: "25%", marginTop: "5px", marginBottom: "5px" }}>
-            <Input suffix={<SearchOutlined/>} placeholder="Search"
-              style={{width:"90%",marginLeft:"5px",marginBottom:"5px", borderRadius:"15px"}}
-              onChange={(e)=>{
-                setSearchUsers(users.filter((user)=>{
-                  if ((user.firstName+" "+user.lastName+" "+user.email).toUpperCase().search(e.target.defaultValue.toUpperCase()) === -1) {
-                    return false;
-                  }
-                  return true;
-                }))
-              }}/>
+            <Input
+              suffix={<SearchOutlined />}
+              placeholder="Search"
+              style={{
+                width: "90%",
+                marginLeft: "5px",
+                marginBottom: "5px",
+                borderRadius: "15px",
+              }}
+              onChange={(e) => {
+                setSearchUsers(
+                  users.filter((user) => {
+                    if (
+                      (user.firstName + " " + user.lastName + " " + user.email)
+                        .toUpperCase()
+                        .search(e.target.value.toUpperCase()) === -1
+                    ) {
+                      return false;
+                    }
+                    return true;
+                  })
+                );
+              }}
+            />
             <InfiniteScroll height="75vh" dataLength={users.length}>
               <List>
                 <VirtualList data={searchUsers} itemHeight={47} itemKey="email">
                   {(item) => (
-                    <div className="userDiscussion" onClick={()=>{navigate(`/messages/${item.id}`);}}>
+                    <div
+                      className="userDiscussion"
+                      onClick={() => {
+                        navigate(`/messages/${item.id}`);
+                      }}
+                    >
                       <List.Item key={item.email}>
                         <List.Item.Meta
                           avatar={

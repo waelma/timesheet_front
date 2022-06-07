@@ -41,12 +41,9 @@ const EmployeCalendar = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     axios
-      .get(
-        "https://8dcd-197-244-176-194.eu.ngrok.io/api/employe/getEmployeCalendar",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      )
+      .get("http://localhost:8000/api/employe/getEmployeCalendar", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       .then((res) => {
         setData(res.data);
       })
@@ -64,12 +61,13 @@ const EmployeCalendar = () => {
   function dateCellRender(value) {
     const listData = getListData(value);
     return (
-      <ul className='events'>
+      <ul className="events">
         {listData.map((item, index) => (
           <Tooltip
             key={index}
-            placement='topLeft'
-            title={`Deadline of task : ${item}`}>
+            placement="topLeft"
+            title={`Deadline of task : ${item}`}
+          >
             <Badge status={"success"} text={item} />
           </Tooltip>
         ))}
@@ -82,7 +80,7 @@ const EmployeCalendar = () => {
       <HeaderMenu></HeaderMenu>
       <div style={{ display: "flex" }}>
         <SideMenu></SideMenu>
-        <div className='calendar'>
+        <div className="calendar">
           <Calendar fullscreen dateCellRender={dateCellRender} />
         </div>
       </div>

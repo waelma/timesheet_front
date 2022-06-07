@@ -2,3 +2,12 @@
     background-color: #F7F9F9;
     padding: 8px 24px;
 }
+.ant-page-header-heading-sub-title{
+    margin: 0 auto!important;
+    font-weight: 700;
+    color: black;
+    text-transform: capitalize;
+}
+.ant-page-header-heading-left{
+    width: 100%;
+}

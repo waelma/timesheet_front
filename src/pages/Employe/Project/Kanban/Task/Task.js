@@ -1,9 +1,23 @@
-import { React, useState } from "react";
+import { React, useEffect, useState } from "react";
 import { Card, Avatar } from "antd";
 import { AiOutlineClose } from "react-icons/ai";
 import { BiTimeFive } from "react-icons/bi";
 import "./Task.css";
 import TaskModel from "./TaskModel";
+var months = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "June",
+  "July",
+  "Aug",
+  "Sept",
+  "Oct",
+  "Nov",
+  "Dec",
+];
 const Task = ({
   description,
   id,
@@ -12,15 +26,22 @@ const Task = ({
   removeCard,
   dragging,
   members,
+  dateD,
+  dateF,
+  subTache,
+  projectMembers,
+  comment,
 }) => {
   const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    console.log();
+  }, []);
   return (
     <>
       <Card
         className="task"
         dragging={dragging}
         onClick={() => {
-          console.log(id);
           setVisible(true);
         }}
       >
@@ -37,10 +58,22 @@ const Task = ({
               color: "#707B7C ",
             }}
           >
-            <BiTimeFive
-              style={{ fontSize: "15px", marginBottom: "-3px" }}
-            ></BiTimeFive>{" "}
-            08 apr - 12 dec
+            {dateD && dateF ? (
+              <>
+                <BiTimeFive
+                  style={{ fontSize: "15px", marginBottom: "-3px" }}
+                ></BiTimeFive>{" "}
+                {String(dateD).substr(8, 2) +
+                  " " +
+                  months[parseInt(String(dateD).substr(5, 2)) - 1] +
+                  " - " +
+                  String(dateF).substr(8, 2) +
+                  " " +
+                  months[parseInt(String(dateF).substr(5, 2)) - 1]}
+              </>
+            ) : (
+              <></>
+            )}
           </span>
           <Avatar.Group
             style={{
@@ -55,16 +88,25 @@ const Task = ({
               backgroundColor: "#D0D3D4",
             }}
           >
-            {/* <Avatar src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUDnkndWV6_6v_dks3oYlvJZwW6CQiCsV6Uw&usqp=CAU" />
-            <Avatar src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_d3SP2vKOeGFVESn5rk6xnPiQ0naW2e-ldA&usqp=CAU" />
-            <Avatar src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQEZrATmgHOi5ls0YCCQBTkocia_atSw0X-Q&usqp=CAU" /> */}
             {members.map((member) => (
-              <Avatar src={member.photo} />
+              <Avatar key={member.id} src={member.photo} />
             ))}
           </Avatar.Group>
         </div>
       </Card>
-      <TaskModel setVisible={setVisible} visible={visible}></TaskModel>
+      <TaskModel
+        description={description}
+        id={id}
+        title={title}
+        members={members}
+        dateD={dateD}
+        dateF={dateF}
+        projectMembers={projectMembers}
+        subTache={subTache}
+        comment={comment}
+        setVisible={setVisible}
+        visible={visible}
+      ></TaskModel>
     </>
   );
 };

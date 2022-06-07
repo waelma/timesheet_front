@@ -11,7 +11,7 @@ import {
 import axios from "axios";
 import VirtualList from "rc-virtual-list";
 import { UserDeleteOutlined } from "@ant-design/icons";
-const ProjectTeam = ({ setVisible, visible }) => {
+const ProjectTeam = ({ members, setVisible, visible }) => {
   const token = localStorage.getItem("token");
   const [form] = Form.useForm();
   const [, updateState] = useState();
@@ -127,7 +127,7 @@ const ProjectTeam = ({ setVisible, visible }) => {
       <div style={{ marginTop: "20px" }}>
         <span style={{ fontWeight: "bold" }}>Project team</span>
         <List>
-          <VirtualList data={users} itemHeight={47} itemKey="email">
+          <VirtualList data={members} itemHeight={47} itemKey="email">
             {(item) => (
               <div>
                 <List.Item key={item.email}>
