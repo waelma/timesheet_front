@@ -11,7 +11,7 @@ import {
 import axios from "axios";
 import VirtualList from "rc-virtual-list";
 import { UserDeleteOutlined } from "@ant-design/icons";
-const ProjectTeam = ({ members, setVisible, visible }) => {
+const ProjectTeam = ({ project_id, members, setVisible, visible, refresh }) => {
   const token = localStorage.getItem("token");
   const isEmployee = localStorage.getItem("role") === "1";
   const [form] = Form.useForm();
@@ -19,51 +19,10 @@ const ProjectTeam = ({ members, setVisible, visible }) => {
   const forceUpdate = useCallback(() => updateState({}), []);
   let [options, setOptions] = useState([]);
   let [name, setName] = useState("");
-  let [users, setUsers] = useState([
-    {
-      id: 0,
-      email: "waelma@gmail.com",
-      photo:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_d3SP2vKOeGFVESn5rk6xnPiQ0naW2e-ldA&usqp=CAU",
-      firstName: "Wael",
-      lastName: "machlouch",
-    },
-    {
-      id: 1,
-      email: "firsama@gmail.com",
-      photo:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUDnkndWV6_6v_dks3oYlvJZwW6CQiCsV6Uw&usqp=CAU",
-      firstName: "Firas",
-      lastName: "machlouch",
-    },
-    {
-      id: 2,
-      email: "atzahri@gmail.com",
-      photo:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQEZrATmgHOi5ls0YCCQBTkocia_atSw0X-Q&usqp=CAU",
-      firstName: "Zahri",
-      lastName: "atoui",
-    },
-    {
-      id: 3,
-      email: "aaaatzahri@gmail.com",
-      photo:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQEZrATmgHOi5ls0YCCQBTkocia_atSw0X-Q&usqp=CAU",
-      firstName: "aaaaaZahri",
-      lastName: "aaaatoui",
-    },
-    {
-      id: 4,
-      email: "sdfsdf@gmail.com",
-      photo:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQEZrATmgHOi5ls0YCCQBTkocia_atSw0X-Q&usqp=CAU",
-      firstName: "Zsfdsdfahri",
-      lastName: "atofsdui",
-    },
-  ]);
+  let [users, setUsers] = useState(members);
   useEffect(() => {
     axios
-      .get(`https://8dcd-197-244-176-194.eu.ngrok.io/api/employe/getEmployes`, {
+      .get(`http://localhost:8000/api/employe/getEmployes`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
@@ -77,6 +36,7 @@ const ProjectTeam = ({ members, setVisible, visible }) => {
       placement="right"
       onClose={() => {
         setVisible(false);
+        refresh(Math.random());
       }}
       visible={visible}
     >
@@ -84,19 +44,36 @@ const ProjectTeam = ({ members, setVisible, visible }) => {
         <Form
           form={form}
           onFinish={(values) => {
-            setUsers((oldArray) => [
-              ...oldArray,
-              {
-                id: 5,
-                email: "zzzzz@gmail.com",
-                photo:
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQEZrATmgHOi5ls0YCCQBTkocia_atSw0X-Q&usqp=CAU",
-                firstName: values.selectEmploye,
-                // lastName:"atofsdui"
-              },
-            ]);
-            form.resetFields();
-            forceUpdate();
+            let newItem = options.filter(
+              (item) => item.value === values.selectEmploye
+            )[0];
+            if (
+              newItem &&
+              members.findIndex((x) => x.id === newItem.id) === -1
+            ) {
+              let data = {
+                user_id: newItem.id,
+                project_id: project_id,
+              };
+              axios
+                .post(`http://localhost:8000/api/project/addMember`, data, {
+                  headers: { Authorization: `Bearer ${token}` },
+                })
+                .then((response) => {
+                  setUsers((oldArray) => [
+                    ...oldArray,
+                    {
+                      id: newItem.id,
+                      email: newItem.email,
+                      photo: newItem.photo,
+                      firstName: newItem.first,
+                      lastName: newItem.last,
+                    },
+                  ]);
+                  form.resetFields();
+                  forceUpdate();
+                });
+            }
           }}
         >
           <span style={{ fontWeight: "bold" }}>Add employe</span>
@@ -130,7 +107,7 @@ const ProjectTeam = ({ members, setVisible, visible }) => {
       <div style={{ marginTop: "20px" }}>
         <span style={{ fontWeight: "bold" }}>Project team</span>
         <List>
-          <VirtualList data={members} itemHeight={47} itemKey="email">
+          <VirtualList data={users} itemHeight={47} itemKey="email">
             {(item) => (
               <div>
                 <List.Item key={item.email}>
@@ -154,11 +131,26 @@ const ProjectTeam = ({ members, setVisible, visible }) => {
                           }}
                           onClick={() => {
                             console.log(users);
-                            setUsers(
-                              users.filter((element) => {
-                                return element.id !== item.id;
-                              })
-                            );
+                            let data = {
+                              user_id: item.id,
+                              project_id: project_id,
+                            };
+                            axios
+                              .post(
+                                `http://localhost:8000/api/project/removeMember`,
+                                data,
+                                {
+                                  headers: { Authorization: `Bearer ${token}` },
+                                }
+                              )
+                              .then((response) => {
+                                setUsers(
+                                  users.filter((element) => {
+                                    return element.id !== item.id;
+                                  })
+                                );
+                              });
+
                             forceUpdate();
                           }}
                         />

@@ -9,15 +9,15 @@ import axios from "axios";
 import { Navigate } from "react-router-dom";
 import { useNavigate } from "react-router";
 
-const token = localStorage.getItem("token");
-
 const EmployeHome = () => {
   let navigate = useNavigate();
   let [projects, setProjects] = useState([]);
   const [visible, setVisible] = useState(false);
+  const token = localStorage.getItem("token");
+  const isEmployee = localStorage.getItem("role") === "1";
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/api/chefProjet/getChefProjects`, {
+      .get(`http://localhost:8000/api/chefProjet/getProjects`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
@@ -25,17 +25,17 @@ const EmployeHome = () => {
         setProjects(response.data);
       });
   }, []);
-  const color=(etat)=>{
-    if(etat==="todo"){
-      return "#CACFD2"
-    }else if(etat==="inprogress"){
-      return "#5DADE2"
-    }else if(etat==="test"){
-      return "#F5B041"
-    }else{
-      return "#58D68D"
+  const color = (etat) => {
+    if (etat === "todo") {
+      return "#CACFD2";
+    } else if (etat === "inprogress") {
+      return "#5DADE2";
+    } else if (etat === "test") {
+      return "#F5B041";
+    } else {
+      return "#58D68D";
     }
-  }
+  };
   return (
     <div>
       <HeaderMenu></HeaderMenu>
@@ -43,35 +43,42 @@ const EmployeHome = () => {
         <SideMenu></SideMenu>
         <div className="Home">
           <Row>
-            <Col key="0">
-              <Card
-                style={{marginRight:'20px'}}
-                className="card"
-                bordered={true}
-                onClick={() => {
-                  setVisible(true);
-                }}
-              >
-                <AiOutlinePlus></AiOutlinePlus>
-                <br></br>
-                <span> Create new project</span>
-              </Card>
-            </Col>
+            {!isEmployee && (
+              <Col key="0">
+                <Card
+                  style={{ marginRight: "20px" }}
+                  className="card"
+                  bordered={true}
+                  onClick={() => {
+                    setVisible(true);
+                  }}
+                >
+                  <AiOutlinePlus></AiOutlinePlus>
+                  <br></br>
+                  <span> Create new project</span>
+                </Card>
+              </Col>
+            )}
             {projects.map((project) => (
               <Col key={project.id}>
-                <div style={{marginRight:'20px'}}>  
-                <Badge.Ribbon text={project.etat} color={color(project.etat)} style={{marginTop:'-10px'}}>
-                  <Card
-                    className="card"
-                    // title={project.name}
-                    bordered={true}
-                    onClick={() => {
-                      navigate(`/project/kanbanTable/${project.id}`);
-                    }}
-                  ><br />
-                    <span style={{fontWeight:"bold"}}>{project.name}</span>
-                  </Card>
-                </Badge.Ribbon>
+                <div style={{ marginRight: "20px" }}>
+                  <Badge.Ribbon
+                    text={project.etat}
+                    color={color(project.etat)}
+                    style={{ marginTop: "-10px" }}
+                  >
+                    <Card
+                      className="card"
+                      // title={project.name}
+                      bordered={true}
+                      onClick={() => {
+                        navigate(`/project/kanbanTable/${project.id}`);
+                      }}
+                    >
+                      <br />
+                      <span style={{ fontWeight: "bold" }}>{project.name}</span>
+                    </Card>
+                  </Badge.Ribbon>
                 </div>
               </Col>
             ))}

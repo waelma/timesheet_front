@@ -45,3 +45,6 @@
 .messageBox .messageFromMe .ant-skeleton-content{
     float: right;
 }
+.messageBox .ant-comment-inner{
+    padding: 5px;
+}

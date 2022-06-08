@@ -13,104 +13,78 @@ import {
 import moment from "moment";
 import { SendOutlined } from "@ant-design/icons";
 import InfiniteScroll from "react-infinite-scroll-component";
-const data = [
-  {
-    author: "Han Solo",
-    transmitter: "35",
-    receiver: 50,
-    avatar: "https://joeschmoe.io/api/v1/random",
-    content: (
-      <p>
-        We supply a series of design principles, practical patterns and high
-        quality design resources (Sketch and Axure).
-      </p>
-    ),
-    datetime: (
-      <Tooltip
-        title={moment().subtract(1, "days").format("YYYY-MM-DD HH:mm:ss")}>
-        <span>{moment().subtract(1, "days").fromNow()}</span>
-      </Tooltip>
-    ),
-  },
-  {
-    author: "Han Solo",
-    transmitter: "35",
-    receiver: 50,
-    avatar: "https://joeschmoe.io/api/v1/random",
-    content: (
-      <p>
-        We supply a series of design principles, practical patterns and high
-        quality design resources (Sketch and Axure).
-      </p>
-    ),
-    datetime: (
-      <Tooltip
-        title={moment().subtract(1, "days").format("YYYY-MM-DD HH:mm:ss")}>
-        <span>{moment().subtract(1, "days").fromNow()}</span>
-      </Tooltip>
-    ),
-  },
-  {
-    author: "Han Solo",
-    transmitter: "50",
-    receiver: 35,
-    avatar: "https://joeschmoe.io/api/v1/random",
-    content: (
-      <p>
-        We supply a series of design principles, practical patterns and high
-        quality design resources (Sketch and Axure).
-      </p>
-    ),
-    datetime: (
-      <Tooltip
-        title={moment().subtract(2, "days").format("YYYY-MM-DD HH:mm:ss")}>
-        <span>{moment().subtract(2, "days").fromNow()}</span>
-      </Tooltip>
-    ),
-  },
-];
-const GroupeMessaging = ({ setVisible, visible }) => {
+import axios from "axios";
+const GroupeMessaging = ({ id, setVisible, visible }) => {
+  const token = localStorage.getItem("token");
   const [form] = Form.useForm();
-  const [commentHeight, setCommentHeight] = useState();
   const [, updateState] = useState();
   const forceUpdate = useCallback(() => updateState({}), []);
   const messagesRef = useRef();
+  const [messages, setMessages] = useState([]);
+  const [avatar, setAvatar] = useState();
   useEffect(() => {
+    axios
+      .get(`http://localhost:8000/api/project/groupeMessage/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        setMessages(response.data);
+        console.log(response.data);
+      });
+    axios
+      .get(`http://localhost:8000/api/employe/userPhoto`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        setAvatar(response.data);
+      });
+
     if (!messagesRef.current) return;
     const messagesDiv = messagesRef.current.querySelector(
       ".infinite-scroll-component"
     );
     if (!messagesDiv) return;
     messagesDiv.scrollTo(0, 100000);
-    // setCommentHeight(document.getElementById('commentsId').clientHeight-10);
   }, []);
   return (
     <Drawer
       title={"Group Messaging"}
-      placement='right'
+      placement="right"
       onClose={() => {
         setVisible(false);
       }}
-      visible={visible}>
+      visible={visible}
+    >
       <div style={{ height: "90%", marginRight: "-10px" }}>
         <div ref={messagesRef}>
-          {data.length ? (
+          {messages.length ? (
             <InfiniteScroll
               inverse={true}
-              height='480px'
-              dataLength={data.length}>
+              height="480px"
+              dataLength={messages.length}
+            >
               <List
                 //   header={`${data.length} replies`}
-                itemLayout='horizontal'
-                dataSource={data}
+                itemLayout="horizontal"
+                dataSource={messages}
                 renderItem={(item) => (
                   <li>
                     <Comment
-                      actions={item.actions}
-                      author={item.author}
-                      avatar={item.avatar}
-                      content={item.content}
-                      datetime={item.datetime}
+                      // actions={item.actions}
+                      author={
+                        item.user[0].firstName + " " + item.user[0].lastName
+                      }
+                      avatar={item.user[0].photo}
+                      content={item.message}
+                      datetime={
+                        <Tooltip
+                          title={moment(item.date).format(
+                            "YYYY-MM-DD HH:mm:ss"
+                          )}
+                        >
+                          <span>{moment(item.date).fromNow()}</span>
+                        </Tooltip>
+                      }
                     />
                   </li>
                 )}
@@ -127,57 +101,72 @@ const GroupeMessaging = ({ setVisible, visible }) => {
           <Form
             form={form}
             onFinish={(values) => {
-              console.log(values.comment);
-              data.push({
-                author: "Han Solo",
-                transmitter: localStorage.getItem("user_id"),
-                receiver: 50,
-                avatar: "https://joeschmoe.io/api/v1/random",
-                content: <p>{values.message}</p>,
-                datetime: (
-                  <Tooltip
-                    title={moment()
-                      .subtract(1, "days")
-                      .format("YYYY-MM-DD HH:mm:ss")}>
-                    <span>{moment().subtract(1, "days").fromNow()}</span>
-                  </Tooltip>
-                ),
-              });
-              form.resetFields();
-              forceUpdate();
-              if (!messagesRef.current) return;
-              const messagesDiv = messagesRef.current.querySelector(
-                ".infinite-scroll-component"
-              );
-              if (!messagesDiv) return;
-              messagesDiv.scrollTo(0, 1000000);
+              let data = {
+                message: values.message,
+                project_id: id,
+                user_id: localStorage.getItem("user_id"),
+                date: moment().format("YYYY-MM-DD HH:mm:ss"),
+              };
+              axios
+                .post(
+                  `http://localhost:8000/api/project/addGroupeMessage`,
+                  data,
+                  {
+                    headers: { Authorization: `Bearer ${token}` },
+                  }
+                )
+                .then((response) => {
+                  const newMessage = [...messages];
+                  newMessage.push({
+                    user: [
+                      {
+                        firstName: response.data.firstName,
+                        lastName: response.data.lastName,
+                        photo: response.data.photo,
+                      },
+                    ],
+                    message: values.message,
+                  });
+                  setMessages(newMessage);
+
+                  form.resetFields();
+                  forceUpdate();
+                  if (!messagesRef.current) return;
+                  const messagesDiv = messagesRef.current.querySelector(
+                    ".infinite-scroll-component"
+                  );
+                  if (!messagesDiv) return;
+                  messagesDiv.scrollTo(0, 1000000);
+                });
             }}
-            autoComplete='off'>
+            autoComplete="off"
+          >
             <div style={{ display: "flex" }}>
-              <Avatar src='https://joeschmoe.io/api/v1/random' />
+              <Avatar src={avatar} />
               <Form.Item
                 style={{
                   marginLeft: "10px",
                   marginRight: "5px",
                   width: "100%",
                 }}
-                name='message'
+                name="message"
                 rules={[
                   {
                     required: true,
                     message: "Please enter a message!",
                   },
-                ]}>
+                ]}
+              >
                 <Input
-                  placeholder='Message...'
+                  placeholder="Message..."
                   style={{ borderRadius: "15px" }}
                 />
               </Form.Item>
-              <Tooltip title='send'>
+              <Tooltip title="send">
                 <Button
-                  type='primary'
-                  htmlType='submit'
-                  shape='circle'
+                  type="primary"
+                  htmlType="submit"
+                  shape="circle"
                   icon={<SendOutlined style={{ marginLeft: "1px" }} />}
                 />
               </Tooltip>

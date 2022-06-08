@@ -33,9 +33,15 @@ const App = () => {
           <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register step={0} />} />
-          <Route path="/home" element={<EmployeHome />} />
-          <Route path="/messages" element={<MessageBox />} />
-          <Route path="/messages/:id" element={<MessageBox />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/home" element={<EmployeHome />} />
+          </Route>
+          <Route element={<ProtectedRoute />}>
+            <Route path="/messages" element={<MessageBox />} />
+          </Route>
+          <Route element={<ProtectedRoute />}>
+            <Route path="/messages/:id" element={<MessageBox />} />
+          </Route>
           <Route element={<ProtectedRoute />}>
             <Route path="/profile" element={<Profile />} />
           </Route>
@@ -44,10 +50,13 @@ const App = () => {
             element={<ForgetPwdCodeConfirmation />}
           />
           <Route path="/updatePwd" element={<UpdatePwd />} />
-          <Route path="/project/kanbanTable/:id" element={<Kanban />} />
-          <Route path="/calendar" element={<Calendar />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/project/kanbanTable/:id" element={<Kanban />} />
+          </Route>
+          <Route element={<ProtectedRoute />}>
+            <Route path="/calendar" element={<Calendar />} />
+          </Route>
           <Route path="*" element={<NotFound />} />
-          {/* <Route path="*" element={<Navigate to="/" replace />}/> */}
         </Routes>
       </BrowserRouter>
     </div>

@@ -14,62 +14,11 @@ import { SendOutlined } from "@ant-design/icons";
 import { MdAddComment } from "react-icons/md";
 import InfiniteScroll from "react-infinite-scroll-component";
 import axios from "axios";
-const data = [
-  // {
-  //     author: "Han Solo",
-  //     avatar: "https://joeschmoe.io/api/v1/random",
-  //     content: (
-  //       <p>
-  //         We supply a series of design principles, practical patterns and high
-  //         quality design resources (Sketch and Axure).
-  //       </p>
-  //     ),
-  //     datetime: (
-  //       <Tooltip
-  //         title={moment().subtract(1, "days").format("YYYY-MM-DD HH:mm:ss")}
-  //       >
-  //         <span>{moment().subtract(1, "days").fromNow()}</span>
-  //       </Tooltip>
-  //     ),
-  //   },
-  {
-    author: "Han Solo",
-    avatar: "http://localhost:8000/uploads/users/photParDefault.jpeg",
-    content: (
-      <p>
-        Hello team, We have an urgent meeting this afternoon to discuss the
-        progress of your current work. Please be on time.
-      </p>
-    ),
-    datetime: (
-      <Tooltip
-        title={moment().subtract(1, "days").format("YYYY-MM-DD HH:mm:ss")}
-      >
-        <span>{moment().subtract(1, "days").fromNow()}</span>
-      </Tooltip>
-    ),
-  },
-  {
-    author: "Han Solo",
-    avatar: "http://localhost:8000/uploads/users/photParDefault.jpeg",
-    content: (
-      <p>
-        Hello team, We are late on the deadline please hurry up a little bit.
-      </p>
-    ),
-    datetime: (
-      <Tooltip
-        title={moment().subtract(2, "days").format("YYYY-MM-DD HH:mm:ss")}
-      >
-        <span>{moment().subtract(2, "days").fromNow()}</span>
-      </Tooltip>
-    ),
-  },
-];
-const TaskComments = ({ comment }) => {
+const TaskComments = ({ comment, tache_id }) => {
   const [form] = Form.useForm();
   const commentsRef = useRef();
   const [commentHeight, setCommentHeight] = useState();
+  const [comments, setComments] = useState(comment);
   const [avatar, setAvatar] = useState();
   const [, updateState] = useState();
   const forceUpdate = useCallback(() => updateState({}), []);
@@ -82,7 +31,7 @@ const TaskComments = ({ comment }) => {
       .then((response) => {
         setAvatar(response.data);
       });
-    if (comment.length) {
+    if (comments.length) {
       const commentsDiv = commentsRef.current.querySelector(
         ".infinite-scroll-component"
       );
@@ -94,16 +43,16 @@ const TaskComments = ({ comment }) => {
   return (
     <div style={{ height: "90%" }}>
       <div id="commentsId" ref={commentsRef} style={{ height: "300px" }}>
-        {comment.length ? (
+        {comments.length ? (
           <InfiniteScroll
             inverse={true}
             height="290px"
-            dataLength={comment.length}
+            dataLength={comments.length}
           >
             <List
               //   header={`${data.length} replies`}
               itemLayout="horizontal"
-              dataSource={comment}
+              dataSource={comments}
               renderItem={(item) => (
                 <li>
                   <Comment
@@ -128,33 +77,39 @@ const TaskComments = ({ comment }) => {
           form={form}
           onFinish={(values) => {
             console.log(values.comment);
-            comment.push({
-              user: [
-                {
-                  firstName: "Han",
-                  lastName: " Solo",
-                  photo: avatar,
-                },
-              ],
-              comment: <p>{values.comment}</p>,
-              datetime: (
-                <Tooltip
-                  title={moment()
-                    .subtract(1, "days")
-                    .format("YYYY-MM-DD HH:mm:ss")}
-                >
-                  <span>{moment().subtract(1, "days").fromNow()}</span>
-                </Tooltip>
-              ),
-            });
-            form.resetFields();
-            forceUpdate();
+            let data = {
+              comment: values.comment,
+              tache_id: tache_id,
+              user_id: localStorage.getItem("user_id"),
+            };
+            axios
+              .post(`http://localhost:8000/api/task/addComment`, data, {
+                headers: { Authorization: `Bearer ${token}` },
+              })
+              .then((response) => {
+                console.log(response.data);
+                const newComments = [...comments];
+                newComments.push({
+                  user: [
+                    {
+                      firstName: response.data.firstName,
+                      lastName: response.data.lastName,
+                      photo: response.data.photo,
+                    },
+                  ],
+                  comment: values.comment,
+                });
+                setComments(newComments);
 
-            const commentsDiv = commentsRef.current.querySelector(
-              ".infinite-scroll-component"
-            );
+                form.resetFields();
+                forceUpdate();
 
-            commentsDiv.scrollTo(0, 100000);
+                const commentsDiv = commentsRef.current.querySelector(
+                  ".infinite-scroll-component"
+                );
+
+                commentsDiv.scrollTo(0, 100000);
+              });
           }}
           autoComplete="off"
         >

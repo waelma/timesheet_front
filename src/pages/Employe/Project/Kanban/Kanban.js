@@ -9,30 +9,33 @@ import SideMenu from "../../../../components/SideMenu";
 import KanbanSideMenu from "./KanbanSideMenu/KanbanSideMenu";
 import axios from "axios";
 import { useParams } from "react-router";
-
-const token = localStorage.getItem("token");
+import { Navigate } from "react-router-dom";
 
 const Kanban = () => {
+  const token = localStorage.getItem("token");
+  const userID = localStorage.getItem("user_id");
   const { id } = useParams();
   let [ok, setOk] = useState(true);
   const [controlledBoard, setBoard] = useState();
   const [projectDate, setProjectDate] = useState([]);
-  const [, forceUpdate] = useState(0);
+  const [update, forceUpdate] = useState(0);
 
   useEffect(() => {
     axios
-      .get(
-        `https://8dcd-197-244-176-194.eu.ngrok.io/api/project/getProject/${id}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      )
+      .get(`http://localhost:8000/api/project/getProject/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       .then((response) => {
-        console.log(response.data);
-        setBoard(response.data);
-        setOk(false);
+        if (response.status === 200) {
+          console.log(response.data);
+          setBoard(response.data);
+          setOk(false);
+        }
+      })
+      .catch(() => {
+        window.history.back();
       });
-  }, [id]);
+  }, [id, update]);
 
   const changeState = (id, newState) => {
     let data = {
@@ -142,8 +145,10 @@ const Kanban = () => {
               <ControlledBoard />
             </div>
             <KanbanSideMenu
+              forceUpdate={forceUpdate}
               id={id}
               members={controlledBoard.employes_projects}
+              controlledBoard={controlledBoard}
             ></KanbanSideMenu>
           </>
         )}

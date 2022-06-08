@@ -77,7 +77,7 @@ const TaskModel = ({
   comment,
   visible,
   setVisible,
-  forceUpdate: forceRefresh
+  forceUpdate: forceRefresh,
 }) => {
   const token = localStorage.getItem("token");
   let [dates, setDates] = useState(
@@ -90,6 +90,7 @@ const TaskModel = ({
         ]
       : null
   );
+  const isEmployee = localStorage.getItem("role") === "1";
   const [visibleAddTask, setVisibleAddTask] = useState(false);
   const [form] = Form.useForm();
   const [, updateState] = useState();
@@ -117,7 +118,7 @@ const TaskModel = ({
     <Menu style={{ paddingTop: "10px", paddingBottom: "5px" }}>
       {projectMembers.map((allUser) => (
         <div
-          className='addMemberDropDown'
+          className="addMemberDropDown"
           style={{
             width: "200px",
             display: "flex",
@@ -125,12 +126,13 @@ const TaskModel = ({
             paddingRight: "10px",
             marginBottom: "5px",
           }}
-          key={allUser.id}>
+          key={allUser.id}
+        >
           <span>{allUser.firstName}</span>
           {members.filter((element) => {
             return element.id === allUser.id;
           }).length ? (
-            <Tooltip title='Delete member'>
+            <Tooltip title="Delete member">
               <UserDeleteOutlined
                 style={{
                   color: "red",
@@ -157,10 +159,11 @@ const TaskModel = ({
                       console.log(response.data);
                     });
                   forceUpdate();
-                }}></UserDeleteOutlined>
+                }}
+              ></UserDeleteOutlined>
             </Tooltip>
           ) : (
-            <Tooltip title='Add member'>
+            <Tooltip title="Add member">
               <UserAddOutlined
                 style={{
                   color: "green",
@@ -183,7 +186,8 @@ const TaskModel = ({
                       console.log(response.data);
                     });
                   forceUpdate();
-                }}></UserAddOutlined>
+                }}
+              ></UserAddOutlined>
             </Tooltip>
           )}
         </div>
@@ -196,11 +200,11 @@ const TaskModel = ({
   return (
     <div>
       <Modal
-        className='TaskModel'
+        className="TaskModel"
         title={
           <div style={{ display: "flex" }}>
             <div>
-              {taskTitleInput ? (
+              {taskTitleInput && !isEmployee ? (
                 <Form
                   style={{ display: "flex" }}
                   // form={formDesc}
@@ -232,31 +236,36 @@ const TaskModel = ({
                   </Form.Item>
                   <Button
                     style={{ marginLeft: "5px", borderRadius: "15px" }}
-                    htmlType='submit'
-                    type='primary'>
+                    htmlType="submit"
+                    type="primary"
+                  >
                     Edit
                   </Button>
                 </Form>
               ) : (
                 <div style={{ display: "felx" }}>
                   {taskTitle}
-                  <Tooltip title='Edit task Title'>
-                    <EditOutlined
-                      className='updateDescIcon'
-                      style={{
-                        marginLeft: "10px",
-                        cursor: "pointer",
-                        fontSize: "10px",
-                      }}
-                      onClick={() => {
-                        setTaskTitleInput(true);
-                      }}></EditOutlined>
-                  </Tooltip>
+                  {!isEmployee && (
+                    <Tooltip title="Edit task Title">
+                      <EditOutlined
+                        className="updateDescIcon"
+                        style={{
+                          marginLeft: "10px",
+                          cursor: "pointer",
+                          fontSize: "10px",
+                        }}
+                        onClick={() => {
+                          setTaskTitleInput(true);
+                        }}
+                      ></EditOutlined>
+                    </Tooltip>
+                  )}
                 </div>
               )}
             </div>
             <div>
               <RangePicker
+                disabled={isEmployee}
                 style={{
                   marginLeft: "20px",
                   borderRadius: "15px",
@@ -290,32 +299,37 @@ const TaskModel = ({
                 }}
               />
             </div>
-            <Tooltip title="Archive task">
-              <Popconfirm
-                title="Are you sure to delete this task?"
-                onConfirm={() => {
-                  message.success("Task removed");
-                  axios
-                    .delete(`http://localhost:8000/api/task/removeTask/${id}`, {
-                      headers: { Authorization: `Bearer ${token}` },
-                    })
-                    .then((response) => {
-                      setVisible(false);
-                      window.location.reload();
-                    });
-                }}
-                okText="Yes"
-                cancelText="No"
-              >
-                <div className="btn-archive">
-                  <Button
-                    shape="circle"
-                    icon={<HiOutlineArchive style={{ marginTop: "5px" }} />}
-                    style={{ marginLeft: "20px" }}
-                  ></Button>
-                </div>
-              </Popconfirm>
-            </Tooltip>
+            {!isEmployee && (
+              <Tooltip title="Archive task">
+                <Popconfirm
+                  title="Are you sure to delete this task?"
+                  onConfirm={() => {
+                    message.success("Task removed");
+                    axios
+                      .delete(
+                        `http://localhost:8000/api/task/removeTask/${id}`,
+                        {
+                          headers: { Authorization: `Bearer ${token}` },
+                        }
+                      )
+                      .then((response) => {
+                        setVisible(false);
+                        window.location.reload();
+                      });
+                  }}
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <div className="btn-archive">
+                    <Button
+                      shape="circle"
+                      icon={<HiOutlineArchive style={{ marginTop: "5px" }} />}
+                      style={{ marginLeft: "20px" }}
+                    ></Button>
+                  </div>
+                </Popconfirm>
+              </Tooltip>
+            )}
           </div>
         }
         footer={null}
@@ -327,7 +341,8 @@ const TaskModel = ({
           console.log("force refresh ");
           forceRefresh(Math.random());
         }}
-        width={850}>
+        width={850}
+      >
         <div style={{ display: "flex" }}>
           <div style={{ width: "60%", paddingRight: "10px" }}>
             <div>
@@ -364,8 +379,9 @@ const TaskModel = ({
                       marginLeft: "70%",
                       borderRadius: "15px",
                     }}
-                    htmlType='submit'
-                    type='primary'>
+                    htmlType="submit"
+                    type="primary"
+                  >
                     {" "}
                     Add desciption
                   </Button>
@@ -373,18 +389,21 @@ const TaskModel = ({
               ) : (
                 <div style={{ display: "felx" }}>
                   {desc}
-                  <Tooltip title="Edit description">
-                    <EditOutlined
-                      className='updateDescIcon'
-                      style={{
-                        marginLeft: "10px",
-                        cursor: "pointer",
-                        fontSize: "10px",
-                      }}
-                      onClick={() => {
-                        setDescInput(true);
-                      }}></EditOutlined>
-                  </Tooltip>
+                  {!isEmployee && (
+                    <Tooltip title="Edit description">
+                      <EditOutlined
+                        className="updateDescIcon"
+                        style={{
+                          marginLeft: "10px",
+                          cursor: "pointer",
+                          fontSize: "10px",
+                        }}
+                        onClick={() => {
+                          setDescInput(true);
+                        }}
+                      ></EditOutlined>
+                    </Tooltip>
+                  )}
                 </div>
               )}
             </div>
@@ -405,7 +424,7 @@ const TaskModel = ({
 
               {todos.map((todo, index) => (
                 <div
-                  className='chekboxTache'
+                  className="chekboxTache"
                   style={{
                     width: "100%",
                     display: "flex",
@@ -456,11 +475,12 @@ const TaskModel = ({
                           });
                       }
                       forceUpdate();
-                    }}>
+                    }}
+                  >
                     {todo.name}
                   </Checkbox>
                   <DeleteOutlined
-                    className='chekboxTacheDelete'
+                    className="chekboxTacheDelete"
                     onClick={() => {
                       setTodos(
                         todos.filter((element) => {
@@ -497,27 +517,29 @@ const TaskModel = ({
                       });
                     forceUpdate();
                   }}
-                  autoComplete='off'>
+                  autoComplete="off"
+                >
                   <div style={{ display: "flex", marginTop: "5px" }}>
                     <Form.Item
                       style={{ marginRight: "5px", width: "30%" }}
-                      name='todo'
+                      name="todo"
                       rules={[
                         {
                           required: true,
                           message: "Please enter a todo!",
                         },
-                      ]}>
+                      ]}
+                    >
                       <Input
-                        placeholder='Add ToDo'
+                        placeholder="Add ToDo"
                         style={{ borderRadius: "15px" }}
                       />
                     </Form.Item>
-                    <Tooltip title='Add'>
+                    <Tooltip title="Add">
                       <Button
-                        type='primary'
-                        htmlType='submit'
-                        shape='circle'
+                        type="primary"
+                        htmlType="submit"
+                        shape="circle"
                         icon={<PlusOutlined style={{ marginLeft: "1px" }} />}
                       />
                     </Tooltip>
@@ -525,14 +547,15 @@ const TaskModel = ({
                 </Form>
               ) : (
                 <Button
-                  type='dashed'
+                  type="dashed"
                   onClick={() => setVisibleAddTask(true)}
                   style={{
                     width: "30%",
                     borderRadius: "15px",
                     marginTop: "5px",
                   }}
-                  icon={<PlusOutlined />}>
+                  icon={<PlusOutlined />}
+                >
                   Add todo
                 </Button>
               )}
@@ -542,18 +565,23 @@ const TaskModel = ({
               <Upload {...props}>
                 <Button
                   style={{ borderRadius: "15px" }}
-                  icon={<UploadOutlined />}>
+                  icon={<UploadOutlined />}
+                >
                   Upload
                 </Button>
               </Upload>
             </div>
           </div>
           <div style={{ paddingTop: "5%" }}>
-            <Divider type='vertical' plain />
+            <Divider type="vertical" plain />
           </div>
           <div style={{ width: "40%", paddingLeft: "10px" }}>
             <div>
-              <h2 style={{ color: "#626567" }}>Members</h2>
+              {members.length || !isEmployee ? (
+                <h2 style={{ color: "#626567" }}>Members</h2>
+              ) : (
+                <></>
+              )}
               {members.map((user) => (
                 <Tooltip key={user.id} title={user.firstName}>
                   <Avatar
@@ -563,20 +591,23 @@ const TaskModel = ({
                   />
                 </Tooltip>
               ))}
-              <Dropdown overlay={menu} trigger={["click"]} placement='bottom'>
-                <Tooltip title='add Member'>
-                  <Avatar
-                    className='addMemberTache'
-                    style={{ cursor: "pointer" }}>
-                    <EditOutlined />
-                  </Avatar>
-                </Tooltip>
-              </Dropdown>
+              {!isEmployee && (
+                <Dropdown overlay={menu} trigger={["click"]} placement="bottom">
+                  <Tooltip title="add Member">
+                    <Avatar
+                      className="addMemberTache"
+                      style={{ cursor: "pointer" }}
+                    >
+                      <EditOutlined />
+                    </Avatar>
+                  </Tooltip>
+                </Dropdown>
+              )}
             </div>
 
             <div>
               <h2 style={{ color: "#626567", marginTop: "15px" }}>Comments</h2>
-              <TaskComments comment={comment}></TaskComments>
+              <TaskComments comment={comment} tache_id={id}></TaskComments>
             </div>
           </div>
         </div>

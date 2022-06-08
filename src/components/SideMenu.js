@@ -8,15 +8,16 @@ import {
 } from "@ant-design/icons";
 import axios from "axios";
 import { useNavigate } from "react-router";
-const token = localStorage.getItem("token");
+
 const { SubMenu } = Menu;
 
 const SideMenu = () => {
+  const token = localStorage.getItem("token");
   let navigate = useNavigate();
   let [projects, setProjects] = useState([]);
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/api/chefProjet/getChefProjects`, {
+      .get(`http://localhost:8000/api/chefProjet/getProjects`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {

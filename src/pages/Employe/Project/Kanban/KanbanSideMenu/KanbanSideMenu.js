@@ -14,7 +14,7 @@ import ProjectSetting from "./ProjectSetting";
 import ProjectArchive from "./ProjectArchive";
 import Statistics from "./Statistics";
 
-const KanbanSideMenu = ({ id, members }) => {
+const KanbanSideMenu = ({ forceUpdate, id, members, controlledBoard }) => {
   const [groupeMessaging, setGroupeMessaging] = useState(false);
   const [projectCalendar, setProjectCalendar] = useState(false);
   const [projectTeam, setProjectTeam] = useState(false);
@@ -112,6 +112,7 @@ const KanbanSideMenu = ({ id, members }) => {
         </Menu.Item>
       </Menu>
       <GroupeMessaging
+        id={id}
         setVisible={setGroupeMessaging}
         visible={groupeMessaging}
       ></GroupeMessaging>
@@ -120,14 +121,18 @@ const KanbanSideMenu = ({ id, members }) => {
         visible={projectCalendar}
       ></ProjectCalendar>
       <ProjectTeam
+        project_id={id}
         members={members}
         setVisible={setProjectTeam}
         visible={projectTeam}
+        refresh={forceUpdate}
       ></ProjectTeam>
       <AddTask id={id} setVisible={setAddTask} visible={addTask}></AddTask>
       <ProjectSetting
         setVisible={setProjectSetting}
         visible={projectSetting}
+        controlledBoard={controlledBoard}
+        forceUpdate={forceUpdate}
       ></ProjectSetting>
       <ProjectArchive
         setVisible={setProjectArchive}

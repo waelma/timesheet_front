@@ -31,3 +31,10 @@
 .btn-archive:hover svg{
     stroke: red;
 }
+
+.TaskModel .ant-picker-input > input[disabled] {
+    color: black;
+}
+.TaskModel .ant-picker.ant-picker-disabled {
+    background-color: white;
+}
