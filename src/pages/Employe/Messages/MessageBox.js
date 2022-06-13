@@ -14,6 +14,7 @@ import {
   Tooltip,
   Input,
   Comment,
+  Spin,
 } from "antd";
 import { SendOutlined } from "@ant-design/icons";
 import axios from "axios";
@@ -24,6 +25,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import moment from "moment";
 import { useParams } from "react-router";
 import { useNavigate } from "react-router";
+import Pusher from "pusher-js";
 const { Option } = Select;
 const MessageBox = () => {
   const { id } = useParams();
@@ -47,6 +49,11 @@ const MessageBox = () => {
         .then((response) => {
           setMessages(response.data);
           setWait(false);
+          const messagesDiv = messagesRef.current.querySelector(
+            ".infinite-scroll-component"
+          );
+
+          if (messagesDiv) messagesDiv.scrollTo(0, 100000);
         });
     }
     axios
@@ -64,12 +71,25 @@ const MessageBox = () => {
       .then((response) => {
         setAvatar(response.data);
       });
-    if (messagesRef.current) {
+
+    const pusher = new Pusher("e43b09785ab7ef07b82f", {
+      cluster: "eu",
+      encrypted: true,
+    });
+    const channel = pusher.subscribe(
+      "channel".concat(localStorage.getItem("user_id"))
+    );
+    channel.bind("messagesUpdate", (data) => {
+      console.log(data.message.original);
+      setMessages(data.message.original);
       const messagesDiv = messagesRef.current.querySelector(
         ".infinite-scroll-component"
       );
+
       if (messagesDiv) messagesDiv.scrollTo(0, 100000);
-    }
+    });
+
+    return () => pusher.unsubscribe(channel);
   }, [id]);
 
   return (
@@ -77,9 +97,9 @@ const MessageBox = () => {
       <HeaderMenu></HeaderMenu>
       <div style={{ display: "flex" }}>
         <SideMenu></SideMenu>
-        <div className="messageBox">
-          <div style={{ width: "75%" }}>
-            {id ? (
+        {messages && avatar && users ? (
+          <div className="messageBox">
+            <div style={{ width: "75%" }}>
               <>
                 <div style={{ height: "8%" }}>
                   <Avatar
@@ -264,86 +284,82 @@ const MessageBox = () => {
                   </Form>
                 </div>
               </>
-            ) : (
-              <>
-                <div style={{ height: "8%" }}>
-                  <Skeleton.Avatar active={true} size="large" shape="circle" />
-                  <Skeleton.Input active={true} className="skeletonUserName" />
-                </div>
-                <Divider />
-                <div style={{ height: "82%" }}>
-                  <Skeleton avatar active={true} paragraph={{ rows: 2 }} />
-                  <Skeleton
-                    active={true}
-                    paragraph={{ rows: 2 }}
-                    className="messageFromMe"
-                  />
-                  <Skeleton avatar active={true} paragraph={{ rows: 2 }} />
-                  <Skeleton
-                    active={true}
-                    paragraph={{ rows: 2 }}
-                    className="messageFromMe"
-                  />
-                </div>
-              </>
-            )}
+            </div>
+            <Divider type="vertical" plain />
+            <div
+              style={{ width: "25%", marginTop: "5px", marginBottom: "5px" }}
+            >
+              <Input
+                suffix={<SearchOutlined />}
+                placeholder="Search"
+                style={{
+                  width: "90%",
+                  marginLeft: "5px",
+                  marginBottom: "5px",
+                  borderRadius: "15px",
+                }}
+                onChange={(e) => {
+                  setSearchUsers(
+                    users.filter((user) => {
+                      if (
+                        (
+                          user.firstName +
+                          " " +
+                          user.lastName +
+                          " " +
+                          user.email
+                        )
+                          .toUpperCase()
+                          .search(e.target.value.toUpperCase()) === -1
+                      ) {
+                        return false;
+                      }
+                      return true;
+                    })
+                  );
+                }}
+              />
+              <InfiniteScroll height="75vh" dataLength={users.length}>
+                <List>
+                  <VirtualList
+                    data={searchUsers}
+                    itemHeight={47}
+                    itemKey="email"
+                  >
+                    {(item) => (
+                      <div
+                        className="userDiscussion"
+                        onClick={() => {
+                          navigate(`/messages/${item.id}`);
+                          setWait(true);
+                        }}
+                      >
+                        <List.Item key={item.email}>
+                          <List.Item.Meta
+                            avatar={
+                              <Avatar
+                                src={item.photo}
+                                style={{ marginLeft: "10px", marginTop: "8px" }}
+                              />
+                            }
+                            title={item.lastName + " " + item.firstName}
+                            description={item.email}
+                          />
+                        </List.Item>
+                      </div>
+                    )}
+                  </VirtualList>
+                </List>
+              </InfiniteScroll>
+            </div>
           </div>
-          <Divider type="vertical" plain />
-          <div style={{ width: "25%", marginTop: "5px", marginBottom: "5px" }}>
-            <Input
-              suffix={<SearchOutlined />}
-              placeholder="Search"
-              style={{
-                width: "90%",
-                marginLeft: "5px",
-                marginBottom: "5px",
-                borderRadius: "15px",
-              }}
-              onChange={(e) => {
-                setSearchUsers(
-                  users.filter((user) => {
-                    if (
-                      (user.firstName + " " + user.lastName + " " + user.email)
-                        .toUpperCase()
-                        .search(e.target.value.toUpperCase()) === -1
-                    ) {
-                      return false;
-                    }
-                    return true;
-                  })
-                );
-              }}
-            />
-            <InfiniteScroll height="75vh" dataLength={users.length}>
-              <List>
-                <VirtualList data={searchUsers} itemHeight={47} itemKey="email">
-                  {(item) => (
-                    <div
-                      className="userDiscussion"
-                      onClick={() => {
-                        navigate(`/messages/${item.id}`);
-                        setWait(true);
-                      }}
-                    >
-                      <List.Item key={item.email}>
-                        <List.Item.Meta
-                          avatar={
-                            <Avatar
-                              src={item.photo}
-                              style={{ marginLeft: "10px", marginTop: "8px" }}
-                            />
-                          }
-                          title={item.lastName + " " + item.firstName}
-                          description={item.email}
-                        />
-                      </List.Item>
-                    </div>
-                  )}
-                </VirtualList>
-              </List>
-            </InfiniteScroll>
+        ) : (
+          <div
+            style={{ width: "100%", textAlign: "center", paddingTop: "150px" }}
+          >
+            <Spin size="large" />
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

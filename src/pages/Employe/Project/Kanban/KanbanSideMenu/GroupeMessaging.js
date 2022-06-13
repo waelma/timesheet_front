@@ -14,6 +14,7 @@ import moment from "moment";
 import { SendOutlined } from "@ant-design/icons";
 import InfiniteScroll from "react-infinite-scroll-component";
 import axios from "axios";
+import Pusher from "pusher-js";
 const GroupeMessaging = ({ id, setVisible, visible }) => {
   const token = localStorage.getItem("token");
   const [form] = Form.useForm();
@@ -29,7 +30,10 @@ const GroupeMessaging = ({ id, setVisible, visible }) => {
       })
       .then((response) => {
         setMessages(response.data);
-        console.log(response.data);
+        const messagesDiv = messagesRef.current.querySelector(
+          ".infinite-scroll-component"
+        );
+        messagesDiv.scrollTo(0, 100000);
       });
     axios
       .get(`http://localhost:8000/api/employe/userPhoto`, {
@@ -39,12 +43,20 @@ const GroupeMessaging = ({ id, setVisible, visible }) => {
         setAvatar(response.data);
       });
 
-    if (!messagesRef.current) return;
-    const messagesDiv = messagesRef.current.querySelector(
-      ".infinite-scroll-component"
+    const pusher = new Pusher("e43b09785ab7ef07b82f", {
+      cluster: "eu",
+      encrypted: true,
+    });
+    const channel = pusher.subscribe(
+      "channel".concat(localStorage.getItem("user_id"))
     );
-    if (!messagesDiv) return;
-    messagesDiv.scrollTo(0, 100000);
+    channel.bind("updateGroupeMessage", (data) => {
+      setMessages(data.message.original);
+      const messagesDiv = messagesRef.current.querySelector(
+        ".infinite-scroll-component"
+      );
+      messagesDiv.scrollTo(0, 100000);
+    });
   }, []);
   return (
     <Drawer

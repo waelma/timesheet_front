@@ -7,8 +7,31 @@ import { CgProfile } from "react-icons/cg";
 import "./HeaderMenu.css";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import Pusher from "pusher-js";
 
-const notifications = [];
+const notifications = [
+  {
+    lastName: "Ma",
+    firstName: "Rabeb",
+    photo:
+      "http://localhost:8000/uploads/users/1654377674Screenshot_20220421_010800.jpg",
+    content: "you send a message",
+  },
+  {
+    lastName: "Tlemsani",
+    firstName: "Yass",
+    photo:
+      "https://lh3.googleusercontent.com/a-/AOh14GiKBVnzlLGk7ulbVO2s5-OpJwkldnofA9a4NuVemg=s96-c",
+    content: "moved task xxxx to test column",
+  },
+  {
+    lastName: "Ma",
+    firstName: "Wael",
+    photo:
+      "http://localhost:8000/uploads/users/1652462116Screenshot_20220421_012359.jpg",
+    content: "assigned you to task xxxx",
+  },
+];
 
 const HeaderMenu = ({ projectTitle = "" }) => {
   const token = localStorage.getItem("token");
@@ -23,6 +46,17 @@ const HeaderMenu = ({ projectTitle = "" }) => {
       .then((response) => {
         setAvatar(response.data);
       });
+    // const pusher = new Pusher("e43b09785ab7ef07b82f", {
+    //   cluster: "eu",
+    //   encrypted: true,
+    // });
+    // const channel = pusher.subscribe(
+    //   "channel".concat(localStorage.getItem("user_id"))
+    // );
+    // channel.bind("projectUpdate", (data) => {
+    //   console.log(data);
+    // });
+    // return () => pusher.unsubscribe(channel);
   }, []);
 
   const logout = () => {
@@ -58,7 +92,7 @@ const HeaderMenu = ({ projectTitle = "" }) => {
                 <p>{notif.content}</p>
               </div>
             </div>
-            <Menu.Divider />
+            {notifications?.length > 1 && <Menu.Divider />}
           </Menu.Item>
         ))
       ) : (

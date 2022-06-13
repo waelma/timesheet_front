@@ -14,6 +14,7 @@ import { SendOutlined } from "@ant-design/icons";
 import { MdAddComment } from "react-icons/md";
 import InfiniteScroll from "react-infinite-scroll-component";
 import axios from "axios";
+import Pusher from "pusher-js";
 const TaskComments = ({ comment, tache_id }) => {
   const [form] = Form.useForm();
   const commentsRef = useRef();
@@ -31,13 +32,27 @@ const TaskComments = ({ comment, tache_id }) => {
       .then((response) => {
         setAvatar(response.data);
       });
+    const commentsDiv = commentsRef.current.querySelector(
+      ".infinite-scroll-component"
+    );
     if (comments.length) {
-      const commentsDiv = commentsRef.current.querySelector(
-        ".infinite-scroll-component"
-      );
-
       commentsDiv.scrollTo(0, 100000);
     }
+    const pusher = new Pusher("e43b09785ab7ef07b82f", {
+      cluster: "eu",
+      encrypted: true,
+    });
+    const channel = pusher.subscribe(
+      "channel".concat(localStorage.getItem("user_id"))
+    );
+    channel.bind("commentsUpdate", (data) => {
+      console.log(data);
+      setComments(data.message);
+      if (comments.length) {
+        commentsDiv.scrollTo(0, 100000);
+      }
+    });
+    return () => pusher.unsubscribe(channel);
     // setCommentHeight(document.getElementById('commentsId').clientHeight-10);
   }, []);
   return (

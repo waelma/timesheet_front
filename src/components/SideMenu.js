@@ -39,6 +39,7 @@ const SideMenu = () => {
               key={project.id}
               onClick={() => {
                 navigate(`/project/kanbanTable/${project.id}`);
+                window.location.reload();
               }}
             >
               {project.name}
@@ -49,7 +50,7 @@ const SideMenu = () => {
           key="1"
           icon={<MessageOutlined />}
           onClick={() => {
-            navigate(`/messages`);
+            navigate(`/messages/${localStorage.getItem("user_id")}`);
           }}
         >
           Messages

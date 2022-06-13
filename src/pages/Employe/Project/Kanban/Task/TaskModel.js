@@ -29,40 +29,13 @@ import {
 import { HiOutlineArchive } from "react-icons/hi";
 import moment from "moment";
 import axios from "axios";
+import Pusher from "pusher-js";
 
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
 const formatter = (value) => {
   return `${value}%`;
-};
-const props = {
-  onChange({ file }) {
-    console.log(file);
-  },
-
-  defaultFileList: [
-    {
-      uid: "1",
-      name: "xxx.png",
-      status: "done",
-      response: "Server Error 500", // custom error message to show
-      url: "http://www.baidu.com/xxx.png",
-    },
-    {
-      uid: "2",
-      name: "yyy.png",
-      status: "done",
-      url: "http://www.baidu.com/yyy.png",
-    },
-    {
-      uid: "3",
-      name: "zzz.png",
-      status: "done",
-      response: "Server Error 500", // custom error message to show
-      url: "http://www.baidu.com/zzz.png",
-    },
-  ],
 };
 
 const TaskModel = ({
@@ -75,11 +48,21 @@ const TaskModel = ({
   projectMembers,
   subTache,
   comment,
+  files,
   visible,
   setVisible,
   forceUpdate: forceRefresh,
 }) => {
   const token = localStorage.getItem("token");
+  const props = {
+    name: "file",
+    action: `http://localhost:8000/api/project/uploadFiles/${id}`,
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+
+    defaultFileList: files,
+  };
   let [dates, setDates] = useState(
     dateD && dateF
       ? [
@@ -195,6 +178,7 @@ const TaskModel = ({
     </Menu>
   );
   useEffect(() => {
+
     description ? setDescInput(false) : setDescInput(true);
   }, []);
   return (
@@ -440,7 +424,7 @@ const TaskModel = ({
                       if (todo.verified === 1) {
                         todo.verified = 0;
                         let data = {
-                          verif: 1,
+                          verif: 0,
                           tache_id: id,
                           name: todo.name,
                         };
@@ -482,13 +466,26 @@ const TaskModel = ({
                   <DeleteOutlined
                     className="chekboxTacheDelete"
                     onClick={() => {
-                      setTodos(
-                        todos.filter((element) => {
-                          return element.name !== todo.name;
-                        })
-                      );
-                      forceUpdate();
-                      console.log(todos);
+                      let data = {
+                        name: todo.name,
+                      };
+                      axios
+                        .post(
+                          `http://localhost:8000/api/task/deleteTodo/${id}`,
+                          data,
+                          {
+                            headers: { Authorization: `Bearer ${token}` },
+                          }
+                        )
+                        .then((response) => {
+                          console.log(response.data);
+                          setTodos(
+                            todos.filter((element) => {
+                              return element.name !== todo.name;
+                            })
+                          );
+                          forceUpdate();
+                        });
                     }}
                   />
                 </div>
@@ -497,13 +494,6 @@ const TaskModel = ({
                 <Form
                   form={form}
                   onFinish={(values) => {
-                    console.log(values);
-                    todos.push({
-                      name: values.todo,
-                      verifier: false,
-                    });
-                    form.resetFields();
-                    setVisibleAddTask(false);
                     let data = {
                       name: values.todo,
                       tache_id: id,
@@ -514,6 +504,12 @@ const TaskModel = ({
                       })
                       .then((response) => {
                         console.log(response.data);
+                        todos.push({
+                          name: values.todo,
+                          verifier: false,
+                        });
+                        form.resetFields();
+                        setVisibleAddTask(false);
                       });
                     forceUpdate();
                   }}

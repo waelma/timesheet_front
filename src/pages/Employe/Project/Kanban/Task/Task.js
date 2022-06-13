@@ -31,6 +31,7 @@ const Task = ({
   subTache,
   projectMembers,
   comment,
+  files,
   forceUpdate,
 }) => {
   const [visible, setVisible] = useState(false);
@@ -105,6 +106,7 @@ const Task = ({
         projectMembers={projectMembers}
         subTache={subTache}
         comment={comment}
+        files={files}
         setVisible={setVisible}
         visible={visible}
         forceUpdate={forceUpdate}

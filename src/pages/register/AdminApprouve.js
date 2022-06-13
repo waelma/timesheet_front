@@ -15,7 +15,7 @@ const AdminApprouve = () => {
     channel.bind("ApprouverCompte", (data) => {
       console.log(data);
       localStorage.setItem("verifier", true);
-      if (window.document.URL === "http://localhost:3000/profile") {
+      if (window.document.URL === "http://localhost:3000/home") {
         window.location.reload();
       } else {
         navigate("/home");

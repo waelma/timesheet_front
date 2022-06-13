@@ -92,15 +92,17 @@ const KanbanSideMenu = ({ forceUpdate, id, members, controlledBoard }) => {
         >
           Project Calendar
         </Menu.Item>
-        <Menu.Item
-          key="6"
-          icon={<AiOutlineSetting />}
-          onClick={() => {
-            setProjectSetting(true);
-          }}
-        >
-          Project Setting
-        </Menu.Item>
+        {!isEmployee && (
+          <Menu.Item
+            key="6"
+            icon={<AiOutlineSetting />}
+            onClick={() => {
+              setProjectSetting(true);
+            }}
+          >
+            Project Setting
+          </Menu.Item>
+        )}
         <Menu.Item
           key="7"
           icon={<HiOutlineArchive />}
@@ -138,7 +140,12 @@ const KanbanSideMenu = ({ forceUpdate, id, members, controlledBoard }) => {
         setVisible={setProjectArchive}
         visible={projectArchive}
       ></ProjectArchive>
-      <Statistics setVisible={setStatistics} visible={statistics}></Statistics>
+      <Statistics
+        id={id}
+        setVisible={setStatistics}
+        visible={statistics}
+        controlledBoard={controlledBoard}
+      ></Statistics>
     </div>
   );
 };

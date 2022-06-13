@@ -2,7 +2,7 @@ import { React, useEffect, useState } from "react";
 import Board, { moveCard } from "@lourenci/react-kanban";
 import "@lourenci/react-kanban/dist/styles.css";
 import "./Kanban.css";
-import { Spin } from "antd";
+import { Spin, message } from "antd";
 import Task from "./Task/Task";
 import HeaderMenu from "../../../../components/HeaderMenu";
 import SideMenu from "../../../../components/SideMenu";
@@ -10,6 +10,7 @@ import KanbanSideMenu from "./KanbanSideMenu/KanbanSideMenu";
 import axios from "axios";
 import { useParams } from "react-router";
 import { Navigate } from "react-router-dom";
+import Pusher from "pusher-js";
 
 const Kanban = () => {
   const token = localStorage.getItem("token");
@@ -19,7 +20,7 @@ const Kanban = () => {
   const [controlledBoard, setBoard] = useState();
   const [projectDate, setProjectDate] = useState([]);
   const [update, forceUpdate] = useState(0);
-
+  const [statistics, setStatistics] = useState();
   useEffect(() => {
     axios
       .get(`http://localhost:8000/api/project/getProject/${id}`, {
@@ -35,11 +36,24 @@ const Kanban = () => {
       .catch(() => {
         window.history.back();
       });
+    const pusher = new Pusher("e43b09785ab7ef07b82f", {
+      cluster: "eu",
+      encrypted: true,
+    });
+    const channel = pusher.subscribe(
+      "channel".concat(localStorage.getItem("user_id"))
+    );
+    channel.bind("projectUpdate", (data) => {
+      console.log(data);
+      setBoard(data.message.original);
+    });
+    return () => pusher.unsubscribe(channel);
   }, [id, update]);
 
   const changeState = (id, newState) => {
     let data = {
       state: newState,
+      user_id: localStorage.getItem("user_id"),
     };
     axios
       .put(`http://localhost:8000/api/task/changeState/${id}`, data, {
@@ -47,6 +61,7 @@ const Kanban = () => {
       })
       .then((response) => {
         console.log(response.data);
+        forceUpdate(Math.random());
       });
   };
 
@@ -63,8 +78,19 @@ const Kanban = () => {
         _card.state = "test";
         changeState(_card.id, "test");
       } else if (destination.toColumnId === 3) {
-        _card.state = "done";
-        changeState(_card.id, "done");
+        if (localStorage.getItem("role") === "2") {
+          _card.state = "done";
+          changeState(_card.id, "done");
+        } else {
+          _card.state = "test";
+          changeState(_card.id, "test");
+          message.error({
+            content:
+              "You cannot move in the finish column without the manager's approval!",
+            key: "updatable",
+            duration: 5,
+          });
+        }
       }
       setBoard(updatedBoard);
     }
@@ -102,6 +128,7 @@ const Kanban = () => {
             dateF,
             subTache,
             comments,
+            files,
           },
           { removeCard, dragging }
         ) => (
@@ -119,6 +146,7 @@ const Kanban = () => {
             subTache={subTache}
             projectMembers={controlledBoard.employes_projects}
             comment={comments}
+            files={files}
             // dragging={dragging}
           ></Task>
         )}
