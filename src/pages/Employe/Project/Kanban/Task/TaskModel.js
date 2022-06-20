@@ -27,6 +27,8 @@ import {
   UserAddOutlined,
 } from "@ant-design/icons";
 import { HiOutlineArchive } from "react-icons/hi";
+import { GrAttachment } from "react-icons/gr";
+
 import moment from "moment";
 import axios from "axios";
 import Pusher from "pusher-js";
@@ -53,15 +55,15 @@ const TaskModel = ({
   setVisible,
   forceUpdate: forceRefresh,
 }) => {
+  let [filesUploaded, setFilesUploaded] = useState(files);
   const token = localStorage.getItem("token");
   const props = {
     name: "file",
-    action: `http://localhost:8000/api/project/uploadFiles/${id}`,
+    action: `http://localhost:8000/api/task/uploadFiles/${id}`,
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
-
-    defaultFileList: files,
+    defaultFileList: filesUploaded,
   };
   let [dates, setDates] = useState(
     dateD && dateF
@@ -178,7 +180,6 @@ const TaskModel = ({
     </Menu>
   );
   useEffect(() => {
-
     description ? setDescInput(false) : setDescInput(true);
   }, []);
   return (
@@ -286,19 +287,19 @@ const TaskModel = ({
             {!isEmployee && (
               <Tooltip title="Archive task">
                 <Popconfirm
-                  title="Are you sure to delete this task?"
+                  title="Are you sure to archive this task?"
                   onConfirm={() => {
-                    message.success("Task removed");
+                    message.success("Task archived");
                     axios
                       .delete(
-                        `http://localhost:8000/api/task/removeTask/${id}`,
+                        `http://localhost:8000/api/task/archiveTask/${id}`,
                         {
                           headers: { Authorization: `Bearer ${token}` },
                         }
                       )
                       .then((response) => {
                         setVisible(false);
-                        window.location.reload();
+                        forceRefresh(Math.random());
                       });
                   }}
                   okText="Yes"

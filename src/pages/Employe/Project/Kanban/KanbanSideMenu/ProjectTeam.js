@@ -76,7 +76,7 @@ const ProjectTeam = ({ project_id, members, setVisible, visible, refresh }) => {
             }
           }}
         >
-          <span style={{ fontWeight: "bold" }}>Add employe</span>
+          <span style={{ fontWeight: "bold" }}>Add employee</span>
           <div style={{ display: "flex" }}>
             <Form.Item
               name="selectEmploye"

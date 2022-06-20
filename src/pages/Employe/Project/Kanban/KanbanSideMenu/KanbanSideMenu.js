@@ -61,7 +61,7 @@ const KanbanSideMenu = ({ forceUpdate, id, members, controlledBoard }) => {
           key="3"
           icon={
             <Badge
-              count={5}
+              count={1}
               size="small"
               style={{ fontSize: "8px", marginTop: "7px" }}
             >
@@ -129,7 +129,13 @@ const KanbanSideMenu = ({ forceUpdate, id, members, controlledBoard }) => {
         visible={projectTeam}
         refresh={forceUpdate}
       ></ProjectTeam>
-      <AddTask id={id} setVisible={setAddTask} visible={addTask}></AddTask>
+      <AddTask
+        id={id}
+        members={members}
+        refresh={forceUpdate}
+        setVisible={setAddTask}
+        visible={addTask}
+      ></AddTask>
       <ProjectSetting
         setVisible={setProjectSetting}
         visible={projectSetting}
@@ -137,8 +143,10 @@ const KanbanSideMenu = ({ forceUpdate, id, members, controlledBoard }) => {
         forceUpdate={forceUpdate}
       ></ProjectSetting>
       <ProjectArchive
+        id={id}
         setVisible={setProjectArchive}
         visible={projectArchive}
+        refresh={forceUpdate}
       ></ProjectArchive>
       <Statistics
         id={id}

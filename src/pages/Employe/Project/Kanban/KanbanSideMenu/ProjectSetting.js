@@ -131,11 +131,11 @@ const ProjectSetting = ({
         </div>
       </Form>
       <Popconfirm
-        title="Are you sure to delete this project?"
+        title="Are you sure to archive this project?"
         onConfirm={() => {
           axios
             .delete(
-              `http://localhost:8000/api/project/deleteProject/${controlledBoard.id}`,
+              `http://localhost:8000/api/project/archiveProject/${controlledBoard.id}`,
               {
                 headers: { Authorization: `Bearer ${token}` },
               }

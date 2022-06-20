@@ -5,7 +5,7 @@ import moment from "moment";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 const { TextArea } = Input;
-const AddTask = ({ id, setVisible, visible }) => {
+const AddTask = ({ id, members, refresh, setVisible, visible }) => {
   const token = localStorage.getItem("token");
   const [form] = Form.useForm();
   let [options, setOptions] = useState([]);
@@ -44,7 +44,7 @@ const AddTask = ({ id, setVisible, visible }) => {
             .then((response) => {
               console.log(response.data);
               setVisible(false);
-              window.location.reload();
+              refresh();
             });
         }}
       >

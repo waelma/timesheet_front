@@ -1,0 +1,42 @@
+.Archive {
+    width: 100%;
+    padding: 30px;
+  }
+.Archive .ant-card{
+    height: 100%;
+    text-align: center;
+}
+.Archive .card{
+    box-shadow:  0 2px 4px 0 #EAEDED , 0 2px 12px 0 #EAEDED ;
+    cursor: pointer;
+    width: 160px;
+    height: 130px;
+    /* margin-right: 15px; */
+    margin-bottom: 15px;
+}
+.Archive .card:hover{
+    background-color: white;
+    box-shadow:  0 4px 8px 0 #B2BABB   , 0 4px 15px 0 #B2BABB   ;
+}
+
+.Archive .ProjectDelete{
+    cursor:pointer;
+    padding-top: 4px;
+    visibility: hidden;
+    color:#E74C3C;
+}
+.Archive .card:hover .ProjectDelete{
+    visibility:initial;
+}
+
+.Archive .ProjectRestore{
+    size: 15px;
+    cursor:pointer;
+    padding-top: 4px;
+    visibility: hidden;
+    color:#27AE60 ;
+    margin-right: 15px;
+}
+.Archive .card:hover .ProjectRestore{
+    visibility:initial;
+}

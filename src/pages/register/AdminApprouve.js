@@ -7,7 +7,7 @@ const AdminApprouve = () => {
   let navigate = useNavigate();
   const user_id = localStorage.getItem("user_id");
   useEffect(() => {
-    const pusher = new Pusher("e43b09785ab7ef07b82f", {
+    const pusher = new Pusher("b9d29c42996852d3dd6c", {
       cluster: "eu",
       encrypted: true,
     });

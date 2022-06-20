@@ -16,6 +16,7 @@ import Kanban from "./pages/Employe/Project/Kanban/Kanban";
 import Calendar from "./pages/Employe/Calendar/EmployeCalendar";
 import TaskModel from "./pages/Employe/Project/Kanban/Task/TaskModel";
 import MessageBox from "./pages/Employe/Messages/MessageBox";
+import Archive from "./pages/Employe/Archive/Archive";
 
 const App = () => {
   return (
@@ -44,6 +45,9 @@ const App = () => {
           </Route>
           <Route element={<ProtectedRoute />}>
             <Route path="/profile" element={<Profile />} />
+          </Route>
+          <Route element={<ProtectedRoute />}>
+            <Route path="/archive" element={<Archive />} />
           </Route>
           <Route
             path="/ForgetPwdCodeConfirmation"
