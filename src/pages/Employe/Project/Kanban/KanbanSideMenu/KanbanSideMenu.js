@@ -124,8 +124,8 @@ const KanbanSideMenu = ({ forceUpdate, id, members, controlledBoard }) => {
       ></ProjectCalendar>
       <ProjectTeam
         project_id={id}
-        members={members}
         setVisible={setProjectTeam}
+        members={members}
         visible={projectTeam}
         refresh={forceUpdate}
       ></ProjectTeam>

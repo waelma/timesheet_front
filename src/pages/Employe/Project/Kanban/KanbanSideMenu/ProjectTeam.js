@@ -71,7 +71,7 @@ const ProjectTeam = ({ project_id, members, setVisible, visible, refresh }) => {
                     },
                   ]);
                   form.resetFields();
-                  forceUpdate();
+                  forceUpdate(Math.random());
                 });
             }
           }}
